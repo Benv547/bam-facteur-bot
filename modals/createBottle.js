@@ -1,6 +1,8 @@
 const { ChannelType, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const { newBottleCategory } = require('../config.json');
 const createEmbeds = require('../utils/createEmbeds.js');
+const messageDB = require("../database/message");
+const bottleDB = require("../database/bottle");
 
 module.exports = {
     name: 'createBottle',
@@ -51,9 +53,13 @@ module.exports = {
             );
 
         // Send to channel
-        channel.send({ content: randMember.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: randMember.toString(), embeds: [embed], components: [row] });
 
-        // TODO: save it to DB
+        // TODO: save bottle to DB
+        await bottleDB.insertBottle(channel.id, randMember.id, sender.id, channel.id, channel_name);
+
+        // TODO: save message to DB
+        await messageDB.insertMessage(message.id, 0, channel.id, interaction.member.id, content);
 
         await interaction.reply({ content: 'Votre bouteille a été envoyée.', ephemeral: true });
     },
