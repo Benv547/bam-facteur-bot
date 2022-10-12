@@ -18,6 +18,14 @@ CREATE TABLE "Message" (
   "content" text
 );
 
+CREATE TABLE "Couleur" (
+  "couleur" text PRIMARY KEY
+);
+
+CREATE TABLE "Etat" (
+  "etat" text PRIMARY KEY
+);
+
 CREATE TABLE "Bottle" (
   "id_bottle" bigint PRIMARY KEY,
   "id_user_sender" bigint,
