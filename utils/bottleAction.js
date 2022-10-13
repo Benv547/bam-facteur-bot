@@ -90,13 +90,46 @@ module.exports = {
             sender = await userDB.getUser(id_user_sender);
         }
 
+        // If category is not "conversations", move channel to "conversations"
+        if (channel.parentId === newBottleCategory) {
+            let moved = false;
+            // Foreach conversations
+            for (const conversation of conversations) {
+                console.log(conversation);
+                // Fetch category conversation channel
+                const category = guild.channels.cache.find(c => c.id == conversation);
+
+                // If number of channels in category is less than 45
+                if (category.children.cache.size < 45) {
+                    // Move channel to category
+                    await channel.setParent(category);
+                    moved = true;
+                    break;
+                }
+            }
+            // If channel not moved
+            if (!moved) {
+                // Get oldest bottle channel
+                const oldestChannel = await bottleDB.getOldestBottleNotArchived();
+                // Fetch channel
+                const oldestChannelFetched = await guild.channels.fetch(oldestChannel.id_channel);
+                // Get category
+                const category = guild.channels.cache.find(c => c.id == oldestChannelFetched.parentId);
+                // Delete channel
+                await oldestChannelFetched.delete();
+                // Move channel to category
+                await channel.setParent(category);
+
+            }
+        }
+
         // TODO: get receiver from DB
         const receiver_id = await bottleDB.getReceiver(channel.id);
         const receiver = await guild.members.fetch(receiver_id);
 
         // edits overwrites to allow a user to view the channel
-        await channel.permissionOverwrites.edit(receiver_id, {ViewChannel: true});
-        await channel.permissionOverwrites.edit(id_user_sender, {ViewChannel: false});
+        await channel.permissionOverwrites.create(receiver_id, {ViewChannel: true});
+        await channel.permissionOverwrites.create(id_user_sender, {ViewChannel: false});
 
         await bottleDB.switchSenderReceiver(channel.id);
 
@@ -123,35 +156,6 @@ module.exports = {
         const lastMessage = await channel.messages.fetch(lastMessageId);
         // Remove actions from last message
         await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
-
-        let moved = false;
-        // Foreach conversations
-        for (const conversation of conversations) {
-            console.log(conversation);
-            // Fetch category conversation channel
-            const category = guild.channels.cache.find(c => c.id == conversation);
-
-            // If number of channels in category is less than 45
-            if (category.children.cache.size < 45) {
-                // Move channel to category
-                await channel.setParent(category);
-                moved = true;
-                break;
-            }
-        }
-        // If channel not moved
-        if (!moved) {
-            // Get oldest bottle channel
-            const oldestChannel = await bottleDB.getOldestBottleNotArchived();
-            // Fetch channel
-            const oldestChannelFetched = await guild.channels.fetch(oldestChannel.id_channel);
-            // Get category
-            const category = guild.channels.cache.find(c => c.id == oldestChannelFetched.parentId);
-            // Delete channel
-            await oldestChannelFetched.delete();
-            // Move channel to category
-            await channel.setParent(category);
-        }
 
         // Send message
         const message = await channel.send({ content: receiver.toString(), embeds: [embed], components: [row] });
