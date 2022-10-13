@@ -55,20 +55,20 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('Répondre')
+                    .setLabel('📨 Répondre')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('seaBottle')
-                    .setLabel('Remettre à la mer')
+                    .setLabel('🌊 Remettre à la mer')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warningBottle')
-                    .setLabel('Signaler')
-                    .setStyle(ButtonStyle.Primary),
+                    .setLabel('⚠️ Signaler')
+                    .setStyle(ButtonStyle.Danger),
             );
 
         // Send to channel
@@ -108,14 +108,14 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('Répondre')
+                    .setLabel('📨 Répondre')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warningBottle')
-                    .setLabel('Signaler')
-                    .setStyle(ButtonStyle.Primary),
+                    .setLabel('⚠️ Signaler')
+                    .setStyle(ButtonStyle.Danger),
             );
 
         // Fetch last message

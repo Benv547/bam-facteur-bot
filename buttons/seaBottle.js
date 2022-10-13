@@ -15,8 +15,8 @@ module.exports = {
             // TODO: recreate a new bottle with the same content
             const result = await bottle.create(interaction.guild, sender_id, original_message);
         }
-        await bottleDB.deleteBottle(interaction.channel.id);
         await messageDB.deleteAllMessagesOfBottle(interaction.channel.id);
+        await bottleDB.deleteBottle(interaction.channel.id);
         await interaction.channel.delete();
     },
 };
