@@ -31,5 +31,10 @@ module.exports = {
     deleteAllMessagesOfBottle: async function (id_bottle) {
         const pool = getPool();
         return await pool.query('DELETE FROM "Message" WHERE "id_bottle" = $1', [id_bottle]);
+    },
+    getContentOfMessage: async function (id_message) {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Message" WHERE "id_message" = $1', [id_message]);
+        return results.rows[0]["content"];
     }
 };

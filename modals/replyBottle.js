@@ -8,12 +8,12 @@ module.exports = {
 
         const sender = interaction.member;
 
+        await interaction.reply({ content: 'Votre bouteille a été envoyée.', ephemeral: true });
+
         try {
             await bottle.reply(interaction.guild, sender.id, interaction.channel, content);
         } catch (e) {
             console.log(e);
         }
-
-        await interaction.reply({ content: 'Votre bouteille a été envoyée.', ephemeral: true });
     },
 };

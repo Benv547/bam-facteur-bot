@@ -29,5 +29,9 @@ module.exports = {
     deleteUser: async function (id_user) {
         const pool = getPool();
         return await pool.query('DELETE FROM "User" WHERE "id_user" = $1', [id_user]);
+    },
+    incr_nb_warn: async function (id_user) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "nb_warn" = "nb_warn" + 1 WHERE "id_user" = $1', [id_user]);
     }
 }
