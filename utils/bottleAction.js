@@ -42,10 +42,10 @@ module.exports = {
 
         // TODO: add member to channel
         // edits overwrites to disallow everyone to view the channel
-        await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false});
+        await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
 
         // edits overwrites to allow a user to view the channel
-        await channel.permissionOverwrites.edit(randMember.id, {ViewChannel: true});
+        await channel.permissionOverwrites.edit(randMember.id, {ViewChannel: true, SendMessages: false});
 
         // TODO: create bottle message ...
         const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
@@ -127,14 +127,28 @@ module.exports = {
         const receiver_id = await bottleDB.getReceiver(channel.id);
         const receiver = await guild.members.fetch(receiver_id);
 
-        // edits overwrites to allow a user to view the channel
-        await channel.permissionOverwrites.create(receiver_id, {ViewChannel: true});
-        await channel.permissionOverwrites.create(id_user_sender, {ViewChannel: false});
-
-        await bottleDB.switchSenderReceiver(channel.id);
-
-        // TODO: create bottle message ...
+        // Create embedded bottle message ...
         const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
+
+        // Send message
+        const messageTemp = await channel.send({ content: "", embeds: [embed] });
+
+        // edits overwrites to allow a user to view the channel
+        await channel.permissionOverwrites.create(id_user_sender, {ViewChannel: false, SendMessages: false});
+
+        // Delete temp message
+        await messageTemp.delete();
+
+        // Remove actions from last message
+        const lastMessageId = await messageDB.getLastMessageId(channel.id);
+        const lastMessage = await channel.messages.fetch(lastMessageId);
+        await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
+
+        // The receiver can see channel
+        await channel.permissionOverwrites.create(receiver_id, {ViewChannel: true, SendMessages: false});
+
+        // Switch receiver and sender in DB
+        await bottleDB.switchSenderReceiver(channel.id);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -150,12 +164,6 @@ module.exports = {
                     .setLabel('⚠️ Signaler')
                     .setStyle(ButtonStyle.Danger),
             );
-
-        // Fetch last message
-        const lastMessageId = await messageDB.getLastMessageId(channel.id);
-        const lastMessage = await channel.messages.fetch(lastMessageId);
-        // Remove actions from last message
-        await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
 
         // Send message
         const message = await channel.send({ content: receiver.toString(), embeds: [embed], components: [row] });
