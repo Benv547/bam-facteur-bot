@@ -9,7 +9,7 @@ CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
   "money" int,
   "xp" int,
-  "diceBearSeed" text default "0"
+  "diceBearSeed" text default '0'
 );
 
 CREATE TABLE "Message" (

@@ -16,12 +16,7 @@ function getPool() {
 module.exports = {
     insertBottle: async function (id_bottle, id_user_sender, id_user_receiver, id_channel, name) {
         const pool = getPool();
-        await pool.query('INSERT INTO "Bottle" ("id_bottle", "id_user_sender", "id_user_receiver", "id_channel", "name") VALUES ($1, $2, $3, $4, $5)', [id_bottle, id_user_sender, id_user_receiver, id_channel, name], (error, results) => {
-            if (error) {
-                console.log(error)
-            }
-            return results;
-        });
+        return await pool.query('INSERT INTO "Bottle" ("id_bottle", "id_user_sender", "id_user_receiver", "id_channel", "name") VALUES ($1, $2, $3, $4, $5)', [id_bottle, id_user_sender, id_user_receiver, id_channel, name]);
     },
     getReceiver : async function (id_bottle) {
         const pool = getPool();
@@ -33,30 +28,15 @@ module.exports = {
     },
     switchSenderReceiver: async function (id_bottle) {
         const pool = getPool();
-        await pool.query('UPDATE "Bottle" SET "id_user_sender" = "id_user_receiver", "id_user_receiver" = "id_user_sender" WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
-            if (error) {
-                console.log(error)
-            }
-            return results;
-        });
+        return await pool.query('UPDATE "Bottle" SET "id_user_sender" = "id_user_receiver", "id_user_receiver" = "id_user_sender" WHERE "id_bottle" = $1', [id_bottle]);
     },
     deleteBottle: async function (id_bottle) {
         const pool = getPool();
-        await pool.query('DELETE FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
-            if (error) {
-                console.log(error)
-            }
-            return results;
-        });
+        return await pool.query('DELETE FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle]);
     },
     incr_sea: async function (id_bottle) {
         const pool = getPool();
-        await pool.query('UPDATE "Bottle" SET "nb_sea" = "nb_sea" + 1 WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
-            if (error) {
-                console.log(error)
-            }
-            return results;
-        });
+        return await pool.query('UPDATE "Bottle" SET "nb_sea" = "nb_sea" + 1 WHERE "id_bottle" = $1', [id_bottle]);
     },
     get_sea: async function (id_bottle) {
         const pool = getPool();

@@ -16,12 +16,7 @@ function getPool() {
 module.exports = {
     insertMessage: async function (id_message, id_bottle, id_channel, id_user, content) {
         const pool = getPool();
-        await pool.query('INSERT INTO "Message" ("id_message", "id_bottle", "id_channel", "id_user", "content") VALUES ($1, $2, $3, $4, $5)', [id_message, id_bottle, id_channel, id_user, content], (error, results) => {
-            if (error) {
-                console.log(error)
-                return results;
-            }
-        })
+        return await pool.query('INSERT INTO "Message" ("id_message", "id_bottle", "id_channel", "id_user", "content") VALUES ($1, $2, $3, $4, $5)', [id_message, id_bottle, id_channel, id_user, content]);
     },
     getFirstMessage: async function (id_channel) {
         const pool = getPool();
@@ -35,11 +30,6 @@ module.exports = {
     },
     deleteAllMessagesOfBottle: async function (id_bottle) {
         const pool = getPool();
-        await pool.query('DELETE FROM "Message" WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
-            if (error) {
-                console.log(error);
-            }
-            return results;
-        })
+        return await pool.query('DELETE FROM "Message" WHERE "id_bottle" = $1', [id_bottle]);
     }
 };

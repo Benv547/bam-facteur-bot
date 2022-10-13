@@ -28,11 +28,6 @@ module.exports = {
     },
     deleteUser: async function (id_user) {
         const pool = getPool();
-        await pool.query('DELETE FROM "User" WHERE "id_user" = $1', [id_user], (error, results) => {
-            if (error) {
-                console.log(error)
-            }
-            return results;
-        });
+        return await pool.query('DELETE FROM "User" WHERE "id_user" = $1', [id_user]);
     }
 }
