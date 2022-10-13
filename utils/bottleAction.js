@@ -1,5 +1,5 @@
 const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newBottleCategory} = require("../config.json");
+const {newBottleCategory, conversations} = require("../config.json");
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
@@ -31,7 +31,6 @@ module.exports = {
         // TODO: move channel to "nouvelles bouteilles"
         const category = guild.channels.cache.find(c => c.id == newBottleCategory);
         await channel.setParent(category);
-        //await channel.setPosition(0);
 
         // TODO: choose random member
         const members = await guild.members.fetch();
@@ -124,6 +123,35 @@ module.exports = {
         const lastMessage = await channel.messages.fetch(lastMessageId);
         // Remove actions from last message
         await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
+
+        let moved = false;
+        // Foreach conversations
+        for (const conversation of conversations) {
+            console.log(conversation);
+            // Fetch category conversation channel
+            const category = guild.channels.cache.find(c => c.id == conversation);
+
+            // If number of channels in category is less than 45
+            if (category.children.cache.size < 45) {
+                // Move channel to category
+                await channel.setParent(category);
+                moved = true;
+                break;
+            }
+        }
+        // If channel not moved
+        if (!moved) {
+            // Get oldest bottle channel
+            const oldestChannel = await bottleDB.getOldestBottleNotArchived();
+            // Fetch channel
+            const oldestChannelFetched = await guild.channels.fetch(oldestChannel.id_channel);
+            // Get category
+            const category = guild.channels.cache.find(c => c.id == oldestChannelFetched.parentId);
+            // Delete channel
+            await oldestChannelFetched.delete();
+            // Move channel to category
+            await channel.setParent(category);
+        }
 
         // Send message
         const message = await channel.send({ content: receiver.toString(), embeds: [embed], components: [row] });

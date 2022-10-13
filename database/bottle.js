@@ -45,5 +45,13 @@ module.exports = {
             return results.rows[0].nb_sea;
         }
         return null;
+    },
+    getOldestBottleNotArchived: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT id_channel FROM "Message" WHERE "id_message" IN (SELECT MAX("id_message") FROM "Message" GROUP BY "id_bottle") ORDER BY "date" ASC LIMIT 1;');
+        if (results.rows.length > 0) {
+            return results.rows[0].id_channel;
+        }
+        return null;
     }
 }
