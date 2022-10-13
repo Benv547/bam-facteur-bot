@@ -2,11 +2,14 @@ DROP TABLE "Sanctions";
 DROP TABLE "Message";
 DROP TABLE "Bottle";
 DROP TABLE "User";
+DROP TABLE "Couleur";
+DROP TABLE "Etat";
 
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
   "money" int,
-  "xp" int
+  "xp" int,
+  "diceBearSeed" text default "0"
 );
 
 CREATE TABLE "Message" (
@@ -31,7 +34,8 @@ CREATE TABLE "Bottle" (
   "id_user_sender" bigint,
   "id_user_receiver" bigint,
   "id_channel" bigint,
-  "name" varchar(30)
+  "name" varchar(30),
+  "nb_sea" int default 0
 );
 
 CREATE TABLE "Sanctions" (
@@ -48,8 +52,16 @@ ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
 ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_sender") REFERENCES "User" ("id_user");
 
-ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_reveiver") REFERENCES "User" ("id_user");
+ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_receiver") REFERENCES "User" ("id_user");
 
 ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
 ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_mod") REFERENCES "User" ("id_user");
+
+INSERT INTO "Couleur" VALUES ('rose'),
+                             ('rouge'),
+                             ('bleue');
+
+INSERT INTO "Etat" VALUES ('cassée'),
+                             ('fissurée'),
+                             ('argentée');

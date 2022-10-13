@@ -23,14 +23,23 @@ module.exports = {
             }
         })
     },
-    getMessage: async function (id_message) {
+    getFirstMessage: async function (id_channel) {
         const pool = getPool();
-        const results = await pool.query('SELECT * FROM "Message" WHERE id_message = $1', [id_message], (error, results) => {
+        const results = await pool.query('SELECT * FROM "Message" WHERE "id_channel" = $1 ORDER BY "id_message" ASC LIMIT 1', [id_channel]);
+        return results.rows[0]["content"];
+    },
+    getLastMessageId: async function (id_channel) {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Message" WHERE "id_channel" = $1 ORDER BY "id_message" DESC LIMIT 1', [id_channel]);
+        return results.rows[0]["id_message"];
+    },
+    deleteAllMessagesOfBottle: async function (id_bottle) {
+        const pool = getPool();
+        await pool.query('DELETE FROM "Message" WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
             if (error) {
-                console.log(error)
-                return results;
+                console.log(error);
             }
+            return results;
         })
-        return results;
     }
 };

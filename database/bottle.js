@@ -39,5 +39,31 @@ module.exports = {
             }
             return results;
         });
+    },
+    deleteBottle: async function (id_bottle) {
+        const pool = getPool();
+        await pool.query('DELETE FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
+            if (error) {
+                console.log(error)
+            }
+            return results;
+        });
+    },
+    incr_sea: async function (id_bottle) {
+        const pool = getPool();
+        await pool.query('UPDATE "Bottle" SET "nb_sea" = "nb_sea" + 1 WHERE "id_bottle" = $1', [id_bottle], (error, results) => {
+            if (error) {
+                console.log(error)
+            }
+            return results;
+        });
+    },
+    get_sea: async function (id_bottle) {
+        const pool = getPool();
+        const results = await pool.query('SELECT nb_sea FROM "Bottle" WHERE id_bottle = $1', [id_bottle]);
+        if (results.rows.length > 0) {
+            return results.rows[0].nb_sea;
+        }
+        return null;
     }
 }

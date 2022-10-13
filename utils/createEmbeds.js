@@ -1,14 +1,13 @@
 const {EmbedBuilder} = require("discord.js");
 
 module.exports = {
-    createBottle: function (content) {
+    createBottle: function (content, diceBearSeed) {
         const embed = new EmbedBuilder()
             .setColor(0x0099FF)
-            .setTitle('Some title')
+            .setAuthor({ name: 'Un•e illustre inconnu•e', iconURL: 'https://avatars.dicebear.com/api/adventurer-neutral/' + diceBearSeed + '.png'})
             .setDescription(content)
             .setThumbnail('https://i.imgur.com/AfFp7pu.png')
-            .setTimestamp()
-            .setFooter({ text: 'Some footer text here' });
+            .setTimestamp();
         return embed;
     },
 };

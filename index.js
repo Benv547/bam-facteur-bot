@@ -87,7 +87,7 @@ client.on('interactionCreate', async interaction => {
 // Modals Handler
 client.modals = new Collection();
 const modalsPath = path.join(__dirname, 'modals');
-const modalFiles = fs.readdirSync(buttonsPath).filter(file => file.endsWith('.js'));
+const modalFiles = fs.readdirSync(modalsPath).filter(file => file.endsWith('.js'));
 
 for (const file of modalFiles) {
     const filePath = path.join(modalsPath, file);
