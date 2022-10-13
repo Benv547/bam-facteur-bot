@@ -10,6 +10,28 @@ module.exports = {
             .setTimestamp();
         return embed;
     },
+    createFullEmbed: function (title, description, thumbnail, image, color, footer) {
+        const embed = new EmbedBuilder();
+        if (title) {
+            embed.setTitle(title);
+        }
+        if (description) {
+            embed.setDescription(description);
+        }
+        if (thumbnail) {
+            embed.setThumbnail(thumbnail);
+        }
+        if (image) {
+            embed.setImage(image);
+        }
+        if (footer) {
+            embed.setFooter({ text: footer });
+        }
+        if (color) {
+            embed.setColor(color);
+        }
+        return embed;
+    }
 };
 
 // inside a command, event listener, etc.
