@@ -8,7 +8,11 @@ module.exports = {
 
         const sender = interaction.member;
 
-        const result = await bottle.reply(interaction.guild, sender.id, interaction.channel, content);
+        try {
+            await bottle.reply(interaction.guild, sender.id, interaction.channel, content);
+        } catch (e) {
+            console.log(e);
+        }
 
         await interaction.reply({ content: 'Votre bouteille a été envoyée.', ephemeral: true });
     },
