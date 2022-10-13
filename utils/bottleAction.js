@@ -32,8 +32,8 @@ module.exports = {
         const category = guild.channels.cache.find(c => c.id == newBottleCategory);
         await channel.setParent(category);
 
-        // TODO: choose random member
-        const members = await guild.members.fetch();
+        // TODO: choose random member who are not a bot
+        const members = guild.members.cache.filter(m => !m.user.bot);
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
