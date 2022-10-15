@@ -29,6 +29,8 @@ module.exports = {
         }
         if (color) {
             embed.setColor(color);
+        } else {
+            embed.setColor(0x2f3136);
         }
         return embed;
     }

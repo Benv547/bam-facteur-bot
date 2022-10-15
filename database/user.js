@@ -33,5 +33,9 @@ module.exports = {
     incr_nb_warn: async function (id_user) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "nb_warn" = "nb_warn" + 1 WHERE "id_user" = $1', [id_user]);
+    },
+    update_diceBearSeed: async function (id_user, diceBearSeed) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "diceBearSeed" = $1 WHERE "id_user" = $2', [diceBearSeed, id_user]);
     }
 }
