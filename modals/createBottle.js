@@ -11,7 +11,7 @@ module.exports = {
         await interaction.reply({ content: 'Votre bouteille a été envoyée.', ephemeral: true });
 
         try {
-            await bottle.create(interaction.guild, sender.id, content);
+            await bottle.create(interaction.guild, sender.id, content, 0);
         } catch (e) {
             console.log(e);
         }

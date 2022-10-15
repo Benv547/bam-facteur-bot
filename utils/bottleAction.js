@@ -8,7 +8,7 @@ const stateAndColorDB = require("../database/statesAndColors");
 
 module.exports = {
     name: 'bottleAction',
-    create: async function (guild, id_user_sender, content) {
+    create: async function (guild, id_user_sender, content, nb_sea) {
         // TODO: check if message is OK (moderation, sad text, injuries, ...)
 
         let sender = await userDB.getUser(id_user_sender);
@@ -35,7 +35,7 @@ module.exports = {
         // TODO: choose random member who are not a bot
 
         // Fetch all members
-        const members = await (await guild.members.fetch()).filter(m => !m.user.bot);
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender);
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
@@ -74,10 +74,10 @@ module.exports = {
             );
 
         // Send to channel
-        const message = await channel.send({ content: randMember.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une bouteille ' + randMember.toString(), embeds: [embed], components: [row] });
 
         // TODO: save bottle to DB
-        await bottleDB.insertBottle(channel.id, randMember.id, id_user_sender, channel.id, channel_name);
+        await bottleDB.insertBottle(channel.id, randMember.id, id_user_sender, channel.id, channel_name, nb_sea);
 
         // TODO: save message to DB
         await messageDB.insertMessage(message.id, channel.id, channel.id, id_user_sender, content);
@@ -168,7 +168,7 @@ module.exports = {
             );
 
         // Send message
-        const message = await channel.send({ content: receiver.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), embeds: [embed], components: [row] });
 
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, channel.id, id_user_sender, content);

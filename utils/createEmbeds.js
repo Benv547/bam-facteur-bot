@@ -6,7 +6,7 @@ module.exports = {
             .setColor(0x0099FF)
             .setAuthor({ name: 'Un•e illustre inconnu•e', iconURL: 'https://avatars.dicebear.com/api/adventurer-neutral/' + diceBearSeed + '.png'})
             .setDescription(content)
-            .setThumbnail('https://i.imgur.com/AfFp7pu.png')
+            .setThumbnail('https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png')
             .setTimestamp();
         return embed;
     },
