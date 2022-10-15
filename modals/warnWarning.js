@@ -15,7 +15,7 @@ module.exports = {
         const receiver = await interaction.guild.members.fetch(id_receiver);
 
         // Send MP to sender
-        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez reçu un avertissement', 'Une de vos bouteille a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : ' + raison, null, null, 0x2f3136, null)] });
+        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez reçu un avertissement', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : ' + raison, null, null, 0x2f3136, null)] });
 
         // Increment number of warning
         await userDB.incr_nb_warn(id_receiver);

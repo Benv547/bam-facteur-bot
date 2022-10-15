@@ -18,7 +18,7 @@ module.exports = {
         await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);
 
         // Send MP to sender
-        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été muté•e', 'Une de vos bouteille a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : ' + raison, null, null, 0x2f3136, null)] });
+        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été muté•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : ' + raison, null, null, 0x2f3136, null)] });
 
         // Delete message
         await interaction.deferReply({ ephemeral: true })
