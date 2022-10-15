@@ -1,0 +1,50 @@
+const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const createEmbeds = require("../utils/createEmbeds");
+const helpDB = require("../database/help");
+const userDB = require("../database/user");
+
+module.exports = {
+    name: 'replyHelp',
+    async execute(interaction) {
+
+        // Check if the user exists in the database
+        const userId = await userDB.getUser(interaction.user.id);
+        if (userId == null) {
+            // Add the user to the database
+            await userDB.createUser(interaction.user.id, 0, 0);
+        }
+
+        // Get content
+        const content = interaction.fields.getTextInputValue('textHelp');
+
+        // Create buttons to upvote and downvote and warn
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('replyHelp')
+                    .setLabel('Répondre')
+                    .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                    .setCustomId('warnHelp')
+                    .setLabel('⚠️')
+                    .setStyle(ButtonStyle.Secondary),
+            );
+
+        // Create embed
+        const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x2F3136, null);
+
+        // Fetch message
+        const message = await interaction.channel.messages.fetch(interaction.message.id);
+
+        // Get suggestion number
+        const repliesNumber = parseInt(await helpDB.getTotalOfReplies()) + 1;
+
+        // Send embed
+        const reply = await message.reply({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
+
+        // Save message id in database
+        await helpDB.insertHelp(reply.id, interaction.user.id, content, true);
+
+        await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
+    }
+};
