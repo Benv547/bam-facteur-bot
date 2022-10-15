@@ -33,7 +33,9 @@ module.exports = {
         await channel.setParent(category);
 
         // TODO: choose random member who are not a bot
-        const members = guild.members.cache.filter(m => !m.user.bot);
+
+        // Fetch all members
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot);
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
