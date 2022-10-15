@@ -9,6 +9,13 @@ module.exports = {
     name: 'createTicket',
     async execute(interaction) {
 
+        // Check if user is already in a ticket
+        const userTicket = await ticketDB.get_id_channel(interaction.user.id);
+        if (userTicket) {
+            await interaction.reply({ content: '⚠️ Vous avez déjà un ticket en cours.', ephemeral: true });
+            return;
+        }
+
         const content = interaction.fields.getTextInputValue('textTicket');
 
         const sender = interaction.member;
@@ -27,11 +34,17 @@ module.exports = {
                     .setCustomId('replyTicketMod')
                     .setLabel('Répondre')
                     .setStyle(ButtonStyle.Primary),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('deleteTicket')
+                    .setLabel('Fermer le ticket')
+                    .setStyle(ButtonStyle.Danger),
             );
 
         const mod = interaction.guild.roles.cache.get(modRole);
 
-        const embed = createEmbeds.createFullEmbed("Utilisateur", content, null, null, 0x0000FF, null);
+        const embed = createEmbeds.createFullEmbed("Un•e illuste inconnu•e", content, null, null, 0x0000FF, null);
         // Send the message to the channel
         await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
 
@@ -46,10 +59,16 @@ module.exports = {
                     .setCustomId('replyTicketUser')
                     .setLabel('Répondre')
                     .setStyle(ButtonStyle.Primary),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('deleteTicket')
+                    .setLabel('Fermer le ticket')
+                    .setStyle(ButtonStyle.Danger),
             );
 
         // Create embed for the user
-        const embedUser = createEmbeds.createFullEmbed(sender.username, content, null, null, 0x0000FF, null);
+        const embedUser = createEmbeds.createFullEmbed("Vous", content, null, null, 0x0000FF, null);
 
         // Send an MP message to the sender
         await sender.send({ content: 'Votre ticket', embeds: [embedUser], components: [rowUser] });

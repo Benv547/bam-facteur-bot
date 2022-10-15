@@ -10,8 +10,6 @@ module.exports = {
 
         const content = interaction.fields.getTextInputValue('textTicket');
 
-        const sender = interaction.member;
-
         await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
 
         // Create a button to reply to the ticket
@@ -45,11 +43,17 @@ module.exports = {
                     .setCustomId('replyTicketUser')
                     .setLabel('Répondre')
                     .setStyle(ButtonStyle.Primary),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('deleteTicket')
+                    .setLabel('Fermer le ticket')
+                    .setStyle(ButtonStyle.Danger),
             );
 
         // Create embed for the user
-        const embedUser = createEmbeds.createFullEmbed(sender.username, content, null, null, 0x0000FF, null);
+        const embedUser = createEmbeds.createFullEmbed("Vous", content, null, null, 0x0000FF, null);
         // Send an MP message to the sender
-        await sender.send({ content: 'Votre réponse', embeds: [embedUser], components: [rowUser] });
+        await interaction.user.send({ content: 'Votre réponse', embeds: [embedUser], components: [rowUser] });
     },
 };

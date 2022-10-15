@@ -16,11 +16,7 @@ function getPool() {
 module.exports = {
     insertTicket: async function (id_user, id_channel, id_guild) {
         const pool = getPool();
-        const query = {
-            text: 'INSERT INTO ticket(id_user, id_channel, id_guild) VALUES($1, $2, $3)',
-            values: [id_user, id_channel, id_guild],
-        }
-        await pool.query(query);
+        const res = await pool.query('INSERT INTO "Ticket" (id_user, id_channel, id_guild) VALUES ($1, $2, $3)', [id_user, id_channel, id_guild]);
     },
     get_id_user: async function (id_channel) {
         const pool = getPool();
