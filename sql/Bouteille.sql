@@ -1,6 +1,9 @@
 DROP TABLE "Sanctions";
 DROP TABLE "Message";
+DROP TABLE "Suggestion";
+DROP TABLE "Help";
 DROP TABLE "Signalement";
+DROP TABLE "Opinion";
 DROP TABLE "Ticket";
 DROP TABLE "Bottle";
 DROP TABLE "User";
@@ -51,16 +54,46 @@ CREATE TABLE "Sanctions" (
 CREATE TABLE "Ticket" (
   "id_user" bigint PRIMARY KEY,
   "id_channel" bigint,
-  "guild_id" bigint
+  "id_guild" bigint
 );
 
 CREATE TABLE "Signalement" (
-    "id_message" bigint,
+    "id_message" bigint PRIMARY KEY,
     "id_sender" bigint,
     "id_receiver" bigint,
     "content" text,
     "id_bottle" bigint,
     "status" boolean default false
+);
+
+CREATE TABLE "Opinion" (
+    "id_message" bigint PRIMARY KEY,
+    "id_user" bigint,
+    "content" text,
+    "date" timestamp default current_timestamp
+);
+
+CREATE TABLE "Suggestion" (
+    "id_message" bigint PRIMARY KEY,
+    "id_user" bigint,
+    "content" text,
+    "isReply" boolean default false,
+    "date" timestamp default current_timestamp,
+    "id" serial
+);
+
+CREATE TABLE "Vote" (
+    "id_message" bigint,
+    "id_user" bigint,
+    "vote" boolean
+);
+
+CREATE TABLE "Help" (
+    "id_message" bigint,
+    "id_user" bigint,
+    "content" text,
+    "isReply" boolean default false,
+    "date" timestamp default current_timestamp
 );
 
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle");
@@ -75,6 +108,14 @@ ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_mod") REFERENCES "User" ("id_user")
 ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_sender") REFERENCES "User" ("id_user");
 ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_receiver") REFERENCES "User" ("id_user");
 ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle");
+
+ALTER TABLE "Opinion" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
+
+ALTER TABLE "Suggestion" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
+ALTER TABLE "Vote" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
+ALTER TABLE "Vote" ADD FOREIGN KEY ("id_message") REFERENCES "Suggestion" ("id_message");
+
+ALTER TABLE "Help" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
 ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
