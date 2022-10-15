@@ -97,7 +97,6 @@ module.exports = {
             let moved = false;
             // Foreach conversations
             for (const conversation of conversations) {
-                console.log(conversation);
                 // Fetch category conversation channel
                 const category = guild.channels.cache.find(c => c.id == conversation);
 
@@ -117,6 +116,8 @@ module.exports = {
                 const oldestChannelFetched = await guild.channels.fetch(oldestChannel.id_channel);
                 // Get category
                 const category = guild.channels.cache.find(c => c.id == oldestChannelFetched.parentId);
+                // Set archive to true
+                await bottleDB.setBottleArchived(oldestChannel.id_channel);
                 // Delete channel
                 await oldestChannelFetched.delete();
                 // Move channel to category
@@ -165,6 +166,12 @@ module.exports = {
                     .setCustomId('warningBottle')
                     .setLabel('⚠️ Signaler')
                     .setStyle(ButtonStyle.Danger),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('deleteBottle')
+                    .setLabel('🗑️ Supprimer')
+                    .setStyle(ButtonStyle.Secondary),
             );
 
         // Send message

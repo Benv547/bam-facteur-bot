@@ -53,5 +53,17 @@ module.exports = {
             return results.rows[0].id_channel;
         }
         return null;
+    },
+    setBottleArchived: async function (id_bottle) {
+        const pool = getPool();
+        return await pool.query('UPDATE "Bottle" SET "archived" = true WHERE "id_bottle" = $1', [id_bottle]);
+    },
+    setBottleUnarchived: async function (id_bottle) {
+        const pool = getPool();
+        return await pool.query('UPDATE "Bottle" SET "archived" = false WHERE "id_bottle" = $1', [id_bottle]);
+    },
+    setBottleTerminated: async function (id_bottle) {
+        const pool = getPool();
+        return await pool.query('UPDATE "Bottle" SET "terminated" = true WHERE "id_bottle" = $1', [id_bottle]);
     }
 }
