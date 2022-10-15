@@ -1,5 +1,7 @@
 DROP TABLE "Sanctions";
 DROP TABLE "Message";
+DROP TABLE "Signalement";
+DROP TABLE "Ticket";
 DROP TABLE "Bottle";
 DROP TABLE "User";
 DROP TABLE "Couleur";
@@ -46,17 +48,35 @@ CREATE TABLE "Sanctions" (
   "date" timestamp default current_timestamp
 );
 
-ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle");
+CREATE TABLE "Ticket" (
+  "id_user" bigint PRIMARY KEY,
+  "id_channel" bigint,
+  "guild_id" bigint
+);
 
+CREATE TABLE "Signalement" (
+    "id_message" bigint,
+    "id_sender" bigint,
+    "id_receiver" bigint,
+    "content" text,
+    "id_bottle" bigint,
+    "status" boolean default false
+);
+
+ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle");
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
 ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_sender") REFERENCES "User" ("id_user");
-
 ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_receiver") REFERENCES "User" ("id_user");
 
 ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
-
 ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_mod") REFERENCES "User" ("id_user");
+
+ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_sender") REFERENCES "User" ("id_user");
+ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_receiver") REFERENCES "User" ("id_user");
+ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle");
+
+ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
 INSERT INTO "Couleur" VALUES ('rose'),
                              ('rouge'),

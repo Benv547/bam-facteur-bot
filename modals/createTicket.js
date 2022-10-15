@@ -1,0 +1,67 @@
+const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const createEmbeds = require("../utils/createEmbeds");
+const {modRole, newBottleCategory} = require("../config.json");
+const ticketDB = require("../database/ticket");
+const userDB = require("../database/user");
+const {ticket} = require("../config.json");
+
+module.exports = {
+    name: 'createTicket',
+    async execute(interaction) {
+
+        const content = interaction.fields.getTextInputValue('textTicket');
+
+        const sender = interaction.member;
+
+        await interaction.reply({ content: 'Votre ticket a été envoyé.', ephemeral: true });
+
+        // Create a new channel for the ticket
+        var channel = await interaction.guild.channels.create({
+            name: 'ticket-' + sender.user.username,
+            type: ChannelType.GuildText
+        });
+        // Create a button to reply to the ticket
+        const rowMod = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('replyTicketMod')
+                    .setLabel('Répondre')
+                    .setStyle(ButtonStyle.Primary),
+            );
+
+        const mod = interaction.guild.roles.cache.get(modRole);
+
+        const embed = createEmbeds.createFullEmbed("Utilisateur", content, null, null, 0x0000FF, null);
+        // Send the message to the channel
+        await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
+
+        // Change category of the channel
+        const category = interaction.guild.channels.cache.find(c => c.id == ticket);
+        await channel.setParent(category);
+
+        // Create a button to reply to the ticket
+        const rowUser = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('replyTicketUser')
+                    .setLabel('Répondre')
+                    .setStyle(ButtonStyle.Primary),
+            );
+
+        // Create embed for the user
+        const embedUser = createEmbeds.createFullEmbed(sender.username, content, null, null, 0x0000FF, null);
+
+        // Send an MP message to the sender
+        await sender.send({ content: 'Votre ticket', embeds: [embedUser], components: [rowUser] });
+
+        // Check if the user exists in the database
+        const userId = await userDB.getUser(sender.user.id);
+        if (userId == null) {
+            // Add the user to the database
+            await userDB.createUser(sender.user.id, 0, 0);
+        }
+
+        // Save ticket to database
+        await ticketDB.insertTicket(sender.user.id, channel.id, interaction.guild.id);
+    },
+};
