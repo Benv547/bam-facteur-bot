@@ -1,5 +1,6 @@
 const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
+const {sanction} = require("../config.json");
 
 module.exports = {
     name: 'muteWarning',
@@ -18,11 +19,15 @@ module.exports = {
         await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);
 
         // Send MP to sender
-        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été muté•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : ' + raison, null, null, 0x2f3136, null)] });
+        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été muté•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
 
         // Delete message
-        await interaction.deferReply({ ephemeral: true })
-        await interaction.deleteReply();
+        await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });
         await interaction.message.delete();
+
+        // Fetch sanctions channel by id
+        const channel = await interaction.guild.channels.fetch(sanction);
+        // Send message
+        await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Mute', 'L\'utilisateur ' + receiver.toString() + ' a été muté par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
     }
 };

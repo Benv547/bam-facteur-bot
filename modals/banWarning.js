@@ -1,5 +1,6 @@
 const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
+const {sanction} = require("../config.json");
 
 module.exports = {
     name: 'banWarning',
@@ -14,14 +15,18 @@ module.exports = {
         const receiver = await interaction.guild.members.fetch(id_receiver);
 
         // Send MP to sender
-        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été banni•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : ' + raison, null, null, 0x2f3136, null)] });
+        await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été banni•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
 
         // Mute receiver
         await receiver.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: raison });
 
         // Delete message
-        await interaction.deferReply({ ephemeral: true })
-        await interaction.deleteReply();
+        await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });
         await interaction.message.delete();
+
+        // Fetch sanctions channel by id
+        const channel = await interaction.guild.channels.fetch(sanction);
+        // Send message
+        await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Ban', 'L\'utilisateur ' + receiver.toString() + ' a été banni par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
     }
 };

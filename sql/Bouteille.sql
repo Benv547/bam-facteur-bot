@@ -16,6 +16,7 @@ CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
   "money" int,
   "xp" int,
+  "nb_warn" int default 0,
   "diceBearSeed" text NOT NULL default md5(random()::text)
 );
 
