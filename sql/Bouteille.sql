@@ -1,3 +1,4 @@
+DROP TABLE "Sticky";
 DROP TABLE "Sanctions";
 DROP TABLE "Message";
 DROP TABLE "Vote";
@@ -16,6 +17,12 @@ CREATE TABLE "User" (
   "money" int,
   "xp" int,
   "diceBearSeed" text NOT NULL default md5(random()::text)
+);
+
+CREATE TABLE "Sticky" (
+    "id_guild" bigint NOT NULL,
+    "id_channel" bigint NOT NULL,
+    "id_lastReply" bigint NOT NULL
 );
 
 CREATE TABLE "Message" (
