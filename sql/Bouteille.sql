@@ -23,7 +23,8 @@ CREATE TABLE "User" (
 CREATE TABLE "Sticky" (
     "id_guild" bigint NOT NULL,
     "id_channel" bigint NOT NULL,
-    "id_lastReply" bigint NOT NULL
+    "id_message" bigint NOT NULL,
+    "id_lastReply" bigint
 );
 
 CREATE TABLE "Message" (
