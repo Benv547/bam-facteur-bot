@@ -22,9 +22,11 @@ module.exports = {
 
         await interaction.reply({ content: 'Votre ticket a été envoyé.', ephemeral: true });
 
+        const count = await ticketDB.get_number_of_tickets();
+
         // Create a new channel for the ticket
         var channel = await interaction.guild.channels.create({
-            name: 'ticket-' + sender.user.username,
+            name: 'ticket-n' + (count + 1),
             type: ChannelType.GuildText
         });
         // Create a button to reply to the ticket
