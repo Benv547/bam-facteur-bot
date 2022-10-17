@@ -71,6 +71,12 @@ module.exports = {
         const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_user_sender" = $1 OR "id_user_receiver" = $1', [id_user]);
         return results.rows;
     },
+    getBottleForUserWithName: async function (id_user, name) {
+        // Get bottle if name seems to be the same with %name%
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE ("id_user_sender" = $1 OR "id_user_receiver" = $1) AND "name" LIKE $2', [id_user, `%${name}%`]);
+        return results.rows;
+    },
     getBottle: async function (id_bottle) {
         const pool = getPool();
         const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle]);
@@ -83,5 +89,9 @@ module.exports = {
         const pool = getPool();
         const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1)');
         return results.rows;
+    },
+    update_id_bottle_and_id_channel: async function (id_bottle, new_id_channel) {
+        const pool = getPool();
+        return await pool.query('UPDATE "Bottle" SET "id_bottle" = $2, "id_channel" = $2 WHERE "id_bottle" = $1', [id_bottle, new_id_channel]);
     }
 }

@@ -8,10 +8,10 @@ module.exports = {
         .setName('bouteille')
         .setDescription('Regardez vos bouteilles !')
         .addStringOption(option =>
-            option.setName('id')
-                .setDescription('Le numéro de la bouteille')),
+            option.setName('name')
+                .setDescription('Le nom de la bouteille')),
     async execute(interaction) {
-        if (interaction.options.getString('id') === null) {
+        if (interaction.options.getString('name') === null) {
             const bottles = await bottleDB.getBottleForUser(interaction.user.id);
             let message = '';
             if (bottles.length === 0) {
@@ -20,10 +20,10 @@ module.exports = {
                 bottles.forEach(bottle => {
                     message += '• **' + bottle.name + '** (' + bottle.id_bottle + ')\n';
                     let status = '';
-                    if (bottle.archived) {
-                        status = '🗄️archivée';
-                    } else if (bottle.terminated) {
+                    if (bottle.terminated) {
                         status = '💀 terminée';
+                    } else if (bottle.archived) {
+                        status = '🗄️archivée';
                     } else if (bottle.id_user_sender === interaction.user.id) {
                         status = '📤 en attente de réponse de votre part';
                     } else {
@@ -35,18 +35,32 @@ module.exports = {
             const embed = createEmbeds.createFullEmbed("Vos bouteilles", message, null, null, 0x2f3136, null);
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
-            const bottle = await bottleDB.getBottle(interaction.options.getString('id'));
-            if (bottle === null) {
-                return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
-            }
+            let bottle;
+            const bottles = await bottleDB.getBottleForUserWithName(interaction.user.id, interaction.options.getString('name'));
+            if (bottles.length === 0) {
+                try {
+                    bottle = await bottleDB.getBottle(interaction.options.getString('name'));
+                }
+                catch (e) {
+                    return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
+                }
 
-            if (bottle.id_user_sender !== interaction.user.id && bottle.id_user_receiver !== interaction.user.id) {
-                return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
+                if (bottle === null) {
+                    return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
+                }
+
+                if (bottle.id_user_sender !== interaction.user.id && bottle.id_user_receiver !== interaction.user.id) {
+                    return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
+                }
+            } else if (bottles.length > 1) {
+                return interaction.reply({content: 'Plusieurs bouteilles ont ce nom, veuillez préciser.', ephemeral: true});
+            } else {
+                bottle = bottles[0];
             }
 
             let message = '';
 
-            const messages = await messageDB.getMessagesOfBottle(interaction.options.getString('id'));
+            const messages = await messageDB.getMessagesOfBottle(bottle.id_bottle);
             messages.forEach(messageDB => {
                 if (messageDB.id_user === interaction.user.id) {
                     message += '📤 **Vous :** ' + messageDB.content + '\n';
@@ -64,10 +78,10 @@ module.exports = {
             }
 
             let status = '';
-            if (bottle.archived) {
-                status = '🗄️archivée';
-            } else if (bottle.terminated) {
+            if (bottle.terminated) {
                 status = '💀 terminée';
+            } else if (bottle.archived) {
+                status = '🗄️archivée';
             } else if (bottle.id_user_sender === interaction.user.id) {
                 status = '📨 en attente de réponse de votre part';
             } else {

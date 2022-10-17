@@ -1,16 +1,29 @@
 const bottleDB = require("../database/bottle");
+const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
 
 module.exports = {
     name: 'deleteBottle',
     async execute(interaction) {
-        // Send bottle terminated and archived
-        await bottleDB.setBottleTerminated(interaction.channel.id);
-        await bottleDB.setBottleArchived(interaction.channel.id);
 
-        // Delete channel
-        await interaction.channel.delete();
+        const modal = new ModalBuilder()
+            .setCustomId('deleteBottle')
+            .setTitle('Êtes-vous sûr ?');
 
-        // Reply to user
-        await interaction.reply({ content: 'La bouteille a été supprimée.', ephemeral: true });
+        // Add components to modal
+        const hobbiesInput = new TextInputBuilder()
+            .setCustomId('textSuppression')
+            .setLabel("Ecrivez 'supprimer' pour confirmer :")
+            // Paragraph means multiple lines of text.
+            .setStyle(TextInputStyle.Paragraph);
+
+        // An action row only holds one text input,
+        // so you need one action row per text input.
+        const primaryActionRow = new ActionRowBuilder().addComponents(hobbiesInput);
+
+        // Add inputs to the modal
+        modal.addComponents(primaryActionRow);
+
+        // Show the modal to the user
+        await interaction.showModal(modal);
     },
 };

@@ -7,6 +7,10 @@ module.exports = {
     name: 'seaBottle',
     async execute(interaction) {
         const nb = await bottleDB.get_sea(interaction.channel.id);
+
+        // Delete components from message
+        await interaction.update({ components: [] });
+
         if (nb < 10) {
             await bottleDB.incr_sea(interaction.channel.id);
             // TODO: get author

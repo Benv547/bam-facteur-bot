@@ -81,7 +81,7 @@ module.exports = {
         await bottleDB.insertBottle(channel.id, guild.id, randMember.id, id_user_sender, channel.id, channel_name, nb_sea);
 
         // TODO: save message to DB
-        await messageDB.insertMessage(message.id, channel.id, channel.id, id_user_sender, content);
+        await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
     },
     reply: async function (guild, id_user_sender, channel, content) {
 
@@ -94,7 +94,7 @@ module.exports = {
         }
 
         // If category is not "conversations", move channel to "conversations"
-        if (channel.parentId === newBottleCategory) {
+        if (channel.parentId === newBottleCategory || channel.parentId === null) {
             let moved = false;
             // Foreach conversations
             for (const conversation of conversations) {
@@ -179,6 +179,58 @@ module.exports = {
         const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), embeds: [embed], components: [row] });
 
         // Save to DB
-        await messageDB.insertMessage(message.id, channel.id, channel.id, id_user_sender, content);
+        await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
+    },
+    unarchive: async function (guild, id_user_sender, id_bottle, content) {
+
+        // Get bottle infos
+        const bottle = await bottleDB.getBottle(id_bottle);
+
+        // Get sender
+        const sender = await userDB.getUser(bottle.id_user_sender);
+        if (sender === null) {
+            // delete bottle;
+            return;
+        }
+
+        // Get receiver
+        const receiver = await userDB.getUser(bottle.id_user_receiver);
+        if (receiver === null) {
+            // delete bottle;
+            return;
+        }
+
+        // Create channel
+        const newChannel = await guild.channels.create({
+            name: bottle.name,
+            type: ChannelType.GuildText
+        })
+
+        const everyoneRole = guild.roles.everyone;
+        await newChannel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
+
+        // Get all old messages
+        const messages = await messageDB.getMessagesOfBottle(id_bottle);
+
+        // Send all old messages
+        for (const message of messages) {
+            if (message.id_user === bottle.id_user_sender) {
+                // Create embedded bottle message ...
+                const embed = createEmbeds.createBottle(message.content, sender.diceBearSeed);
+                const newMessage = await newChannel.send({ content: '', embeds: [embed] });
+                await messageDB.update_id_message(newMessage.id, message.id_message);
+            } else {
+                // Create embedded bottle message ...
+                const embed = createEmbeds.createBottle(message.content, receiver.diceBearSeed);
+                const newMessage = await newChannel.send({ content: '', embeds: [embed] });
+                await messageDB.update_id_message(message.id_message, newMessage.id);
+            }
+        }
+
+        // Update bottle in DB
+        await bottleDB.setBottleUnarchived(id_bottle);
+        await bottleDB.update_id_bottle_and_id_channel(id_bottle, newChannel.id);
+
+        await this.reply(guild, id_user_sender, newChannel, content);
     }
 }
