@@ -13,10 +13,10 @@ module.exports = {
             const guildId = await ticketDB.get_id_guild(interaction.user.id);
 
             // Fetch guild from client
-            const guild = interaction.client.guilds.cache.get(guildId);
+            const guild = await interaction.client.guilds.fetch(guildId);
 
             // Fetch channel from guild
-            const channelGuild = guild.channels.cache.get(channelId);
+            const channelGuild = await guild.channels.fetch(channelId);
 
             // Delete channel
             try {
