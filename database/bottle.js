@@ -65,5 +65,15 @@ module.exports = {
     setBottleTerminated: async function (id_bottle) {
         const pool = getPool();
         return await pool.query('UPDATE "Bottle" SET "terminated" = true WHERE "id_bottle" = $1', [id_bottle]);
+    },
+    getBottleForUser: async function (id_user) {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_user_sender" = $1 OR "id_user_receiver" = $1', [id_user]);
+        return results.rows;
+    },
+    getBottle: async function (id_bottle) {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle]);
+        return results.rows[0];
     }
 }

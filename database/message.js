@@ -33,6 +33,11 @@ module.exports = {
         const results = await pool.query('SELECT * FROM "Message" WHERE "id_channel" = $1 ORDER BY "id_message" DESC LIMIT 10', [id_channel]);
         return results.rows;
     },
+    getMessagesOfBottle: async function (id_bottle) {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Message" WHERE "id_bottle" = $1 ORDER BY "id_message" ASC', [id_bottle]);
+        return results.rows;
+    },
     deleteAllMessagesOfBottle: async function (id_bottle) {
         const pool = getPool();
         return await pool.query('DELETE FROM "Message" WHERE "id_bottle" = $1', [id_bottle]);
