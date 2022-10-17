@@ -2,6 +2,7 @@ const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("dis
 const createEmbeds = require("../utils/createEmbeds");
 const suggestionDB = require("../database/suggestion");
 const userDB = require("../database/user");
+const roles = require("../utils/roles");
 
 module.exports = {
     name: 'replySuggestion',
@@ -39,8 +40,14 @@ module.exports = {
             );
 
         // Create embed
-        const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x2F3136, null);
-
+        let embed;
+        if (await roles.userIsAdmin(interaction.member)) {
+            embed = createEmbeds.createFullEmbed("Administrateur", content, null, null, 0xFF0000, null);
+        } else if (await roles.userIsMod(interaction.member)) {
+            embed = createEmbeds.createFullEmbed("Modérateur", content, null, null, 0xff8c00, null);
+        } else {
+            embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x2F3136, null);
+        }
         // Fetch message
         const message = await interaction.channel.messages.fetch(interaction.message.id);
 
