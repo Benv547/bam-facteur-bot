@@ -40,7 +40,7 @@ module.exports = {
                             .setLabel('Je donne mon avis')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('** Votre avis compte !**',
+                const embed = createEmbeds.createFullEmbed('**Votre avis compte !**',
                     'Vous aimez (ou pas) le serveur ? **Laissez-nous votre avis !**\n' +
                     '\n' +
                     'Attention, les suggestions doivent aller dans <#1030839758361993246>.',
@@ -74,8 +74,7 @@ module.exports = {
                 const embed = createEmbeds.createFullEmbed('',
                     ':warning: **Vous avez une question ?** La communauté y répond !\n' +
                     'Écrit ta question en cliquant en dessous et répond en ouvrant le fil de discussion.',
-                    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/light-bulb_1f4a1.png',
-                    null, 0x2f3136, null);
+                    null, null, 0x2f3136, null);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             }
