@@ -40,6 +40,10 @@ CREATE TABLE "Couleur" (
   "couleur" text PRIMARY KEY
 );
 
+CREATE TABLE "Emoji" (
+  "emoji" text PRIMARY KEY
+);
+
 CREATE TABLE "Etat" (
   "etat" text PRIMARY KEY
 );
@@ -132,9 +136,69 @@ ALTER TABLE "Help" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user");
 
 INSERT INTO "Couleur" VALUES ('rose'),
+                             ('cendrée'),
+                             ('saumon'),
+                             ('taupe'),
+                             ('corail'),
+                             ('violette'),
+                             ('marron'),
+                             ('feu-vif'),
+                             ('magenta'),
+                             ('carmin'),
+                             ('grenat'),
+                             ('écarlate'),
+                             ('cobalt'),
+                             ('azur'),
+                             ('lapis'),
+                             ('rubis'),
+                             ('verte'),
+                             ('saphir'),
+                             ('pourpre'),
+                             ('orange'),
+                             ('grise'),
+                             ('noire'),
+                             ('beige'),
+                             ('blanche'),
+                             ('mauve'),
                              ('rouge'),
                              ('bleue');
 
 INSERT INTO "Etat" VALUES ('cassée'),
-                             ('fissurée'),
+                             ('naufragée'),
+                             ('mousseuse'),
+                             ('dorée'),
+                             ('sale'),
+                             ('étincelante'),
+                             ('polie'),
+                             ('perdue'),
+                             ('rayée'),
+                             ('coupante'),
+                             ('écaillée'),
+                             ('brûlante'),
+                             ('froide'),
+                             ('imaginaire'),
+                             ('douce'),
+                             ('abîmée'),
+                             ('plastique'),
+                             ('étoilée'),
+                             ('boueuse'),
                              ('argentée');
+
+-- Get all emoji from https://emojipedia.org/ who correpond to autumn season
+INSERT INTO "Emoji" VALUES ('🍂'),
+                           ('🥮'),
+                           ('🍁'),
+                           ('🍃'),
+                           ('🍄'),
+                           ('🧣'),
+                           ('🧤'),
+                           ('🧥'),
+                           ('🧦'),
+                           ('🎃'),
+                           ('🍎'),
+                           ('🌶'),
+                           ('🌽'),
+                           ('🥕'),
+                           ('🥔'),
+                           ('🎑'),
+                           ('🌇');

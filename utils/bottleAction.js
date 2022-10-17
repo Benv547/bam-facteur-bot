@@ -19,7 +19,8 @@ module.exports = {
 
         const color = await stateAndColorDB.getRandomColor();
         const state = await stateAndColorDB.getRandomState();
-        const channel_name = "bouteille-" + color + "-" + state;
+        const emoji = await stateAndColorDB.getRandomEmoji();
+        const channel_name = emoji + "│bouteille-" + color + "-" + state;
 
         // TODO: create channel
         const everyoneRole = guild.roles.everyone;
