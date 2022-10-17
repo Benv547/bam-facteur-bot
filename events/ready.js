@@ -2,12 +2,20 @@ const stickyDB = require("../database/sticky");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const bottle = require("../utils/bottleAction");
+const {Collection} = require("discord.js");
 
 module.exports = {
     name: 'ready',
     once: true,
     execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
+
+        client.guilds.cache.forEach(async (guild) => {
+            // Fetch all Guild Invites
+            const firstInvites = await guild.invites.fetch();
+            // Set the key as Guild ID, and create a map which has the invite code, and the number of uses
+            global.invites.set(guild.id, new Collection(firstInvites.map((invite) => [invite.code, invite.uses])));
+        });
 
         const checkSticky = async () => {
             console.log('Checking sticky messages...');

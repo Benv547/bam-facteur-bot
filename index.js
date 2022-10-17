@@ -5,6 +5,8 @@ const path = require('node:path');
 const { Client, GatewayIntentBits, Collection} = require('discord.js');
 const { token } = require('./config.json');
 
+global.invites = new Collection();
+
 // Create a new client instance
 const client = new Client({
     intents: [

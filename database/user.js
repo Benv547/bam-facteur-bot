@@ -37,5 +37,17 @@ module.exports = {
     update_diceBearSeed: async function (id_user, diceBearSeed) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "diceBearSeed" = $1 WHERE "id_user" = $2', [diceBearSeed, id_user]);
+    },
+    incr_nb_invite: async function (id_user) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "nb_invite" = "nb_invite" + 1 WHERE "id_user" = $1', [id_user]);
+    },
+    get_nb_invite: async function (id_user) {
+        const pool = getPool();
+        const results = await pool.query('SELECT "nb_invite" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].nb_invite;
+        }
+        return null;
     }
 }
