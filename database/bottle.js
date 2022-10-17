@@ -14,9 +14,9 @@ function getPool() {
 }
 
 module.exports = {
-    insertBottle: async function (id_bottle, id_user_sender, id_user_receiver, id_channel, name, nb_sea) {
+    insertBottle: async function (id_bottle, id_guild, id_user_sender, id_user_receiver, id_channel, name, nb_sea) {
         const pool = getPool();
-        return await pool.query('INSERT INTO "Bottle" ("id_bottle", "id_user_sender", "id_user_receiver", "id_channel", "name", "nb_sea") VALUES ($1, $2, $3, $4, $5, $6)', [id_bottle, id_user_sender, id_user_receiver, id_channel, name, nb_sea]);
+        return await pool.query('INSERT INTO "Bottle" ("id_bottle", "id_guild", "id_user_sender", "id_user_receiver", "id_channel", "name", "nb_sea") VALUES ($1, $2, $3, $4, $5, $6, $7)', [id_bottle, id_guild, id_user_sender, id_user_receiver, id_channel, name, nb_sea]);
     },
     getReceiver : async function (id_bottle) {
         const pool = getPool();
@@ -75,5 +75,10 @@ module.exports = {
         const pool = getPool();
         const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle]);
         return results.rows[0];
+    },
+    getAllBottleHasOnlyOneMessage: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1)');
+        return results.rows;
     }
 }

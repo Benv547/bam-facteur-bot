@@ -11,6 +11,7 @@ DROP TABLE "Bottle";
 DROP TABLE "User";
 DROP TABLE "Couleur";
 DROP TABLE "Etat";
+DROP TABLE "Emoji";
 
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
@@ -50,6 +51,7 @@ CREATE TABLE "Etat" (
 
 CREATE TABLE "Bottle" (
   "id_bottle" bigint PRIMARY KEY,
+  "id_guild" bigint,
   "id_user_sender" bigint,
   "id_user_receiver" bigint,
   "id_channel" bigint,

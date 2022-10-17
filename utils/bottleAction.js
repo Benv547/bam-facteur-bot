@@ -78,7 +78,7 @@ module.exports = {
         const message = await channel.send({ content: 'Vous avez reçu une bouteille ' + randMember.toString(), embeds: [embed], components: [row] });
 
         // TODO: save bottle to DB
-        await bottleDB.insertBottle(channel.id, randMember.id, id_user_sender, channel.id, channel_name, nb_sea);
+        await bottleDB.insertBottle(channel.id, guild.id, randMember.id, id_user_sender, channel.id, channel_name, nb_sea);
 
         // TODO: save message to DB
         await messageDB.insertMessage(message.id, channel.id, channel.id, id_user_sender, content);
