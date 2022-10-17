@@ -5,7 +5,7 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('say')
-        .setDescription('Display embed on the channel!')
+        .setDescription('Permet de faire parler le bot.')
         .addStringOption(option =>
             option.setName('title')
                 .setDescription('The title of the embed')

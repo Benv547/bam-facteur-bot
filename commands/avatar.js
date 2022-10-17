@@ -5,7 +5,7 @@ const userDB = require("../database/user");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('avatar')
-        .setDescription('Change to a random avatar!')
+        .setDescription('Choisissez votre avatar !')
         .addStringOption(option =>
             option.setName('code')
                 .setDescription('The code of the avatar')),

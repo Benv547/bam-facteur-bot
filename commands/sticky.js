@@ -5,7 +5,7 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('sticky')
-        .setDescription('Set sticky message on the channel!')
+        .setDescription('Permet de créer un message épinglé.')
         .addStringOption(option =>
             option.setName('original')
                 .setDescription('The sticky message')

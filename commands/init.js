@@ -5,7 +5,7 @@ const createEmbeds = require("../utils/createEmbeds");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('init')
-        .setDescription('Initialize the message with buttons')
+        .setDescription('Initialise les messages du serveur.')
         .addStringOption(option =>
             option.setName('type')
                 .setDescription('The type of the init')
