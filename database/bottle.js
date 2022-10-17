@@ -74,7 +74,10 @@ module.exports = {
     getBottle: async function (id_bottle) {
         const pool = getPool();
         const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle]);
-        return results.rows[0];
+        if (results.rows.length > 0) {
+            return results.rows[0];
+        }
+        return null;
     },
     getAllBottleHasOnlyOneMessage: async function () {
         const pool = getPool();

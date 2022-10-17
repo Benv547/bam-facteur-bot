@@ -39,6 +39,11 @@ module.exports = {
             if (bottle === null) {
                 return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
             }
+
+            if (bottle.id_user_sender !== interaction.user.id && bottle.id_user_receiver !== interaction.user.id) {
+                return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
+            }
+
             let message = '';
 
             const messages = await messageDB.getMessagesOfBottle(interaction.options.getString('id'));
