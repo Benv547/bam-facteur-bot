@@ -4,6 +4,7 @@ const messageDB = require("../database/message");
 const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
+    public: true,
     data: new SlashCommandBuilder()
         .setName('bouteille')
         .setDescription('Regardez vos bouteilles !')

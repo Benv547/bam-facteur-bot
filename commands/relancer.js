@@ -2,6 +2,7 @@ const { SlashCommandBuilder, ModalBuilder, TextInputBuilder, TextInputStyle, Act
 const bottleDB = require("../database/bottle");
 
 module.exports = {
+    public: true,
     data: new SlashCommandBuilder()
         .setName('relancer')
         .setDescription('Relancez une bouteille archivée !')
