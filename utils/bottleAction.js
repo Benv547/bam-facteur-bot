@@ -31,6 +31,13 @@ module.exports = {
 
         // TODO: move channel to "nouvelles bouteilles"
         const category = guild.channels.cache.find(c => c.id == newBottleCategory);
+
+        // While number of channels in category is more than 45
+        while (category.children.cache.size > 45) {
+            const channelToDelete = category.children.cache.first();
+            await channelToDelete.delete();
+        }
+
         await channel.setParent(category);
 
         // TODO: choose random member who are not a bot
