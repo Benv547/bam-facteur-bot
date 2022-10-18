@@ -1,5 +1,4 @@
-const { Client } = require('discord.js');
-const { modRole, adminRole } = require('../config.json');
+const { modRole, adminRole, vipRole, boostRole } = require('../config.json');
 
 module.exports = {
      userIsAdmin: async function (member) {
@@ -10,6 +9,18 @@ module.exports = {
 
     userIsMod: async function (member) {
         if (member.roles.cache.find(r => r.id === modRole))
+            return true;
+        return false;
+    },
+
+    userIsVip: async function (member) {
+         if (member.roles.cache.find(r => r.id === vipRole))
+            return true;
+        return false;
+    },
+
+    userIsBooster: async function (member) {
+        if (member.roles.cache.find(r => r.id === boostRole))
             return true;
         return false;
     }

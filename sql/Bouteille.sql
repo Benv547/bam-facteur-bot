@@ -59,7 +59,8 @@ CREATE TABLE "Bottle" (
   "name" varchar(50),
   "nb_sea" int default 0,
   "archived" boolean default false,
-  "terminated" boolean default false
+  "terminated" boolean default false,
+  "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Sanctions" (

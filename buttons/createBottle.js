@@ -1,4 +1,6 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
+const bottleDB = require("../database/bottle");
+const roles = require("../utils/roles");
 
 module.exports = {
     name: 'createBottle',
@@ -20,6 +22,24 @@ module.exports = {
 
         // Add inputs to the modal
         modal.addComponents(primaryActionRow);
+
+        // If last bottle date is less than 5minutes
+        const dateLastBottle = await bottleDB.getDateOfLastBottleWithOneMessageOfUser(interaction.user.id);
+        let waitMinutes = 10;
+
+        if (await roles.userIsBooster(interaction.member)) {
+            waitMinutes = 1;
+        } else if (await roles.userIsVip(interaction.member)) {
+            waitMinutes = 5;
+        }
+
+        if (dateLastBottle) {
+            const diff = Math.abs(new Date() - new Date(dateLastBottle));
+            const diffMinutes = Math.ceil(diff / (1000 * 60));
+            if (diffMinutes < waitMinutes) {
+                return await interaction.reply({ content: `Vous devez attendre ${waitMinutes - diffMinutes} minutes avant de pouvoir créer une nouvelle bouteille.`, ephemeral: true });
+            }
+        }
 
         // Show the modal to the user
         await interaction.showModal(modal);

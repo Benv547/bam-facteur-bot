@@ -93,5 +93,13 @@ module.exports = {
     update_id_bottle_and_id_channel: async function (id_bottle, new_id_channel) {
         const pool = getPool();
         return await pool.query('UPDATE "Bottle" SET "id_bottle" = $2 WHERE "id_bottle" = $1', [id_bottle, new_id_channel]);
+    },
+    getDateOfLastBottleWithOneMessageOfUser: async function (id_user) {
+        const pool = getPool();
+        const results = await pool.query('SELECT date FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "id_user" = $1 ORDER BY "date" DESC LIMIT 1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].date;
+        }
+        return null;
     }
 }
