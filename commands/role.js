@@ -4,7 +4,6 @@ const createEmbeds = require("../utils/createEmbeds");
 const roleDB = require("../database/role");
 
 module.exports = {
-    public: true,
     data: new SlashCommandBuilder()
         .setName('role')
         .setDescription('Permet de créer un rôle dans le salon.')
