@@ -1,4 +1,4 @@
-const { dbuser, dbhost, dbbase, dbpassword, dbport } = require('../config.json');
+const { dbuser, dbhost, dbbase, dbpassword, dbport } = require('../db.json');
 
 const Pool = require('pg').Pool
 function getPool() {

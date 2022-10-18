@@ -1,10 +1,4 @@
 {
-  "dbuser": "postgres",
-  "dbhost": "51.75.19.0",
-  "dbbase": "bouteille",
-  "dbpassword": "bouteilleFacteur2022",
-  "dbport": 5432,
-
   "adminRole": "1030088734894469191",
   "modRole": "1030088798152970320",
   "vipRole": "1031625393985310780",
