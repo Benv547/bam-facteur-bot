@@ -4,7 +4,7 @@ const bottleDB = require("../database/bottle");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('relancer')
-        .setDescription('Relancer une bouteille archivée !')
+        .setDescription('Relancez une bouteille archivée !')
         .addStringOption(option =>
             option.setName('name')
                 .setDescription('Le nom de la bouteille')

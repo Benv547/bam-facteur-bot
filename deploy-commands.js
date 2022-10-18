@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord.js');
-const { clientId, guildId, token } = require('./config.json');
+const { clientId, token } = require('./token.json');
 
 const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
@@ -16,6 +16,12 @@ for (const file of commandFiles) {
 
 const rest = new REST({ version: '10' }).setToken(token);
 
-rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+
+// for global commands
+// rest.put(Routes.applicationCommands(clientId), { body: [] })
+//     .then(() => console.log('Successfully deleted all application commands.'))
+//     .catch(console.error);
+
+rest.put(Routes.applicationCommands(clientId), { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);
