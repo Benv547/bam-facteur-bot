@@ -96,7 +96,7 @@ module.exports = {
     },
     getDateOfLastBottleWithOneMessageOfUser: async function (id_user) {
         const pool = getPool();
-        const results = await pool.query('SELECT date FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "id_user" = $1 ORDER BY "date" DESC LIMIT 1', [id_user]);
+        const results = await pool.query('SELECT date FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "id_user_receiver" = $1 ORDER BY "date" DESC LIMIT 1', [id_user]);
         if (results.rows.length > 0) {
             return results.rows[0].date;
         }
