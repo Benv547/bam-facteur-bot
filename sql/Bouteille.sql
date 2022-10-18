@@ -12,6 +12,7 @@ DROP TABLE "User";
 DROP TABLE "Couleur";
 DROP TABLE "Etat";
 DROP TABLE "Emoji";
+DROP TABLE "Role";
 
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
@@ -112,6 +113,11 @@ CREATE TABLE "Help" (
     "content" text,
     "isReply" boolean default false,
     "date" timestamp default current_timestamp
+);
+
+CREATE TABLE "Role" (
+    "id_role" bigint PRIMARY KEY,
+    "id_message" bigint
 );
 
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
