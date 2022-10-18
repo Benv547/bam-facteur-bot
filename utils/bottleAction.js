@@ -30,11 +30,14 @@ module.exports = {
         })
 
         // TODO: move channel to "nouvelles bouteilles"
-        const category = guild.channels.cache.find(c => c.id == newBottleCategory);
+        const category = (await guild.channels.fetch()).find(c => c.id == newBottleCategory);
 
         // While number of channels in category is more than 45
         while (category.children.cache.size > 45) {
             const channelToDelete = category.children.cache.first();
+            // Set archive to true
+            await bottleDB.setBottleArchived(channelToDelete.id_channel);
+            // Delete channel
             await channelToDelete.delete();
         }
 
@@ -72,7 +75,7 @@ module.exports = {
                 new ButtonBuilder()
                     .setCustomId('seaBottle')
                     .setLabel('🌊 Remettre à la mer')
-                    .setStyle(ButtonStyle.Primary),
+                    .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
@@ -106,7 +109,7 @@ module.exports = {
             // Foreach conversations
             for (const conversation of conversations) {
                 // Fetch category conversation channel
-                const category = guild.channels.cache.find(c => c.id == conversation);
+                const category = (await guild.channels.fetch()).find(c => c.id == conversation);
 
                 // If number of channels in category is less than 45
                 if (category.children.cache.size < 45) {
@@ -121,16 +124,15 @@ module.exports = {
                 // Get oldest bottle channel
                 const oldestChannel = await bottleDB.getOldestBottleNotArchived();
                 // Fetch channel
-                const oldestChannelFetched = await guild.channels.fetch(oldestChannel.id_channel);
+                const oldestChannelFetched = await guild.channels.fetch(oldestChannel);
                 // Get category
-                const category = guild.channels.cache.find(c => c.id == oldestChannelFetched.parentId);
+                const category = (await guild.channels.fetch()).find(c => c.id == oldestChannelFetched.parentId);
                 // Set archive to true
                 await bottleDB.setBottleArchived(oldestChannel.id_channel);
                 // Delete channel
                 await oldestChannelFetched.delete();
                 // Move channel to category
                 await channel.setParent(category);
-
             }
         }
 

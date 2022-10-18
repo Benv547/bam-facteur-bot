@@ -56,7 +56,7 @@ CREATE TABLE "Bottle" (
   "id_user_sender" bigint,
   "id_user_receiver" bigint,
   "id_channel" bigint,
-  "name" varchar(30),
+  "name" varchar(50),
   "nb_sea" int default 0,
   "archived" boolean default false,
   "terminated" boolean default false

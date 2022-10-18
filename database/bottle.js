@@ -48,9 +48,9 @@ module.exports = {
     },
     getOldestBottleNotArchived: async function () {
         const pool = getPool();
-        const results = await pool.query('SELECT id_channel FROM "Message" WHERE "id_message" IN (SELECT MAX("id_message") FROM "Message" GROUP BY "id_bottle") ORDER BY "date" ASC LIMIT 1;');
+        const results = await pool.query('SELECT id_bottle FROM "Message" WHERE "id_message" IN (SELECT MAX("id_message") FROM "Message" GROUP BY "id_bottle") ORDER BY "date" ASC LIMIT 1;');
         if (results.rows.length > 0) {
-            return results.rows[0].id_channel;
+            return results.rows[0].id_bottle;
         }
         return null;
     },
@@ -92,6 +92,6 @@ module.exports = {
     },
     update_id_bottle_and_id_channel: async function (id_bottle, new_id_channel) {
         const pool = getPool();
-        return await pool.query('UPDATE "Bottle" SET "id_bottle" = $2, "id_channel" = $2 WHERE "id_bottle" = $1', [id_bottle, new_id_channel]);
+        return await pool.query('UPDATE "Bottle" SET "id_bottle" = $2 WHERE "id_bottle" = $1', [id_bottle, new_id_channel]);
     }
 }
