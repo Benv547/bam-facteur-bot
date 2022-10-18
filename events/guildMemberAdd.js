@@ -23,16 +23,31 @@ module.exports = {
 
         // Fetch sanctions channel by id
         const channel = await member.guild.channels.fetch(join);
-        // Send message
-        await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur grâce à l\'invitation de ' + invite.inviter.toString() + '\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)] });
 
-        // If number of invite of a user is equal to 5, give the role VIP
-        if (await userDB.get_nb_invite(invite.inviter.id) === 5) {
-            // Add role to the inviter
-            const inviter = await member.guild.members.fetch(invite.inviter.id);
-            await inviter.roles.add(vipRole);
-            // Send message to the inviter
-            await invite.inviter.send({ content: '', embeds: [createEmbeds.createFullEmbed('Une very importante personne !', 'Vous avez atteint le nombre d\'invitation nécessaire pour obtenir **le rôle VIP** !', null, null, 0x2f3136, null)] });
+        if (invite.inviter !== null) {
+            try {
+                // Send message
+                await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur grâce à l\'invitation de ' + invite.inviter.toString() + '\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)] });
+
+                // If number of invite of a user is equal to 5, give the role VIP
+                if (await userDB.get_nb_invite(invite.inviter.id) === 5) {
+                    // Add role to the inviter
+                    const inviter = await member.guild.members.fetch(invite.inviter.id);
+                    await inviter.roles.add(vipRole);
+                    // Send message to the inviter
+                    await invite.inviter.send({ content: '', embeds: [createEmbeds.createFullEmbed('Une very importante personne !', 'Vous avez atteint le nombre d\'invitation nécessaire pour obtenir **le rôle VIP** !', null, null, 0x2f3136, null)] });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        } else {
+            try {
+                // Send message
+                await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur !\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)] });
+            }
+            catch (e) {
+                console.log(e);
+            }
         }
     }
 };
