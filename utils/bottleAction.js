@@ -103,6 +103,16 @@ module.exports = {
             sender = await userDB.getUser(id_user_sender);
         }
 
+        // TODO: get receiver from DB
+        const receiver_id = await bottleDB.getReceiver(channel.id);
+        const receiver = await guild.members.fetch(receiver_id);
+
+        // Create embedded bottle message ...
+        const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
+
+        // Send message
+        const messageTemp = await channel.send({ content: "", embeds: [embed] });
+
         // If category is not "conversations", move channel to "conversations"
         if (channel.parentId === newBottleCategory || channel.parentId === null) {
             let moved = false;
@@ -136,16 +146,6 @@ module.exports = {
             }
         }
 
-        // TODO: get receiver from DB
-        const receiver_id = await bottleDB.getReceiver(channel.id);
-        const receiver = await guild.members.fetch(receiver_id);
-
-        // Create embedded bottle message ...
-        const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
-
-        // Send message
-        const messageTemp = await channel.send({ content: "", embeds: [embed] });
-
         // edits overwrites to allow a user to view the channel
         await channel.permissionOverwrites.create(id_user_sender, {ViewChannel: false, SendMessages: false});
 
@@ -153,9 +153,9 @@ module.exports = {
         await messageTemp.delete();
 
         // Remove actions from last message
-        const lastMessageId = await messageDB.getLastMessageId(channel.id);
-        const lastMessage = await channel.messages.fetch(lastMessageId);
-        await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
+        // const lastMessageId = await messageDB.getLastMessageId(channel.id);
+        // const lastMessage = await channel.messages.fetch(lastMessageId);
+        // await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
 
         // The receiver can see channel
         await channel.permissionOverwrites.create(receiver_id, {ViewChannel: true, SendMessages: false});

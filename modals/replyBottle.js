@@ -8,7 +8,7 @@ module.exports = {
 
         const sender = interaction.member;
 
-        await interaction.update({ components: [] });
+        await interaction.update({ content: '', components: [] });
 
         try {
             await bottle.reply(interaction.guild, sender.id, interaction.channel, content);
