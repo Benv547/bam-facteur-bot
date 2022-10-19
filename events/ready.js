@@ -18,7 +18,7 @@ module.exports = {
         });
 
         const checkSticky = async () => {
-            console.log('Checking sticky messages...');
+            console.log(new Date().toLocaleString() + " - Checking sticky messages...");
 
             const stickies = await stickyDB.getAllStickies();
 
@@ -63,7 +63,7 @@ module.exports = {
         checkSticky();
 
         checkBottle = async () => {
-            console.log('Checking bottles...');
+            console.log(new Date().toLocaleString() + " - Checking bottles...");
 
             const bottles = await bottleDB.getAllBottleHasOnlyOneMessage();
 
@@ -97,7 +97,7 @@ module.exports = {
                     }
                 }
             }
-            setTimeout(checkBottle, 1000 * 60 * 60 * 6);
+            setTimeout(checkBottle, 1000 * 60 * 60 * 1);
         };
         checkBottle();
     },
