@@ -2,7 +2,10 @@ const stickyDB = require("../database/sticky");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const bottle = require("../utils/bottleAction");
-const {Collection} = require("discord.js");
+const userDB = require("../database/user");
+const { Collection } = require("discord.js");
+const { guildId, anniversaireRole } = require("../config.json");
+const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
     name: 'ready',
@@ -30,7 +33,7 @@ module.exports = {
                     const lastReply = await channel.messages.fetch(stickies[i].id_lastReply);
 
                     // Get last message of the channel
-                    const lastMessageOfChannel = await channel.messages.fetch({limit: 1});
+                    const lastMessageOfChannel = await channel.messages.fetch({ limit: 1 });
                     // if the last message of the channel is the last message of the sticky
                     if (lastReply === null || lastMessageOfChannel.first().id !== lastReply.id) {
                         // if the last message as be posted more than 5 minutes ago from now
@@ -73,7 +76,7 @@ module.exports = {
                     try {
                         const channel = await guild.channels.fetch(bottles[i].id_channel);
                         // Get last message of the channel
-                        const lastMessageOfChannel = await channel.messages.fetch({limit: 1});
+                        const lastMessageOfChannel = await channel.messages.fetch({ limit: 1 });
                         // if the last message created timestamp is more than 6 hours ago from now
                         const now = new Date();
                         if (lastMessageOfChannel.first().createdTimestamp + 6 * 60 * 60 * 1000 < now.getTime()) {
@@ -100,5 +103,44 @@ module.exports = {
             setTimeout(checkBottle, 1000 * 60 * 60 * 1);
         };
         checkBottle();
+
+
+
+
+        checkAnniversaire = async () => {
+            console.log(new Date().toLocaleString() + " - Checking anniversaires...");
+            const now = new Date();
+            // if (now.getHours() == 0) {
+            if (true) {
+                const guild = await client.guilds.fetch(guildId);
+                const roleActive = await guild.roles.fetch(anniversaireRole);
+                
+                for (let i = 0; i < roleActive.members.length; i++) {
+                    const memberActive = roleActive.members[i];
+                    await memberActive.roles.remove(anniversaireRole);
+                }
+
+                const monthDate = now.getMonth() + 1;
+                const dayDate = now.getDate();
+                const users = await userDB.getAnniversaire(monthDate, dayDate);
+
+                if (users !== null) { // je vais pisesr j'arve
+                    for (let i = 0; i < users.length; i++) {
+                        const memberId = users[i].id_user;
+                        const member = await guild.members.fetch(memberId);
+
+                        await member.roles.add(anniversaireRole);
+
+                        const embedUser = createEmbeds.createFullEmbed("JOYEUX ANNIVERSAIRE", '', null, null, 0x00FF00, null); // TO DO : Faire le message + ajuster couleur
+                        // Send an MP message to the sender
+                        await member.send({ content: '', embeds: [embedUser] }); // TO DO : Faire un bouton (réclamer sticker anniversaire) components: [rowUser] 
+                    }
+                }
+            }
+
+
+            setTimeout(checkAnniversaire, 1000 * 60 * 60 * 1);
+        };
+        checkAnniversaire();
     },
 };

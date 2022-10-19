@@ -26,6 +26,14 @@ module.exports = {
         }
         return null;
     },
+    getAnniversaire: async function (monthDate, dayDate) {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "User" WHERE "anniversaireJour" = $1 AND "anniversaireMois" = $2', [dayDate, monthDate]); 
+        if (results.rows.length > 0) {
+            return results.rows;
+        }
+        return null;
+    },
     deleteUser: async function (id_user) {
         const pool = getPool();
         return await pool.query('DELETE FROM "User" WHERE "id_user" = $1', [id_user]);
