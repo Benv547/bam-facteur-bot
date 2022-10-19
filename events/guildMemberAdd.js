@@ -13,19 +13,19 @@ module.exports = {
         const invite = newInvites.find(i => i.uses > oldInvites.get(i.code));
         // This is just to simplify the message being sent below (inviter doesn't have a tag property)
 
-        if (await userDB.getUser(member.id) === null) {
-            // Increment the number of invitations of the inviter.
-            await userDB.incr_nb_invite(invite.inviter.id);
-
-            // Create a new user in the database.
-            await userDB.createUser(member.id, 0, 0);
-        }
-
         // Fetch sanctions channel by id
         const channel = await member.guild.channels.fetch(join);
 
         if (invite.inviter !== null) {
             try {
+                if (await userDB.getUser(member.id) === null) {
+                    // Increment the number of invitations of the inviter.
+                    await userDB.incr_nb_invite(invite.inviter.id);
+
+                    // Create a new user in the database.
+                    await userDB.createUser(member.id, 0, 0);
+                }
+
                 // Send message
                 await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur grâce à l\'invitation de ' + invite.inviter.toString() + '\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)] });
 
@@ -43,7 +43,7 @@ module.exports = {
         } else {
             try {
                 // Send message
-                await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur !\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !\nSon compte a été créé il y a **' + member.user.createdAt.toDateString() + '**', null, null, 0x2f3136, null)] });
+                await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur !\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)] });
             }
             catch (e) {
                 console.log(e);
