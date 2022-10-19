@@ -43,7 +43,7 @@ module.exports = {
         } else {
             try {
                 // Send message
-                await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur !\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)] });
+                await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur !\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !\nSon compte a été créé il y a **' + member.user.createdAt.toDateString() + '**', null, null, 0x2f3136, null)] });
             }
             catch (e) {
                 console.log(e);
