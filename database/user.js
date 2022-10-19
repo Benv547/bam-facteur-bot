@@ -38,6 +38,10 @@ module.exports = {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "diceBearSeed" = $1 WHERE "id_user" = $2', [diceBearSeed, id_user]);
     },
+    update_anniversaire: async function (id_user, jour, mois) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "anniversaireJour" = $1, "anniversaireMois" = $2 WHERE "id_user" = $3', [jour, mois, id_user]);
+    },
     incr_nb_invite: async function (id_user) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "nb_invite" = "nb_invite" + 1 WHERE "id_user" = $1', [id_user]);

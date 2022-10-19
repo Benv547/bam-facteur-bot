@@ -20,7 +20,9 @@ CREATE TABLE "User" (
   "xp" int,
   "nb_warn" int default 0,
   "nb_invite" int default 0,
-  "diceBearSeed" text NOT NULL default md5(random()::text)
+  "diceBearSeed" text NOT NULL default md5(random()::text),
+  "anniversaireJour" int,
+  "anniversaireMois" int
 );
 
 CREATE TABLE "Sticky" (
