@@ -110,21 +110,21 @@ module.exports = {
         checkAnniversaire = async () => {
             console.log(new Date().toLocaleString() + " - Checking anniversaires...");
             const now = new Date();
-            // if (now.getHours() == 0) {
-            if (true) {
+            if (now.getHours() == 0) {
+                // Fetch guild
                 const guild = await client.guilds.fetch(guildId);
-                const roleActive = await guild.roles.fetch(anniversaireRole);
-                
-                for (let i = 0; i < roleActive.members.length; i++) {
-                    const memberActive = roleActive.members[i];
-                    await memberActive.roles.remove(anniversaireRole);
+
+                // Remove all anniversaire roles
+                const members = (await guild.members.fetch()).filter((member) => member.roles.cache.has(anniversaireRole));
+                for (const member of members.values()) {
+                    await member.roles.remove(anniversaireRole);
                 }
 
                 const monthDate = now.getMonth() + 1;
                 const dayDate = now.getDate();
                 const users = await userDB.getAnniversaire(monthDate, dayDate);
 
-                if (users !== null) { // je vais pisesr j'arve
+                if (users !== null) {
                     for (let i = 0; i < users.length; i++) {
                         const memberId = users[i].id_user;
                         const member = await guild.members.fetch(memberId);
