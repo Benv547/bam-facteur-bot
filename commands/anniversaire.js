@@ -3,6 +3,7 @@ const createEmbeds = require("../utils/createEmbeds");
 const userDB = require('../database/user');
 
 module.exports = {
+    public: true,
     data: new SlashCommandBuilder()
         .setName('anniversaire')
         .setDescription('Fêtons ton anniversaire !')
