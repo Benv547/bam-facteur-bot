@@ -107,6 +107,11 @@ module.exports = {
         const receiver_id = await bottleDB.getReceiver(channel.id);
         const receiver = await guild.members.fetch(receiver_id);
 
+        if (receiver === null) {
+            // TODO : delete bottle
+            return;
+        }
+
         // Create embedded bottle message ...
         const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
 
