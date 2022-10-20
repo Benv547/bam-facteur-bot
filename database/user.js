@@ -61,5 +61,25 @@ module.exports = {
             return results.rows[0].nb_invite;
         }
         return null;
+    },
+    incr_money: async function (id_user, qte) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "money" = "money" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    reduce_money: async function (id_user, qte) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "money" = "money" - $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    get_money: async function (id_user) {
+        const pool = getPool();
+        const results = await pool.query('SELECT "money" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].money;
+        }
+        return null;
+    },
+    incr_xp: async function (id_user, qte) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "xp" = "xp" + $1 WHERE "id_user" = $2', [qte, id_user]);
     }
 }
