@@ -12,6 +12,10 @@ module.exports = {
         // Get sender id
         const id_sender = await signalementDB.get_id_sender(interaction.message.id);
 
+        if (id_sender === null) {
+            return await interaction.reply({content: "Ce signalement a déjà été traité ou n'éxiste plus.", ephemeral: true});
+        }
+
         // Fetch sender
         const sender = await interaction.guild.members.fetch(id_sender);
 
