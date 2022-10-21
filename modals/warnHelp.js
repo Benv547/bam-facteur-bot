@@ -7,11 +7,9 @@ module.exports = {
     name: 'warnHelp',
     async execute(interaction) {
 
-        // Check if signalement is already in database
-        const check = await signalementDB.get_id_receiver(interaction.message.id);
-        if (check !== null) {
-            await interaction.reply({ content: 'Ce message a déjà été signalé.', ephemeral: true });
-            return;
+        // Check if message is already in database
+        if (await signalementDB.get_id_message(interaction.message.id) !== null) {
+            return await interaction.reply({content: "Ce message a déjà été signalé.", ephemeral: true});
         }
 
         const content = interaction.fields.getTextInputValue('warnHelp');
@@ -59,7 +57,7 @@ module.exports = {
 
         try {
             // Save signalement in database
-            await signalementDB.insertSignalement(warnMessage.id, sender.id, receiverId, content, null);
+            await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, warnMessage.id);
         } catch (e) {
             console.log(e);
         }

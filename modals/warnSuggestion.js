@@ -11,6 +11,11 @@ module.exports = {
     name: 'warnSuggestion',
     async execute(interaction) {
 
+        // Check if message is already in database
+        if (await signalementDB.get_id_message(interaction.message.id) !== null) {
+            return await interaction.reply({content: "Ce message a déjà été signalé.", ephemeral: true});
+        }
+
         const content = interaction.fields.getTextInputValue('warnSuggestion');
         const sender = interaction.member;
         const warnMessage = interaction.message;
@@ -55,6 +60,6 @@ module.exports = {
         const receiverId = await suggestionDB.get_id_user(message.id);
 
         // Save signalement in database
-        await signalementDB.insertSignalement(warnMessage.id, sender.id, receiverId, content, null);
+        await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, warnMessage.id);
     },
 };

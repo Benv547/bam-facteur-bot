@@ -42,5 +42,13 @@ module.exports = {
             return results.rows[0]["id_bottle"];
         }
         return null;
+    },
+    get_id_message: async function (id_bottle) {
+        const pool = getPool();
+        const results = await pool.query('SELECT "id_message" FROM "Signalement" WHERE id_bottle = $1', [id_bottle]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["id_message"];
+        }
+        return null;
     }
 };

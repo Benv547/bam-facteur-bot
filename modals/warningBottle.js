@@ -10,6 +10,11 @@ module.exports = {
     name: 'warningBottle',
     async execute(interaction) {
 
+        // Check if message is already in database
+        if (await signalementDB.get_id_message(interaction.channel.id) !== null) {
+            return await interaction.reply({content: "Ce message a déjà été signalé.", ephemeral: true});
+        }
+
         const content = interaction.fields.getTextInputValue('textWarning');
         const sender = interaction.member;
 
