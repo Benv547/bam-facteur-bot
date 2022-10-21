@@ -108,9 +108,9 @@ module.exports = {
 
 
         checkAnniversaire = async () => {
-            console.log(new Date().toLocaleString() + " - Checking anniversaires...");
             const now = new Date();
             if (now.getHours() == 0) {
+                console.log(new Date().toLocaleString() + " - Checking anniversaires...");
                 // Fetch guild
                 const guild = await client.guilds.fetch(guildId);
 
