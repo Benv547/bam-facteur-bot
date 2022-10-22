@@ -57,7 +57,7 @@ module.exports = {
 
         try {
             // Save signalement in database
-            await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, warnMessage.id);
+            await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null);
         } catch (e) {
             console.log(e);
         }

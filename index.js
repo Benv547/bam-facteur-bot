@@ -70,18 +70,26 @@ for (const file of buttonFiles) {
     client.buttons.set(button.name, button);
 }
 client.on('interactionCreate', async interaction => {
-    if(interaction.isButton()) {
-        const button = client.buttons.get(interaction.customId);
-        if(!button) return;
+    try {
+        if (interaction.isButton()) {
+            const button = client.buttons.get(interaction.customId);
+            if (!button) return;
 
-        try {
-            await button.execute(interaction);
-        } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: 'There was an error while executing the button script !', ephemeral: true});
+            try {
+                await button.execute(interaction);
+            } catch (error) {
+                console.error(error);
+                await interaction.reply({
+                    content: 'There was an error while executing the button script !',
+                    ephemeral: true
+                });
+            }
+        } else {
+            return;
         }
-    } else {
-        return;
+    }
+    catch (error) {
+        console.error(error);
     }
 })
 
@@ -97,18 +105,23 @@ for (const file of modalFiles) {
     client.modals.set(modal.name, modal);
 }
 client.on('interactionCreate', async interaction => {
-    if(interaction.isModalSubmit()) {
-        const modal = client.modals.get(interaction.customId);
-        if(!modal) return;
+    try {
+        if(interaction.isModalSubmit()) {
+            const modal = client.modals.get(interaction.customId);
+            if(!modal) return;
 
-        try {
-            await modal.execute(interaction);
-        } catch (error) {
-            console.error(error);
-            await interaction.reply({ content: 'There was an error while executing the modal script !', ephemeral: true});
+            try {
+                await modal.execute(interaction);
+            } catch (error) {
+                console.error(error);
+                await interaction.reply({ content: 'There was an error while executing the modal script !', ephemeral: true});
+            }
+        } else {
+            return;
         }
-    } else {
-        return;
+    }
+    catch (error) {
+        console.error(error);
     }
 })
 
