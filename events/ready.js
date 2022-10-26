@@ -81,20 +81,29 @@ module.exports = {
                         const now = new Date();
                         if (lastMessageOfChannel.first().createdTimestamp + 6 * 60 * 60 * 1000 < now.getTime()) {
                             const nb = await bottleDB.get_sea(channel.id);
+                            // TODO: get author
+                            const sender_id = await bottleDB.getReceiver(channel.id);
+                            // TODO: get original message
+                            const original_message = await messageDB.getFirstMessage(channel.id);
                             if (nb < 10) {
                                 await bottleDB.incr_sea(channel.id);
-                                // TODO: get author
-                                const sender_id = await bottleDB.getReceiver(channel.id);
-                                // TODO: get original message
-                                const original_message = await messageDB.getFirstMessage(channel.id);
                                 // TODO: recreate a new bottle with the same content
                                 const result = await bottle.create(guild, sender_id, original_message, nb + 1);
+                            }
+                            else {
+                                //Cherche l'utilisateur qui a envoyé la bouteille à partir de son ID
+                                const sender = await guild.members.fetch(sender_id);
+                                //Crée l'embed
+                                const embedFlow = createEmbeds.createFullEmbed("Une de perdue, dix de retrouvées !", 'Une de vos bouteilles a coulé, elle contenait le message :\n\n"**' + original_message + '**"', null, null, null, null);
+                                //Envoie l'embed crée à l'utilisateur
+                                await sender.send({ content: '', embeds: [embedFlow] })
                             }
                             await messageDB.deleteAllMessagesOfBottle(channel.id);
                             await bottleDB.deleteBottle(channel.id);
                             await channel.delete();
                         }
                     } catch (error) {
+                        console.log(error);
                         await bottleDB.deleteBottle(bottles[i].id_channel);
                         continue;
                     }
