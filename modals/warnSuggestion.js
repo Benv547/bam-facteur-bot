@@ -60,6 +60,6 @@ module.exports = {
         const receiverId = await suggestionDB.get_id_user(message.id);
 
         // Save signalement in database
-        await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null);
+        await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id);
     },
 };

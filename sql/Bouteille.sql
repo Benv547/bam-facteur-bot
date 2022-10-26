@@ -85,6 +85,7 @@ CREATE TABLE "Signalement" (
     "id_receiver" bigint,
     "content" text,
     "id_bottle" bigint,
+    "id_warn" bigint,
     "status" boolean default false
 );
 

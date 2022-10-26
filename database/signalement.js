@@ -15,9 +15,9 @@ function getPool() {
 
 
 module.exports = {
-    insertSignalement: async function (id_message, id_sender, id_receiver, content, id_bottle) {
+    insertSignalement: async function (id_message, id_sender, id_receiver, content, id_bottle, id_warn) {
         const pool = getPool();
-        return await pool.query('INSERT INTO "Signalement" ("id_message", "id_sender", "id_receiver", "content", "id_bottle") VALUES ($1, $2, $3, $4, $5)', [id_message, id_sender, id_receiver, content, id_bottle]);
+        return await pool.query('INSERT INTO "Signalement" ("id_message", "id_sender", "id_receiver", "content", "id_bottle", "id_warn") VALUES ($1, $2, $3, $4, $5, $6)', [id_message, id_sender, id_receiver, content, id_bottle, id_warn]);
     },
     get_id_sender: async function (id_message) {
         const pool = getPool();
@@ -43,9 +43,9 @@ module.exports = {
         }
         return null;
     },
-    get_id_message: async function (id_bottle) {
+    get_id_message: async function (id_warn) {
         const pool = getPool();
-        const results = await pool.query('SELECT "id_message" FROM "Signalement" WHERE id_bottle = $1', [id_bottle]);
+        const results = await pool.query('SELECT "id_message" FROM "Signalement" WHERE id_warn = $1', [id_warn]);
         if (results.rows.length > 0) {
             return results.rows[0]["id_message"];
         }
