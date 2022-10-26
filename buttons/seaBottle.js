@@ -2,7 +2,6 @@ const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = req
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const bottle = require("../utils/bottleAction");
-const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
     name: 'seaBottle',
@@ -22,12 +21,7 @@ module.exports = {
             const result = await bottle.create(interaction.guild, sender_id, original_message, nb + 1);
         }
         else {
-            //Cherche l'utilisateur qui a envoyé la bouteille à partir de son ID
-            const sender = await interaction.guild.members.fetch(sender_id);
-            //Crée l'embed
-            const embedFlow = createEmbeds.createFullEmbed("Une de perdue, dix de retrouvées !", 'Une de vos bouteilles a coulé, elle contenait le message :\n"**' + original_message + '**"', null, null, null, null);
-            //Envoie l'embed crée à l'utilisateur
-            await sender.send({ content: '', embeds: [embedFlow] })
+            await bottle.flow(interaction.guild, sender_id, original_message);
         }
         await messageDB.deleteAllMessagesOfBottle(interaction.channel.id);
         await bottleDB.deleteBottle(interaction.channel.id);

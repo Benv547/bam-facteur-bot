@@ -246,5 +246,14 @@ module.exports = {
         await bottleDB.update_id_bottle_and_id_channel(id_bottle, newChannel.id);
 
         await this.reply(guild, id_user_sender, newChannel, content);
+    },
+
+    flow: async function (guild, sender_id, original_message) {
+        //Cherche l'utilisateur qui a envoyé la bouteille à partir de son ID
+        const sender = await guild.members.fetch(sender_id);
+        //Crée l'embed
+        const embedFlow = createEmbeds.createFullEmbed("Une de perdue, dix de retrouvées !", 'Une de vos bouteilles a coulé, elle contenait le message :\n"**' + original_message + '**"', null, null, null, null);
+        //Envoie l'embed crée à l'utilisateur
+        await sender.send({ content: '', embeds: [embedFlow] })
     }
 }
