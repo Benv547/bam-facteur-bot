@@ -14,9 +14,9 @@ function getPool() {
 }
 
 module.exports = {
-    insertSuggestions: async function (id_message, id_user, content, isReply) {
+    insertSuggestions: async function (id_message, id_thread, id_user, content, isReply) {
         const pool = getPool();
-        return await pool.query('INSERT INTO "Suggestion" ("id_message", "id_user", "content", "isReply") VALUES ($1, $2, $3, $4)', [id_message, id_user, content, isReply]);
+        return await pool.query('INSERT INTO "Suggestion" ("id_message", "id_thread", "id_user", "content", "isReply") VALUES ($1, $2, $3, $4, $5)', [id_message, id_thread, id_user, content, isReply]);
     },
     getTotalNumberOfSuggestions: async function () {
         const pool = getPool();
@@ -33,6 +33,14 @@ module.exports = {
         const results = await pool.query('SELECT "id_user" FROM "Suggestion" WHERE id_message = $1', [id_message]);
         if (results.rows.length > 0) {
             return results.rows[0]["id_user"];
+        }
+        return null;
+    },
+    get_id_thread: async function (id_message) {
+        const pool = getPool();
+        const results = await pool.query('SELECT "id_thread" FROM "Suggestion" WHERE id_message = $1', [id_message]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["id_thread"];
         }
         return null;
     }

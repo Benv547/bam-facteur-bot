@@ -44,20 +44,16 @@ module.exports = {
         // Get suggestion number
         const suggestionNumber = parseInt(await suggestionDB.getTotalNumberOfSuggestions()) + 1;
 
-        const thread = await interaction.channel.threads.create({
+        // Send embed
+        const message = await interaction.channel.send({ content: 'Suggestion n°' + suggestionNumber, embeds: [embed], components: [row] });
+        const thread = await message.startThread({
             name: 'Suggestion n°' + suggestionNumber,
             autoArchiveDuration: 60,
             reason: 'Espace de discussion pour la suggestion n°' + suggestionNumber,
         });
 
-        // Send embed
-        const message = await thread.send({ content: 'Suggestion n°' + suggestionNumber, embeds: [embed], components: [row] });
-
-        // Pin message
-        await message.pin();
-
         // Save message id in database
-        await suggestionDB.insertSuggestions(message.id, interaction.user.id, content, false);
+        await suggestionDB.insertSuggestions(message.id, thread.id, interaction.user.id, content, false);
 
         await interaction.reply({ content: 'Votre suggestion a été envoyée.', ephemeral: true });
     }

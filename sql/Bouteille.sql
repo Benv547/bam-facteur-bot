@@ -98,6 +98,7 @@ CREATE TABLE "Opinion" (
 
 CREATE TABLE "Suggestion" (
     "id_message" bigint PRIMARY KEY,
+    "id_thread" bigint,
     "id_user" bigint,
     "content" text,
     "isReply" boolean default false,
@@ -113,6 +114,7 @@ CREATE TABLE "Vote" (
 
 CREATE TABLE "Help" (
     "id_message" bigint,
+    "id_thread" bigint,
     "id_user" bigint,
     "content" text,
     "isReply" boolean default false,

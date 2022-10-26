@@ -36,20 +36,15 @@ module.exports = {
         // Get suggestion number
         const helpNumber = parseInt(await helpDB.getTotalNumberOfHelp()) + 1;
 
-        const thread = await interaction.channel.threads.create({
+        const message = await interaction.channel.send({ content: 'Demande d\'aide n°' + helpNumber, embeds: [embed], components: [row] });
+        const thread = await message.startThread({
             name: 'Demande d\'aide n°' + helpNumber,
             autoArchiveDuration: 60,
             reason: 'Espace de discussion pour la demande d\'aide n°' + helpNumber,
         });
 
-        // Send embed
-        const message = await thread.send({ content: 'Demande d\'aide n°' + helpNumber, embeds: [embed], components: [row] });
-
-        // Pin message
-        await message.pin();
-
         // Save message id in database
-        await helpDB.insertHelp(message.id, interaction.user.id, content, false);
+        await helpDB.insertHelp(message.id, thread.id, interaction.user.id, content, false);
 
         await interaction.reply({ content: 'Votre demande d\'aide a été envoyée.', ephemeral: true });
     }

@@ -40,18 +40,23 @@ module.exports = {
         } else {
             embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x2F3136, null);
         }
-        // Fetch message
-        const message = await interaction.channel.messages.fetch(interaction.message.id);
 
         // Get suggestion number
         const repliesNumber = parseInt(await helpDB.getTotalOfReplies()) + 1;
 
-        // Send embed
-        const reply = await message.reply({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
+        // Fetch message
+        let reply;
+        const thread_id = await helpDB.get_id_thread(interaction.message.id);
+        if (thread_id == null) {
+            const message = await interaction.channel.messages.fetch(interaction.message.id);
+            reply = await message.reply({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
+        } else {
+            const thread = await interaction.guild.channels.fetch(thread_id);
+            reply = await thread.send({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
+        }
 
         // Save message id in database
-        await helpDB.insertHelp(reply.id, interaction.user.id, content, true);
-
+        await helpDB.insertHelp(reply.id, null, interaction.user.id, content, true);
         await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
     }
 };
