@@ -3,6 +3,7 @@ const {newBottleCategory, conversations} = require("../config.json");
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
+const stickerDB = require("../database/sticker");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
 
@@ -61,7 +62,12 @@ module.exports = {
         await channel.permissionOverwrites.edit(randMember.id, {ViewChannel: true, SendMessages: false});
 
         // TODO: create bottle message ...
-        const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
+        const sticker = await stickerDB.getSticker(sender.id_sticker);
+        let stickerUrl = null;
+        if (sticker !== null) {
+            stickerUrl = sticker.url;
+        }
+        const embed = createEmbeds.createBottle(content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -113,7 +119,12 @@ module.exports = {
         }
 
         // Create embedded bottle message ...
-        const embed = createEmbeds.createBottle(content, sender.diceBearSeed);
+        const sticker = await stickerDB.getSticker(sender.id_sticker);
+        let stickerUrl = null;
+        if (sticker !== null) {
+            stickerUrl = sticker.url;
+        }
+        const embed = createEmbeds.createBottle(content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
 
         // Send message
         const messageTemp = await channel.send({ content: "", embeds: [embed] });
@@ -230,12 +241,22 @@ module.exports = {
         for (const message of messages) {
             if (message.id_user === bottle.id_user_sender) {
                 // Create embedded bottle message ...
-                const embed = createEmbeds.createBottle(message.content, sender.diceBearSeed);
+                const sticker = await stickerDB.getSticker(sender.id_sticker);
+                let stickerUrl = null;
+                if (sticker !== null) {
+                    stickerUrl = sticker.url;
+                }
+                const embed = createEmbeds.createBottle(message.content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(newMessage.id, message.id_message);
             } else {
                 // Create embedded bottle message ...
-                const embed = createEmbeds.createBottle(message.content, receiver.diceBearSeed);
+                const sticker = await stickerDB.getSticker(receiver.id_sticker);
+                let stickerUrl = null;
+                if (sticker !== null) {
+                    stickerUrl = sticker.url;
+                }
+                const embed = createEmbeds.createBottle(message.content, receiver.diceBearSeed, stickerUrl, receiver.signature, receiver.color);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(message.id_message, newMessage.id);
             }

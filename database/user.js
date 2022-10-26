@@ -46,6 +46,26 @@ module.exports = {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "diceBearSeed" = $1 WHERE "id_user" = $2', [diceBearSeed, id_user]);
     },
+    update_signature: async function (id_user, signature) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "signature" = $1 WHERE "id_user" = $2', [signature, id_user]);
+    },
+    update_color: async function (id_user, color) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "color" = $1 WHERE "id_user" = $2', [color, id_user]);
+    },
+    update_id_sticker: async function (id_user, id_sticker) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "id_sticker" = $1 WHERE "id_user" = $2', [id_sticker, id_user]);
+    },
+    get_id_sticker: async function (id_user) {
+        const pool = getPool();
+        const results = await pool.query('SELECT "id_sticker" FROM "User" WHERE "id_user" = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["id_sticker"];
+        }
+        return null;
+    },
     update_anniversaire: async function (id_user, jour, mois) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "anniversaireJour" = $1, "anniversaireMois" = $2 WHERE "id_user" = $3', [jour, mois, id_user]);

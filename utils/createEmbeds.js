@@ -1,12 +1,12 @@
 const {EmbedBuilder} = require("discord.js");
 
 module.exports = {
-    createBottle: function (content, diceBearSeed) {
+    createBottle: function (content, diceBearSeed, sticker_url, signature, color) {
         const embed = new EmbedBuilder()
-            .setColor(0x0099FF)
-            .setAuthor({ name: 'Un•e illustre inconnu•e', iconURL: 'https://avatars.dicebear.com/api/adventurer-neutral/' + diceBearSeed + '.png'})
+            .setColor(color) // Set the color of the embed from string to hex
+            .setAuthor({ name: signature, iconURL: 'https://avatars.dicebear.com/api/adventurer-neutral/' + diceBearSeed + '.png'})
             .setDescription(content)
-            .setThumbnail('https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png')
+            .setThumbnail(sticker_url)
             .setTimestamp();
         return embed;
     },

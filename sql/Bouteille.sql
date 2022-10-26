@@ -1,6 +1,7 @@
 DROP TABLE "Sticky";
 DROP TABLE "Sanctions";
 DROP TABLE "Message";
+DROP TABLE "StickerUser";
 DROP TABLE "Vote";
 DROP TABLE "Suggestion";
 DROP TABLE "Help";
@@ -13,6 +14,7 @@ DROP TABLE "Couleur";
 DROP TABLE "Etat";
 DROP TABLE "Emoji";
 DROP TABLE "Role";
+DROP TABLE "Sticker";
 
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
@@ -21,6 +23,9 @@ CREATE TABLE "User" (
   "nb_warn" int default 0,
   "nb_invite" int default 0,
   "diceBearSeed" text NOT NULL default md5(random()::text),
+  "signature" text NOT NULL default 'Un•e illustre inconnu•e',
+  "color" varchar(6) NOT NULL default substring(md5(random()::text), 1, 6),
+  "id_sticker" int,
   "anniversaireJour" int,
   "anniversaireMois" int
 );
@@ -30,6 +35,19 @@ CREATE TABLE "Sticky" (
     "id_channel" bigint NOT NULL,
     "id_message" bigint NOT NULL,
     "id_lastReply" bigint
+);
+
+CREATE TABLE "Sticker" (
+    "id_sticker" serial PRIMARY KEY,
+    "name" text NOT NULL,
+    "url" text NOT NULL
+);
+
+CREATE TABLE "User_Sticker" (
+    "id_user" bigint NOT NULL,
+    "id_sticker" int NOT NULL,
+    "id_guild" bigint NOT NULL,
+    PRIMARY KEY ("id_user", "id_sticker", "id_guild")
 );
 
 CREATE TABLE "Message" (
@@ -148,6 +166,11 @@ ALTER TABLE "Vote" ADD FOREIGN KEY ("id_message") REFERENCES "Suggestion" ("id_m
 ALTER TABLE "Help" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "User" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO "Couleur" VALUES ('rose'),
                              ('cendrée'),

@@ -9,7 +9,7 @@ module.exports = {
         .setName('bouteille')
         .setDescription('Regardez vos bouteilles !')
         .addStringOption(option =>
-            option.setName('name')
+            option.setName('nom')
                 .setDescription('Le nom de la bouteille')),
     async execute(interaction) {
         if (interaction.options.getString('name') === null) {

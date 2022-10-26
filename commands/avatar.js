@@ -19,7 +19,7 @@ module.exports = {
         }
 
         const url = 'https://avatars.dicebear.com/api/adventurer-neutral/' + code + '.png'
-        const embed = createEmbeds.createFullEmbed('Encore un super avatar', 'Voici votre avatar pour vos prochaines bouteilles !', null, url, null, 'Code de l\'avatar : ' + code);
+        const embed = createEmbeds.createFullEmbed('Encore un super avatar !', 'Voici votre avatar pour vos prochaines bouteilles !', null, url, null, 'Code de l\'avatar : ' + code);
 
         // Check if the user exists in the database
         const userId = await userDB.getUser(interaction.user.id);
