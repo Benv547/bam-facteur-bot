@@ -19,8 +19,11 @@ module.exports = {
 
         if (await hourlyDB.checkHourly(interaction.user.id)) {
             const hour = await hourlyDB.get_hourly(interaction.user.id);
-            const delta = Math.floor((Date.now() - hour) / 60000);
-            const embed = createEmbeds.createFullEmbed('Vous êtes gourmant !', 'Vous avez déjà récupéré votre cadeau ! Revenez dans ' + delta + ' minute(s) !', null, null, null, null);
+            const date = new Date(hour);
+            const now = new Date();
+            // calculate the minutes remaining from the last hourly
+            const minutes = Math.round((date.getMinutes() + 60 - now.getMinutes()));
+            const embed = createEmbeds.createFullEmbed('Vous êtes gourmant !', 'Vous avez déjà récupéré votre cadeau ! Revenez dans ' + minutes + ' minute(s) !', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
         // Get random price between 10 and 100

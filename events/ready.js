@@ -92,6 +92,12 @@ module.exports = {
                 await channel.send({ content: '', embeds: [embed], components: [row] });
             }
 
+            try {
+                await hourlyDB.deleteHourly();
+            } catch (error) {
+                console.log(error);
+            }
+
             setTimeout(checkTreasure, 1000 * 60 * 1);
         }
         checkTreasure();
@@ -179,13 +185,6 @@ module.exports = {
                         continue;
                     }
                 }
-            }
-
-            // Check hourly
-            try {
-                await hourlyDB.deleteHourly();
-            } catch (error) {
-                console.log(error);
             }
             setTimeout(checkBottle, 1000 * 60 * 60 * 1);
         };
