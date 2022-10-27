@@ -24,7 +24,12 @@ module.exports = {
         await sanctionsDB.saveSanction(id_receiver, mod.id,"Mute", raison);
 
         // Mute receiver
-        await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);
+        try {
+            await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);
+        } catch (error) {
+            console.log(error);
+        }
+        
 
         // Send MP to sender
         await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été muté•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });

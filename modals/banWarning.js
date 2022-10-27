@@ -25,8 +25,14 @@ module.exports = {
         // Send MP to sender
         await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été banni•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
 
-        // Mute receiver
-        await receiver.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: raison });
+        // Ban receiver
+        try {
+            await receiver.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: raison });
+        } catch (error) {
+            console.log(error);
+        }
+
+        
 
         // Delete message
         await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });
