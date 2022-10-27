@@ -1,5 +1,6 @@
 const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
+const sanctionsDB = require("../database/sanctions");
 const {sanction} = require("../config.json");
 
 module.exports = {
@@ -17,6 +18,9 @@ module.exports = {
 
         // Fetch receiver
         const receiver = await interaction.guild.members.fetch(id_receiver);
+
+        //Save the informations in the Sanctions tab
+        await sanctionsDB.saveSanction(id_sender, mod.id,"Ban", raison);
 
         // Send MP to sender
         await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été banni•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });

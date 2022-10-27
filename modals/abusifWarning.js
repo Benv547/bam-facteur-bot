@@ -1,6 +1,7 @@
 const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
 const userDB = require("../database/user");
+const sanctionsDB = require("../database/sanctions");
 const {sanction} = require("../config.json");
 
 module.exports = {
@@ -24,6 +25,9 @@ module.exports = {
 
         // Increment number of warning
         await userDB.incr_nb_warn(id_sender);
+
+        //Save the informations in the Sanctions tab
+        await sanctionsDB.saveSanction(id_sender, mod.id,"Warn abusif", raison);
 
         // Delete message
         await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });

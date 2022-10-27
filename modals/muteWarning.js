@@ -1,5 +1,6 @@
 const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
+const sanctionsDB = require("../database/sanctions");
 const {sanction} = require("../config.json");
 
 module.exports = {
@@ -18,6 +19,9 @@ module.exports = {
 
         // Fetch receiver
         const receiver = await interaction.guild.members.fetch(id_receiver);
+
+        //Save the informations in the Sanctions tab
+        await sanctionsDB.saveSanction(id_receiver, mod.id,"Mute", raison);
 
         // Mute receiver
         await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);

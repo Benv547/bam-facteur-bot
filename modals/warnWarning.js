@@ -1,7 +1,8 @@
 const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
 const userDB = require("../database/user");
-const {sanction} = require("../config.json");
+const sanctionsDB = require("../database/sanctions");
+const { sanction } = require("../config.json");
 
 module.exports = {
     name: 'warnWarning',
@@ -13,7 +14,7 @@ module.exports = {
         const id_receiver = await signalementDB.get_id_receiver(interaction.message.id);
 
         if (id_receiver === null) {
-            return await interaction.reply({content: "Ce signalement a déjà été traité ou n'éxiste plus.", ephemeral: true});
+            return await interaction.reply({ content: "Ce signalement a déjà été traité ou n'éxiste plus.", ephemeral: true });
         }
 
         // Fetch receiver
@@ -24,6 +25,9 @@ module.exports = {
 
         // Increment number of warning
         await userDB.incr_nb_warn(id_receiver);
+        
+        //Save the informations in the Sanctions tab
+        await sanctionsDB.saveSanction(id_receiver, mod.id,"Warn", raison);
 
         // Delete message
         await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });
