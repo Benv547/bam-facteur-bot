@@ -21,12 +21,12 @@ module.exports = {
 
         if (random <= 60) {
             // choose a random number between 1 and 300
-            const random = Math.floor(Math.random() * 750) + 1;
+            const random = Math.floor(Math.random() * 75) + 1;
             await orAction.increment(interaction.user.id, random);
             gain = random + " pièce(s) d'or";
         } else if (random <= 90) {
             // choose a random number between 1 and 500
-            const random = Math.floor(Math.random() * 1000) + 1;
+            const random = Math.floor(Math.random() * 100) + 1;
             await xpAction.increment(interaction.guild, interaction.user.id, random);
             gain = random + " point(s) d'expérience";
         } else {
@@ -35,7 +35,7 @@ module.exports = {
                 await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
             } catch {
             }
-            gain = sticker.name;
+            gain = 'le sticker' + sticker.name;
         }
 
         const embed = createEmbeds.createFullEmbed('Bravo !', 'Vous avez reçu **' + gain + '**', null, null, null, null);

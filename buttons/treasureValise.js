@@ -16,12 +16,12 @@ module.exports = {
 
         if (random <= 60) {
             // choose a random number between 1 and 300
-            const random = Math.floor(Math.random() * 250) + 1;
+            const random = Math.floor(Math.random() * 25) + 1;
             await orAction.increment(interaction.user.id, random);
             gain = random + " pièce(s) d'or";
         } else {
             // choose a random number between 1 and 500
-            const random = Math.floor(Math.random() * 500) + 1;
+            const random = Math.floor(Math.random() * 50) + 1;
             await xpAction.increment(interaction.guild, interaction.user.id, random);
             gain = random + " point(s) d'expérience";
         }
