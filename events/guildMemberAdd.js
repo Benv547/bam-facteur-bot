@@ -49,5 +49,7 @@ module.exports = {
                 console.log(e);
             }
         }
+        newInvites.each(inv => oldInvites.set(inv.code, inv.uses));
+        global.invites.set(member.guild.id, oldInvites);
     }
 };

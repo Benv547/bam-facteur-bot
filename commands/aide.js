@@ -26,7 +26,7 @@ module.exports = {
                 let options = commandFile.data.options;
                 for (const option of options) {
                     // if is required
-                    let name = option.required ? '[' + option.name + '] (obligatoire)' : '<' + option.name + '>';
+                    let name = option.required ? '[' + option.name + '] (obligatoire)' : '<' + option.name + '>  (facultatif)';
                     embed.addFields({name: name, value: option.description});
                 }
             }
