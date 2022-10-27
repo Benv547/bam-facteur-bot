@@ -1,4 +1,5 @@
 DROP TABLE "Sticky";
+DROP TABLE "Hourly";
 DROP TABLE "Sanctions";
 DROP TABLE "Message";
 DROP TABLE "StickerUser";
@@ -144,6 +145,11 @@ CREATE TABLE "Role" (
     "id_message" bigint
 );
 
+CREATE TABLE "Hourly" (
+    "id_user" bigint PRIMARY KEY,
+    "lastHourly" timestamp default current_timestamp
+);
+
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -171,6 +177,8 @@ ALTER TABLE "User" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_stic
 
 ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "Hourly" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO "Couleur" VALUES ('rose'),
                              ('cendrée'),

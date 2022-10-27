@@ -6,6 +6,7 @@ const userDB = require("../database/user");
 const { Collection } = require("discord.js");
 const { guildId, anniversaireRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
+const hourlyDB = require("../database/hourly");
 
 module.exports = {
     name: 'ready',
@@ -103,6 +104,13 @@ module.exports = {
                         continue;
                     }
                 }
+            }
+
+            // Check hourly
+            try {
+                await hourlyDB.deleteHourly();
+            } catch (error) {
+                console.log(error);
             }
             setTimeout(checkBottle, 1000 * 60 * 60 * 1);
         };
