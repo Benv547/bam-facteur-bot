@@ -2,7 +2,7 @@ DROP TABLE "Sticky";
 DROP TABLE "Hourly";
 DROP TABLE "Sanctions";
 DROP TABLE "Message";
-DROP TABLE "StickerUser";
+DROP TABLE "User_Sticker";
 DROP TABLE "Vote";
 DROP TABLE "Suggestion";
 DROP TABLE "Help";
