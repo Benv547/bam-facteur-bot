@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require("../database/user");
+const orAction = require("../utils/orAction");
 
 module.exports = {
     public: true,
@@ -12,6 +13,12 @@ module.exports = {
                 .setDescription('La signature de la bouteille')
                 .setRequired(true)),
     async execute(interaction) {
+
+        const price = 100;
+        if(!await orAction.reduce(interaction.user.id, price)) {
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature ! Economisez ' + price + ' pièces d\'or et revenez me voir !', null, null, null, null);
+            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        }
 
         const signature = interaction.options.getString('texte');
 

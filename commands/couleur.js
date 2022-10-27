@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require("../database/user");
+const orAction = require("../utils/orAction");
 
 module.exports = {
     public: true,
@@ -11,6 +12,13 @@ module.exports = {
             option.setName('hex')
                 .setDescription('La couleur de la bouteille')),
     async execute(interaction) {
+
+        const price = 100;
+        if(!await orAction.reduce(interaction.user.id, price)) {
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de couleur ! Economisez ' + price + ' pièces d\'or et revenez me voir !', null, null, null, null);
+            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        }
+
         // set random hex color
         let color = Math.floor(Math.random()*16777215).toString(16);
 

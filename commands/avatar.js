@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require("../database/user");
+const orAction = require("../utils/orAction");
 
 module.exports = {
     public: true,
@@ -11,6 +12,13 @@ module.exports = {
             option.setName('code')
                 .setDescription('The code of the avatar')),
     async execute(interaction) {
+
+        const price = 100;
+        if(!await orAction.reduce(interaction.user.id, price)) {
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer d\'avatar ! Economisez ' + price + ' pièces d\'or et revenez me voir !', null, null, null, null);
+            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        }
+
         let code = (Math.random() + 1).toString(36).substring(7);
 
         let codeGivenByUser = interaction.options.getString('code');
