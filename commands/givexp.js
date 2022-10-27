@@ -28,7 +28,10 @@ module.exports = {
             const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu **' + xp + ' XP** !', null, null, 0x2f3136, null);
 
             // Send direct message to user
-            await user.send({ content: "", embeds: [embed] });
+            try {
+                await user.send({content: "", embeds: [embed]});
+            } catch {
+            }
             return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
         }
         return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
