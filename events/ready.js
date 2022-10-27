@@ -3,8 +3,8 @@ const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
-const { Collection } = require("discord.js");
-const { guildId, anniversaireRole } = require("../config.json");
+const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const { guildId, anniversaireRole, treasure, adminRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const hourlyDB = require("../database/hourly");
 
@@ -20,6 +20,81 @@ module.exports = {
             // Set the key as Guild ID, and create a map which has the invite code, and the number of uses
             global.invites.set(guild.id, new Collection(firstInvites.map((invite) => [invite.code, invite.uses])));
         });
+
+        const checkTreasure = async () => {
+            //console.log(new Date().toLocaleString() + " - Checking treasures messages...");
+
+            // fetch guild
+            const guild = await client.guilds.fetch(guildId);
+            // fetch channel treasure
+            const channel = await guild.channels.fetch(treasure);
+
+            // if channel members length is > to 5% of the guild members length
+            // not count bots and admins
+            let channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
+            let guildSize = (await guild.members.fetch()).size * 0.05;
+            while (channelSize > guildSize) {
+                try {
+                    // choose a non bot member in the channel
+                    const member = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).random();
+                    // if member is not null
+                    if (member !== null) {
+                        // remove permission to see the channel
+                        await channel.permissionOverwrites.delete(member);
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+                channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
+            }
+            while (channelSize <= guildSize) {
+                // choose a non bot member in the guild
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot).random();
+                // if member is not null
+                if (member !== null) {
+                    // add permission to see the channel but not send messages
+                    await channel.permissionOverwrites.edit(member, {ViewChannel: true, SendMessages: false});
+                }
+                channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
+            }
+
+            // choose random number between 1 and 100
+            const random = Math.floor(Math.random() * 100) + 1;
+            if (random < 10) {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('treasureCoffre')
+                            .setLabel('Ouvrir le coffre')
+                            .setStyle(ButtonStyle.Primary),
+                    );
+                const embed = createEmbeds.createFullEmbed('', 'Un **coffre** a été trouvé sur la plage, **ouvrez-le vite** !', null, null, 0x2F3136, null);
+                await channel.send({ content: '', embeds: [embed], components: [row] });
+            } else if (random < 40) {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('treasureValise')
+                            .setLabel('Défaire la valise')
+                            .setStyle(ButtonStyle.Primary),
+                    );
+                const embed = createEmbeds.createFullEmbed('', 'Une **valise** a été trouvée sur la plage, **ouvrez-la vite** !', null, null, 0x2F3136, null);
+                await channel.send({ content: '', embeds: [embed], components: [row] });
+            } else {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('treasureBotte')
+                            .setLabel('Vider la botte')
+                            .setStyle(ButtonStyle.Primary),
+                    );
+                const embed = createEmbeds.createFullEmbed('', 'Une **botte** a été trouvée sur la plage, **ouvrez-la vite** !', null, null, 0x2F3136, null);
+                await channel.send({ content: '', embeds: [embed], components: [row] });
+            }
+
+            setTimeout(checkTreasure, 1000 * 60 * 1);
+        }
+        checkTreasure();
 
         const checkSticky = async () => {
             console.log(new Date().toLocaleString() + " - Checking sticky messages...");

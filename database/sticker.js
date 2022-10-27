@@ -38,5 +38,13 @@ module.exports = {
         const pool = getPool();
         const results = await pool.query('SELECT * FROM "Sticker" AS s INNER JOIN "User_Sticker" AS us ON us."id_sticker" = s."id_sticker" WHERE us."id_user" = $1 AND s."name" LIKE $2', [id_user, `%${name}%`]);
         return results.rows;
+    },
+    getRandomWinnableSticker: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT * FROM "Sticker" WHERE "winnable" = true ORDER BY RANDOM() LIMIT 1');
+        if (results.rows.length === 0) {
+            return null;
+        }
+        return results.rows[0];
     }
 }

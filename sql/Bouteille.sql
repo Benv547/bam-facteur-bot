@@ -41,7 +41,9 @@ CREATE TABLE "Sticky" (
 CREATE TABLE "Sticker" (
     "id_sticker" serial PRIMARY KEY,
     "name" text NOT NULL,
-    "url" text NOT NULL
+    "url" text NOT NULL,
+    "sharable" boolean NOT NULL default false,
+    "winnable" boolean NOT NULL default false
 );
 
 CREATE TABLE "User_Sticker" (
