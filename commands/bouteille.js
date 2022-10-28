@@ -18,17 +18,26 @@ module.exports = {
             if (bottles.length === 0) {
                 message = 'Vous n\'avez pas de bouteille !';
             } else {
+                message += '📥 en attente de réponse de votre correspondant';
+                message += '\n';
+                message += '📨 en attente de votre réponse';
+                message += '\n';
+                message += '💀 bouteille terminée';
+                message += '\n';
+                message += '🗄️ bouteille archivée';
+                message += '\n\n'
+
                 bottles.forEach(bottle => {
                     message += '• **' + bottle.name + '** (' + bottle.id_bottle + ')\n';
                     let status = '';
                     if (bottle.terminated) {
-                        status = '💀 terminée';
+                        status = '💀';
                     } else if (bottle.archived) {
-                        status = '🗄️archivée';
+                        status = '🗄';
                     } else if (bottle.id_user_sender === interaction.user.id) {
-                        status = '📤 en attente de réponse de votre part';
+                        status = '📤';
                     } else {
-                        status = '📥 en attente de réponse de votre correspondant';
+                        status = '📨';
                     }
                     message += 'Statut : ' + status + '\n\n';
                 });
@@ -64,7 +73,7 @@ module.exports = {
             const messages = await messageDB.getMessagesOfBottle(bottle.id_bottle);
             messages.forEach(messageDB => {
                 if (messageDB.id_user === interaction.user.id) {
-                    message += '📤 **Vous :** ' + messageDB.content + '\n';
+                    message += '📨 **Vous :** ' + messageDB.content + '\n';
                 } else {
                     message += '📥 **Votre correspondant :** ' + messageDB.content + '\n';
                 }
@@ -84,7 +93,7 @@ module.exports = {
             } else if (bottle.archived) {
                 status = '🗄️archivée';
             } else if (bottle.id_user_sender === interaction.user.id) {
-                status = '📨 en attente de réponse de votre part';
+                status = '📨 en attente de votre réponse';
             } else {
                 status = '📥 en attente de réponse de votre correspondant';
             }
