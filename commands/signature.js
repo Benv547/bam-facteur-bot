@@ -5,6 +5,7 @@ const orAction = require("../utils/orAction");
 
 module.exports = {
     public: true,
+    price: 100,
     data: new SlashCommandBuilder()
         .setName('signature')
         .setDescription('Choisissez votre signature !')
@@ -14,9 +15,8 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
 
-        const price = 100;
-        if(!await orAction.reduce(interaction.user.id, price)) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature ! Economisez ' + price + ' pièces d\'or et revenez me voir !', null, null, null, null);
+        if(!await orAction.reduce(interaction.user.id, this.price)) {
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature ! Economisez ' + this.price + ' pièces d\'or et revenez me voir !', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 

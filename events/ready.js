@@ -6,7 +6,6 @@ const userDB = require("../database/user");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const { guildId, anniversaireRole, treasure, adminRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
-const hourlyDB = require("../database/hourly");
 
 module.exports = {
     name: 'ready',
@@ -92,13 +91,7 @@ module.exports = {
                 await channel.send({ content: '', embeds: [embed], components: [row] });
             }
 
-            try {
-                await hourlyDB.deleteHourly();
-            } catch (error) {
-                console.log(error);
-            }
-
-            setTimeout(checkTreasure, 1000 * 60 * 1);
+            setTimeout(checkTreasure, 1000 * 60 * 5);
         }
         checkTreasure();
 

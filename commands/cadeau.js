@@ -11,6 +11,12 @@ module.exports = {
         .setDescription('Obtenez chaque heure votre cadeau !'),
     async execute(interaction) {
 
+        try {
+            await hourlyDB.deleteHourly();
+        } catch (error) {
+            console.log(error);
+        }
+
         const userId = await userDB.getUser(interaction.user.id);
         if (userId == null) {
             // Add the user to the database
