@@ -54,7 +54,8 @@ module.exports = {
                         }
                     }
                 }
-                embed.addFields({ name: name, value: command.data.description, inline: false });
+                const price = command.price ? '\n*Cette commande coûte **' + command.price + ' pièces d\'or**.*' : '';
+                embed.addFields({ name: name, value: command.data.description + price, inline: false });
             }
         }
         embed.setFooter({ text: 'Pour plus d\'informations sur une commande, tapez /aide [nom de la commande]' });
