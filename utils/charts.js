@@ -12,29 +12,29 @@ module.exports = {
                         xAxes: [
                             {
                                 gridLines: {
-                                    zeroLineColor: '#ffffff',
-                                    color: "#4f515b"
+                                    zeroLineColor: '#7289da',
+                                    color: "#7289da"
                                 },
                                 ticks: {
-                                    fontColor: "white",
+                                    fontColor: "#7289da",
                                 },
                             }
                         ],
                         yAxes: [
                             {
                                 gridLines: {
-                                    zeroLineColor: '#ffffff',
-                                    color: "#4f515b"
+                                    zeroLineColor: '#7289da',
+                                    color: "#7289da"
                                 },
                                 ticks: {
-                                    fontColor: "white",
+                                    fontColor: "#7289da",
                                 },
                             }
                         ]
                     },
                     legend: {
                         labels: {
-                            fontColor: "#ffffff"
+                            fontColor: "#7289da"
                         }
                     }
                 }
@@ -83,7 +83,7 @@ module.exports = {
         datasetMessage.fill = false;
         datasets.push(datasetMessage);
         const datasetUser = this.setupDataSetFromSQL('count', dataUser, 'Utilisateurs');
-        datasetUser.borderColor = 'rgb(0,141,255)';
+        datasetUser.borderColor = 'rgb(0,178,255)';
         datasetUser.fill = false;
         datasets.push(datasetUser);
         const labels = this.setupLabelsFromSQL('time', dataBottle);
@@ -131,7 +131,7 @@ module.exports = {
     createChartForUser: async function (user, vip, boost) {
         let datasets = [];
         const dataset = this.setupDataSetFromSQL('count', user, 'Utilisateurs');
-        dataset.borderColor = 'rgb(0,141,255)';
+        dataset.borderColor = 'rgb(0,178,255)';
         dataset.fill = false;
         datasets.push(dataset);
         const datasetVip = this.setupDataSetFromSQL('count', vip, 'VIP');
