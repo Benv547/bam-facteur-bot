@@ -37,6 +37,9 @@ module.exports = {
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
             const sticker_name = interaction.options.getString('nom');
+
+            sticker_name = sticker_name.charAt(0).toUpperCase() + sticker_name.slice(1).ToLowerCase();
+
             const sticker = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker_name);
             if (sticker.length === 0) {
                 return interaction.reply({content: 'Ce sticker n\'existe pas.', ephemeral: true});
