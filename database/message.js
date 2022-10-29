@@ -50,5 +50,38 @@ module.exports = {
     update_id_message: async function (id_message, id_message_new) {
         const pool = getPool();
         return await pool.query('UPDATE "Message" SET "id_message" = $1 WHERE "id_message" = $2', [id_message_new, id_message]);
+    },
+
+    getMessageCountForOneWeek: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Message" WHERE "date" > NOW() - INTERVAL \'7 days\'');
+        return results.rows[0]["count"];
+    },
+    getMessageCountEachDayForOneWeek: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Message" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getMessageCountForOneMonth: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Message" WHERE "date" > NOW() - INTERVAL \'30 days\'');
+        return results.rows[0]["count"];
+    },
+    getMessageCountEachDayForOneMonth: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Message" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getMessageCountForThisYear: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Message" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date)');
+        return results.rows[0]["count"];
+    },
+    getMessageCountEachMonthForThisYear: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/YYYY\') AS time FROM "Message" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        return results.rows;
     }
 };

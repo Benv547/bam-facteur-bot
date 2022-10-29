@@ -1,3 +1,4 @@
+DROP TABLE "Record";
 DROP TABLE "Sticky";
 DROP TABLE "Hourly";
 DROP TABLE "Sanctions";
@@ -16,6 +17,12 @@ DROP TABLE "Etat";
 DROP TABLE "Emoji";
 DROP TABLE "Role";
 DROP TABLE "Sticker";
+
+CREATE TABLE "Record" (
+  "score" bigint NOT NULL,
+  "date" timestamp NOT NULL DEFAULT current_timestamp,
+  "type" varchar(255) NOT NULL
+);
 
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,

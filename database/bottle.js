@@ -101,5 +101,38 @@ module.exports = {
             return results.rows[0].date;
         }
         return null;
+    },
+
+    getBottleCountForOneWeek: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Bottle" WHERE "date" > NOW() - INTERVAL \'7 days\'');
+        return results.rows[0]["count"];
+    },
+    getBottleCountEachDayForOneWeek: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getBottleCountForOneMonth: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Bottle" WHERE "date" > NOW() - INTERVAL \'30 days\'');
+        return results.rows[0]["count"];
+    },
+    getBottleCountEachDayForOneMonth: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getBottleCountForThisYear: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date)');
+        return results.rows[0]["count"];
+    },
+    getBottleCountEachMonthForThisYear: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY-MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        return results.rows;
     }
 }

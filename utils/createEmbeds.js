@@ -10,7 +10,7 @@ module.exports = {
             .setTimestamp();
         return embed;
     },
-    createFullEmbed: function (title, description, thumbnail, image, color, footer) {
+    createFullEmbed: function (title, description, thumbnail, image, color, footer, timestamp = true) {
         const embed = new EmbedBuilder();
         if (title) {
             embed.setTitle(title);
@@ -23,6 +23,9 @@ module.exports = {
         }
         if (image) {
             embed.setImage(image);
+        }
+        if (timestamp) {
+            embed.setTimestamp();
         }
         if (footer) {
             embed.setFooter({ text: footer });

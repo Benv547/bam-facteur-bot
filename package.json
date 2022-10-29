@@ -7,13 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "deploy": "node deploy-commands.js",
-    "install": "npm install discord.js"
+    "install": "npm install quickchart-js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.6.0",
-    "pg": "^8.8.0"
+    "pg": "^8.8.0",
+    "quickchart-js": "^3.1.0"
   }
 }

@@ -101,5 +101,14 @@ module.exports = {
     incr_xp: async function (id_user, qte) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "xp" = "xp" + $1 WHERE "id_user" = $2', [qte, id_user]);
-    }
+    },
+
+    getTotalOfMoneyAndXp: async function () {
+        const pool = getPool();
+        const results = await pool.query('SELECT SUM("money") as money, SUM("xp") as xp FROM "User"');
+        if (results.rows.length > 0) {
+            return results.rows[0];
+        }
+        return null;
+    },
 }

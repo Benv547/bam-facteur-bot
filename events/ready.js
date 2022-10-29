@@ -1,10 +1,11 @@
 const stickyDB = require("../database/sticky");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
+const recordDB = require("../database/record");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
@@ -193,8 +194,23 @@ module.exports = {
                 // Fetch guild
                 const guild = await client.guilds.fetch(guildId);
 
+                // Fetch members length
+                let members = await guild.members.fetch();
+                const membersLength = members.size;
+                await recordDB.insertRecord(membersLength, 'user');
+
+                // Fetch members with the VIP role
+                let membersWithVipRole = await guild.roles.fetch(vipRole);
+                const membersWithVipRoleLength = membersWithVipRole.members.size;
+                await recordDB.insertRecord(membersWithVipRoleLength, 'vip');
+
+                // Fetch members with the Booster role
+                let membersWithBoosterRole = await guild.roles.fetch(boostRole);
+                const membersWithBoosterRoleLength = membersWithBoosterRole.members.size;
+                await recordDB.insertRecord(membersWithBoosterRoleLength, 'boost');
+
                 // Remove all anniversaire roles
-                const members = (await guild.members.fetch()).filter((member) => member.roles.cache.has(anniversaireRole));
+                members = members.filter((member) => member.roles.cache.has(anniversaireRole));
                 for (const member of members.values()) {
                     await member.roles.remove(anniversaireRole);
                 }
