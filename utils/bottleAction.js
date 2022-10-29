@@ -66,6 +66,23 @@ module.exports = {
         let stickerUrl = null;
         if (sticker !== null) {
             stickerUrl = sticker.url;
+
+            if (sticker.sharable) {
+                // choose random float between 0 and 1
+                const randFloat = Math.random();
+                if (randFloat < sticker.sharable_percentage) {
+                    // share sticker
+                    try {
+                        await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
+                        const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille " + channel_name + " a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
+                        try {
+                            await randMember.send({content: "", embeds: [embed]});
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    } catch {}
+                }
+            }
         }
         const embed = createEmbeds.createBottle(content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
 

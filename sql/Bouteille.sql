@@ -50,7 +50,8 @@ CREATE TABLE "Sticker" (
     "name" text NOT NULL,
     "url" text NOT NULL,
     "sharable" boolean NOT NULL default false,
-    "winnable" boolean NOT NULL default false
+    "winnable" boolean NOT NULL default false,
+    "sharable_percentage" float NOT NULL default 0.0
 );
 
 CREATE TABLE "User_Sticker" (
