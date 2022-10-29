@@ -25,6 +25,10 @@ module.exports = {
         let codeGivenByUser = interaction.options.getString('hex');
         if (codeGivenByUser !== null) {
             color = codeGivenByUser;
+            if (color.length !== 6) {
+                const embed = createEmbeds.createFullEmbed('Erreur', 'Le code hexadécimal doit être composé de 6 caractères !', null, null, null, null);
+                return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+            }
         }
 
         // set lowerCase
