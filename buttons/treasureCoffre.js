@@ -4,6 +4,7 @@ const xpAction = require("../utils/xpAction");
 const hourlyDB = require("../database/hourly");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
+const userDB = require("../database/user");
 
 module.exports = {
     name: 'treasureCoffre',
@@ -40,6 +41,7 @@ module.exports = {
 
         const embed = createEmbeds.createFullEmbed('Bravo !', 'Vous avez reçu **' + gain + '**', null, null, null, null);
         try {
+            await userDB.incr_nb_treasures(interaction.user.id);
             await interaction.user.send({ content: "", embeds: [embed], ephemeral: true });
         } catch {
         }

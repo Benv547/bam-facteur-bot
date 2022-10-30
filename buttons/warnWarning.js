@@ -12,7 +12,8 @@ module.exports = {
             .setCustomId('raison')
             .setLabel("Pourquoi le signalement est justifié ?")
             // Paragraph means multiple lines of text.
-            .setStyle(TextInputStyle.Paragraph);
+            .setStyle(TextInputStyle.Paragraph)
+            .setMaxLength(1500);
 
         // An action row only holds one text input,
         // so you need one action row per text input.

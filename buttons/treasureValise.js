@@ -3,6 +3,7 @@ const orAction = require("../utils/orAction");
 const xpAction = require("../utils/xpAction");
 const hourlyDB = require("../database/hourly");
 const createEmbeds = require("../utils/createEmbeds");
+const userDB = require("../database/user");
 
 module.exports = {
     name: 'treasureValise',
@@ -27,7 +28,11 @@ module.exports = {
         }
 
         const embed = createEmbeds.createFullEmbed('Bravo !', 'Vous avez reçu **' + gain + '**', null, null, null, null);
-        await interaction.user.send({ content: "", embeds: [embed], ephemeral: true });
+        try {
+            await userDB.incr_nb_treasures(interaction.user.id);
+            await interaction.user.send({ content: "", embeds: [embed], ephemeral: true });
+        } catch {
+        }
 
         const embedPublic = createEmbeds.createFullEmbed('','Un•e illustre inconnu•e a reçu **' + gain + '**', null, null, null, null);
         // fetch interaction message

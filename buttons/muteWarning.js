@@ -11,7 +11,8 @@ module.exports = {
         const raisonInput = new TextInputBuilder()
             .setCustomId('raison')
             .setLabel("Pourquoi le signalement est justifié ?")
-            .setStyle(TextInputStyle.Paragraph);
+            .setStyle(TextInputStyle.Paragraph)
+            .setMaxLength(1500);
 
         const timeoutInput = new TextInputBuilder()
             .setCustomId('timeout')
