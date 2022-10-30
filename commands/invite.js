@@ -10,6 +10,12 @@ module.exports = {
     async execute(interaction) {
         // Get the user's currency
         const guest = await userDB.get_nb_invite(interaction.user.id);
+
+        const userId = await userDB.getUser(interaction.user.id);
+        if (userId == null) {
+            // Add the user to the database
+            await userDB.createUser(interaction.user.id, 0, 0);
+        }
         let embed = createEmbeds.createFullEmbed('', '', null, null, 0x2f3136, null);
 
         if (!guest) {

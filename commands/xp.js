@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const xpAction = require('../utils/xpAction.js');
+const userDB = require("../database/user");
 
 module.exports = {
     public: true,
@@ -9,7 +10,13 @@ module.exports = {
         .setDescription('Consultez votre niveau !'),
     async execute(interaction) {
         // Get the user's currency
-        const xp = await xpAction.get(interaction.user.id);
+        let xp = await xpAction.get(interaction.user.id);
+        if (xp == null) {
+            // Add the user to the database
+            await userDB.createUser(interaction.user.id, 0, 0);
+            xp = 0;
+        }
+
         const nextXp = await xpAction.getNextLevel(interaction.user.id);
         const difference = nextXp - xp;
         if (difference < 0) {

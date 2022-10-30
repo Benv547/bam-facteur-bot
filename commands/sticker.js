@@ -36,8 +36,7 @@ module.exports = {
             const embed = createEmbeds.createFullEmbed("Vos stickers", message, null, null, null, 'Faite /sticker <nom> pour changer de sticker');
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
-            const sticker_name = interaction.options.getString('nom');
-
+            let sticker_name = interaction.options.getString('nom');
             sticker_name = sticker_name.charAt(0).toUpperCase() + sticker_name.slice(1).ToLowerCase();
 
             const sticker = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker_name);
