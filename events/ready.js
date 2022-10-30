@@ -2,6 +2,8 @@ const stickyDB = require("../database/sticky");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const recordDB = require("../database/record");
+const achievementDB = require("../database/achievement");
+const stickerDB = require("../database/sticker");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
@@ -184,6 +186,96 @@ module.exports = {
         };
         checkBottle();
 
+
+
+
+        checkAchievement = async () => {
+            console.log(new Date().toLocaleString() + " - Checking achievements...");
+
+            const achievements = await achievementDB.getAllAchievements();
+
+            if (achievements !== null) {
+                for (let i = 0; i < achievements.length; i++) {
+                    try {
+                        let value;
+                        let id_users;
+                        switch (achievements[i].type) {
+                            case 'bottleSend':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXBottlesSent(achievements[i].id_achievement, value);
+                                break;
+                            case 'bottleReceive':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXBottlesReceived(achievements[i].id_achievement, value);
+                                break;
+                            case 'messageSend':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXMessagesSent(achievements[i].id_achievement, value);
+                                break;
+                            case 'messageLength':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXMessageLength(achievements[i].id_achievement, value);
+                                break;
+                            case 'messageContains':
+                                value = achievements[i].value;
+                                id_users = await achievementDB.achievementXMessageContains(achievements[i].id_achievement, value);
+                                break;
+                            case 'userInvited':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXUsersInvited(achievements[i].id_achievement, value);
+                                break;
+                            case 'userMoneySpent':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXMoneySpent(achievements[i].id_achievement, value);
+                                break;
+                            case 'userMoneyEarned':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXMoney(achievements[i].id_achievement, value);
+                                break;
+                            case 'userNbTreasures':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXNbTreasures(achievements[i].id_achievement, value);
+                                break;
+                            case 'suggestionSent':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXSuggestionsSent(achievements[i].id_achievement, value);
+                                break;
+                            case 'opinionSent':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXOpinionsSent(achievements[i].id_achievement, value);
+                                break;
+                            case 'vipUserInvited':
+                                value = parseInt(achievements[i].value);
+                                id_users = await achievementDB.achievementXVIPUsersInvited(achievements[i].id_achievement, value);
+                                break;
+                        }
+                        const sticker = await stickerDB.getSticker(achievements[i].id_sticker);
+                        if (id_users !== null) {
+                            for (let j = 0; j < id_users.length; j++) {
+                                const user = await client.users.fetch(id_users[j].id_user);
+                                let textSticker = '';
+                                if (sticker !== null) {
+                                    await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
+                                    textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
+                                }
+                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophé **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, null, null, null);
+                                try {
+                                    await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
+                                    await user.send({content: '', embeds: [embed]});
+                                } catch (error) {
+                                    console.log(error);
+                                }
+                            }
+                        }
+                    }
+                    catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+            setTimeout(checkAchievement, 1000 * 60 * 30);
+        };
+        checkAchievement();
 
 
 

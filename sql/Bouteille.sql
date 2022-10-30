@@ -3,6 +3,8 @@ DROP TABLE "Sticky";
 DROP TABLE "Hourly";
 DROP TABLE "Sanctions";
 DROP TABLE "Invite";
+DROP TABLE "User_Achievement";
+DROP TABLE "Achievement";
 DROP TABLE "Message";
 DROP TABLE "User_Sticker";
 DROP TABLE "Vote";
@@ -37,7 +39,7 @@ CREATE TABLE "User" (
   "anniversaireJour" int,
   "anniversaireMois" int,
   "isVIP" boolean NOT NULL default false,
-  "nb_treasures" int NOT NULL default 0,
+  "nb_treasures" int NOT NULL default 0
 );
 
 CREATE TABLE "Sticky" (
@@ -47,6 +49,21 @@ CREATE TABLE "Sticky" (
     "id_lastReply" bigint
 );
 
+CREATE TABLE "Achievement" (
+    "id_achievement" serial PRIMARY KEY,
+    "name" varchar(255) NOT NULL,
+    "rarity" varchar(255) NOT NULL,
+    "description" text NOT NULL,
+    "type" varchar(255) NOT NULL,
+    "value" text NOT NULL,
+    "id_sticker" int
+);
+
+CREATE TABLE "User_Achievement" (
+    "id_user" bigint NOT NULL,
+    "id_achievement" int NOT NULL,
+    "date" timestamp NOT NULL DEFAULT current_timestamp
+);
 
 CREATE TABLE "Invite" (
     "id_user_inviter" bigint NOT NULL,
@@ -200,6 +217,14 @@ ALTER TABLE "User" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_stic
 ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_achievement") REFERENCES "Achievement" ("id_achievement") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "Achievement" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_inviter") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_invited") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+
 ALTER TABLE "Hourly" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO "Couleur" VALUES ('rose'),
@@ -269,3 +294,22 @@ INSERT INTO "Emoji" VALUES ('🍂'),
                            ('🥔'),
                            ('🎑'),
                            ('🌇');
+
+INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01);
+
+INSERT INTO "Achievement" ("name", "description", "rarity", "type", "value", "id_sticker") VALUES ('Océan messager', 'Vous avez envoyé votre première bouteille !', 'commun', 'bottleSend', 1, null),
+                                                                                    ('Courrier marin', 'Vous avez reçu votre première bouteille !', 'commun', 'bottleReceive', 1, null),
+                                                                                    ('Créateur de lien', 'Vous avez envoyé 100 bouteilles !', 'rare', 'bottleSend', 100, null),
+                                                                                    ('Lecture abondante', 'Vous avez reçu 100 bouteilles !', 'rare', 'bottleReceive', 100, null),
+                                                                                    ('Pile poil !', 'Vous avez envoyé une bouteille de 2000 caractères !', 'rare', 'messageLength', 2000, null),
+                                                                                    ('Ecrivain accompli', 'Vous avez envoyé une bouteille de 1500 caractères !', 'rare', 'messageLength', 1500, null),
+                                                                                    ('Pirate sans carte', 'Vous avez trouvé et ouvert un trésor !', 'rare', 'userNbTreasures', 1, null),
+                                                                                    ('Une suggestion suggestive', 'Vous avez envoyé une suggestion !', 'rare', 'suggestionSent', 1, null),
+                                                                                    ('Un avis bien tranché', 'Vous avez envoyé un avis !', 'rare', 'opinionSent', 1, null),
+                                                                                    ('Dépensier', 'Vous avez dépensé 10 000 pièces d''or !', 'rare', 'userMoneySpent', 10000, null),
+                                                                                    ('Accro aux projecteurs', 'Vous êtes passé VIP !', 'epic', 'userInvited', 5, null),
+                                                                                    ('Plus on est de fou...', 'Vous avez invité 10 personnes sur le serveur !', 'epic', 'userInvited', 10, null),
+                                                                                    -- Acheteur compulsif ?
+                                                                                    ('Panier percé', 'Vous avez dépensé 100 000 pièces d''or !', 'legendaire', 'userMoneySpent', 10000, null),
+                                                                                    ('E brezhoneg, mar plij', 'Vous avez écrit un mot en Breton !', 'mythique', 'messageContains', 'Breizh', null),
+                                                                                    ('Créateur de stars', '5 membres que vous avez invités sont devenus VIP', 'mythique', 'vipUserInvited', 5, null);
