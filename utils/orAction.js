@@ -22,6 +22,7 @@ module.exports = {
         if (user) {
             if (user.money >= qte) {
                 await userDB.reduce_money(userId, qte);
+                await userDB.incr_money_spent(userId, qte);
                 return true;
             }
         }

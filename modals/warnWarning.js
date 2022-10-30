@@ -22,9 +22,6 @@ module.exports = {
 
         // Send MP to sender
         await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez reçu un avertissement', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
-
-        // Increment number of warning
-        await userDB.incr_nb_warn(id_receiver);
         
         //Save the informations in the Sanctions tab
         await sanctionsDB.saveSanction(id_receiver, mod.id,"Warn", raison);

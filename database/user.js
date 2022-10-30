@@ -38,10 +38,6 @@ module.exports = {
         const pool = getPool();
         return await pool.query('DELETE FROM "User" WHERE "id_user" = $1', [id_user]);
     },
-    incr_nb_warn: async function (id_user) {
-        const pool = getPool();
-        return await pool.query('UPDATE "User" SET "nb_warn" = "nb_warn" + 1 WHERE "id_user" = $1', [id_user]);
-    },
     update_diceBearSeed: async function (id_user, diceBearSeed) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "diceBearSeed" = $1 WHERE "id_user" = $2', [diceBearSeed, id_user]);
@@ -70,10 +66,6 @@ module.exports = {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "anniversaireJour" = $1, "anniversaireMois" = $2 WHERE "id_user" = $3', [jour, mois, id_user]);
     },
-    incr_nb_invite: async function (id_user) {
-        const pool = getPool();
-        return await pool.query('UPDATE "User" SET "nb_invite" = "nb_invite" + 1 WHERE "id_user" = $1', [id_user]);
-    },
     get_nb_invite: async function (id_user) {
         const pool = getPool();
         const results = await pool.query('SELECT "nb_invite" FROM "User" WHERE id_user = $1', [id_user]);
@@ -86,21 +78,25 @@ module.exports = {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "money" = "money" + $1 WHERE "id_user" = $2', [qte, id_user]);
     },
+    incr_money_spent: async function (id_user, qte) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "money_spent" = "money_spent" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
     reduce_money: async function (id_user, qte) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "money" = "money" - $1 WHERE "id_user" = $2', [qte, id_user]);
     },
-    get_money: async function (id_user) {
-        const pool = getPool();
-        const results = await pool.query('SELECT "money" FROM "User" WHERE id_user = $1', [id_user]);
-        if (results.rows.length > 0) {
-            return results.rows[0].money;
-        }
-        return null;
-    },
     incr_xp: async function (id_user, qte) {
         const pool = getPool();
         return await pool.query('UPDATE "User" SET "xp" = "xp" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    set_vip: async function (id_user, vip = true) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "vip" = $1 WHERE "id_user" = $2', [vip, id_user]);
+    },
+    incr_nb_treasures: async function (id_user) {
+        const pool = getPool();
+        return await pool.query('UPDATE "User" SET "nb_treasures" = "nb_treasures" + 1 WHERE "id_user" = $1', [id_user]);
     },
 
     getTotalOfMoneyAndXp: async function () {

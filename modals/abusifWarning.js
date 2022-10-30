@@ -23,9 +23,6 @@ module.exports = {
         // Send MP to sender
         await sender.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez reçu un avertissement', 'Votre signalement a été jugé comme abusif par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
 
-        // Increment number of warning
-        await userDB.incr_nb_warn(id_sender);
-
         //Save the informations in the Sanctions tab
         await sanctionsDB.saveSanction(id_sender, mod.id,"Warn abusif", raison);
 

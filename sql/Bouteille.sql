@@ -2,6 +2,7 @@ DROP TABLE "Record";
 DROP TABLE "Sticky";
 DROP TABLE "Hourly";
 DROP TABLE "Sanctions";
+DROP TABLE "Invite";
 DROP TABLE "Message";
 DROP TABLE "User_Sticker";
 DROP TABLE "Vote";
@@ -27,15 +28,16 @@ CREATE TABLE "Record" (
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
   "money" int,
+  "money_spent" int,
   "xp" int,
-  "nb_warn" int default 0,
-  "nb_invite" int default 0,
   "diceBearSeed" text NOT NULL default md5(random()::text),
   "signature" text NOT NULL default 'Un•e illustre inconnu•e',
   "color" varchar(6) NOT NULL default substring(md5(random()::text), 1, 6),
-  "id_sticker" int,
+  "id_sticker" int NOT NULL default 1,
   "anniversaireJour" int,
-  "anniversaireMois" int
+  "anniversaireMois" int,
+  "isVIP" boolean NOT NULL default false,
+  "nb_treasures" int NOT NULL default 0,
 );
 
 CREATE TABLE "Sticky" (
@@ -43,6 +45,12 @@ CREATE TABLE "Sticky" (
     "id_channel" bigint NOT NULL,
     "id_message" bigint NOT NULL,
     "id_lastReply" bigint
+);
+
+
+CREATE TABLE "Invite" (
+    "id_user_inviter" bigint NOT NULL,
+    "id_user_invited" bigint NOT NULL
 );
 
 CREATE TABLE "Sticker" (
@@ -86,6 +94,8 @@ CREATE TABLE "Bottle" (
   "id_guild" bigint,
   "id_user_sender" bigint,
   "id_user_receiver" bigint,
+  "id_user_author" bigint,
+  "id_user_recipient" bigint,
   "id_channel" bigint,
   "name" varchar(50),
   "nb_sea" int default 0,
@@ -165,6 +175,8 @@ ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") 
 
 ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_sender") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_receiver") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_author") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Bottle" ADD FOREIGN KEY ("id_user_recipient") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_mod") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;

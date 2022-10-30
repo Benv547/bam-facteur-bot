@@ -84,7 +84,7 @@ module.exports = {
                 }
             }
         }
-        const embed = createEmbeds.createBottle(content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+        const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -141,7 +141,7 @@ module.exports = {
         if (sticker !== null) {
             stickerUrl = sticker.url;
         }
-        const embed = createEmbeds.createBottle(content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+        const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
 
         // Send message
         const messageTemp = await channel.send({ content: "", embeds: [embed] });
@@ -263,7 +263,7 @@ module.exports = {
                 if (sticker !== null) {
                     stickerUrl = sticker.url;
                 }
-                const embed = createEmbeds.createBottle(message.content, sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+                const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, message.content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(newMessage.id, message.id_message);
             } else {
@@ -293,5 +293,23 @@ module.exports = {
         const embedFlow = createEmbeds.createFullEmbed("Une de perdue, dix de retrouvées !", 'Une de vos bouteilles a coulé, elle contenait le message :\n"**' + original_message + '**"', null, null, null, null);
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] })
+    },
+
+    transformEmojiToDiscordEmoji: function (guild, text) {
+        const emojis = text.match(/:[a-zA-Z0-9_]+:/g);
+        if (emojis !== null) {
+            for (const e of emojis) {
+                text = text.replace(e, this.emojiToDiscordEmoji(guild, e));
+            }
+        }
+        return text;
+    },
+    emojiToDiscordEmoji: function (guild, emoji) {
+        const emojiName = emoji.replace(/:/g, '');
+        const emojiFetched = guild.emojis.cache.find(emoji => emoji.name === emojiName);
+        if (emojiFetched !== undefined) {
+            return emojiFetched.toString();
+        }
+        return emoji;
     }
 }

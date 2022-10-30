@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require('../database/user.js');
+const inviteDB = require('../database/invite.js');
+const orAction = require("../utils/orAction");
 
 module.exports = {
     public: true,
@@ -9,13 +11,14 @@ module.exports = {
         .setDescription('Consultez le nombre de personnes que vous avez invités'),
     async execute(interaction) {
         // Get the user's currency
-        const guest = await userDB.get_nb_invite(interaction.user.id);
 
         const userId = await userDB.getUser(interaction.user.id);
         if (userId == null) {
             // Add the user to the database
             await userDB.createUser(interaction.user.id, 0, 0);
         }
+
+        const guest = await inviteDB.getNumberOfInvite(interaction.user.id);
         let embed = createEmbeds.createFullEmbed('', '', null, null, 0x2f3136, null);
 
         if (!guest) {
