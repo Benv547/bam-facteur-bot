@@ -7,7 +7,17 @@ module.exports = {
     name: 'treasureBotte',
     async execute(interaction) {
 
-        await interaction.update({ components: [] });
+        try {
+            await interaction.update({ components: [] });
+        } catch {
+            return;
+        }
+
+        const userId = await userDB.getUser(interaction.user.id);
+        if (userId == null) {
+            // Add the user to the database
+            await userDB.createUser(interaction.user.id, 0, 0);
+        }
 
         // choose a random number between 1 and 100
         const random = Math.floor(Math.random() * 100) + 1;
