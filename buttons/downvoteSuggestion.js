@@ -1,10 +1,17 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const voteDB = require("../database/vote");
 const suggestionDB = require("../database/suggestion");
+const userDB = require("../database/user");
 
 module.exports = {
     name: 'downvoteSuggestion',
     async execute(interaction) {
+
+        const userId = await userDB.getUser(interaction.user.id);
+        if (userId == null) {
+            // Add the user to the database
+            await userDB.createUser(interaction.user.id, 0, 0);
+        }
 
         // Get the vote
         const vote = await voteDB.getVote(interaction.message.id, interaction.user.id);
