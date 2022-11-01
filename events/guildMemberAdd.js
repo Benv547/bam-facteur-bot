@@ -24,6 +24,11 @@ module.exports = {
                         // Create a new user in the database.
                         await userDB.createUser(member.id, 0, 0);
 
+                        if (await userDB.getUser(invite.inviter.id) == null) {
+                            // Add the user to the database
+                            await userDB.createUser(invite.inviter.id, 0, 0);
+                        }
+
                         // Increment the number of invitations of the inviter.
                         await inviteDB.insertInvite(invite.inviter.id, member.id);
 

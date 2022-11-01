@@ -258,7 +258,7 @@ module.exports = {
                                     await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
                                     textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
                                 }
-                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophé **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, null, null, null);
+                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, null, null, null);
                                 try {
                                     await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
                                     await user.send({content: '', embeds: [embed]});
