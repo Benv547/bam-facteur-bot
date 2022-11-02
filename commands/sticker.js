@@ -37,7 +37,7 @@ module.exports = {
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
             let sticker_name = interaction.options.getString('nom');
-            sticker_name = sticker_name.charAt(0).toUpperCase() + sticker_name.slice(1).ToLowerCase();
+            sticker_name = sticker_name.charAt(0).toUpperCase() + sticker_name.slice(1).toLowerCase();
 
             const sticker = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker_name);
             if (sticker.length === 0) {

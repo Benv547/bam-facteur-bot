@@ -295,21 +295,51 @@ INSERT INTO "Emoji" VALUES ('🍂'),
                            ('🎑'),
                            ('🌇');
 
-INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01);
+-- Insert stickers for achievements
+INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Ma bouteille', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png'),
+                                                                                            ('Bouteille échouée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036280255666733087/bouteille_echouee.png'),
+                                                                                            ('Trésor vide', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507425742868/tresorvide.png'),
+                                                                                            ('Trésor remplis', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037428766785421432/tresor.png'),
+                                                                                            ('Trésor débordant', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507325063320/tresordebordant.png'),
+                                                                                            ('Coffre fermé', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037485184716652544/pirate.png'),
+                                                                                            ('Bretagne', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036973819283378257/bretagne.png'),
+                                                                                            ('Etoile montante', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036967149899624518/vip.png'),
+                                                                                            ('3 étoiles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037430577323835442/3etoiles.png'),
+                                                                                            ('Parchemin', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037695619571134475/parchemin.png'),
+                                                                                            ('Parchemin doré', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037695620279963668/parcheminor.png'),
+                                                                                            ('Coeur de crystal', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037477249076699137/avis.png');
 
-INSERT INTO "Achievement" ("name", "description", "rarity", "type", "value", "id_sticker") VALUES ('Océan messager', 'Vous avez envoyé votre première bouteille !', 'commun', 'bottleSend', 1, null),
-                                                                                    ('Courrier marin', 'Vous avez reçu votre première bouteille !', 'commun', 'bottleReceive', 1, null),
+-- Insert stickers
+INSERT INTO "Sticker" ("name", "url") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01),
+                                             ('Biche', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036971155011153980/biche.png', true, true, 0.2),
+                                             ('Panda', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653282252328961/panda.png', true, false, 0.1),
+                                             ('Ours', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653281539305542/ours.png', true, true, 0.1),
+                                             ('Bulles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162265934135346/bulle.png', true, true, 0.2),
+                                             ('Lanternes', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162007221075998/lanterne.png', true, true, 0.2),
+                                             ('Désert', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162005354614845/desert.png', true, true, 0.1),
+                                             ('Vague', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162005266538516/vague.png', true, true, 0.02);
+
+INSERT INTO "Achievement" ("name", "description", "rarity", "type", "value", "id_sticker") VALUES ('Océan messager', 'Vous avez envoyé votre première bouteille !', 'commun', 'bottleSend', 1, 1),
+                                                                                    ('Courrier marin', 'Vous avez reçu votre première bouteille !', 'commun', 'bottleReceive', 1, 2),
+                                                                                    ('Pirate sans carte', 'Vous avez trouvé et ouvert un trésor !', 'rare', 'userNbTreasures', 1, null),
+
                                                                                     ('Créateur de lien', 'Vous avez envoyé 100 bouteilles !', 'rare', 'bottleSend', 100, null),
                                                                                     ('Lecture abondante', 'Vous avez reçu 100 bouteilles !', 'rare', 'bottleReceive', 100, null),
                                                                                     ('Pile poil !', 'Vous avez envoyé une bouteille de 2000 caractères !', 'rare', 'messageLength', 2000, null),
                                                                                     ('Ecrivain accompli', 'Vous avez envoyé une bouteille de 1500 caractères !', 'rare', 'messageLength', 1500, null),
-                                                                                    ('Pirate sans carte', 'Vous avez trouvé et ouvert un trésor !', 'rare', 'userNbTreasures', 1, null),
+                                                                                    ('Une croix rouge', 'Vous avez trouvé et ouvert 100 trésors !', 'rare', 'userNbTreasures', 50, null),
                                                                                     ('Une suggestion suggestive', 'Vous avez envoyé une suggestion !', 'rare', 'suggestionSent', 1, null),
                                                                                     ('Un avis bien tranché', 'Vous avez envoyé un avis !', 'rare', 'opinionSent', 1, null),
                                                                                     ('Dépensier', 'Vous avez dépensé 10 000 pièces d''or !', 'rare', 'userMoneySpent', 10000, null),
+
                                                                                     ('Accro aux projecteurs', 'Vous êtes passé VIP !', 'epic', 'userInvited', 5, null),
                                                                                     ('Plus on est de fou...', 'Vous avez invité 10 personnes sur le serveur !', 'epic', 'userInvited', 10, null),
-                                                                                    -- Acheteur compulsif ?
-                                                                                    ('Panier percé', 'Vous avez dépensé 100 000 pièces d''or !', 'legendaire', 'userMoneySpent', 10000, null),
+                                                                                    ('Plein aux as', 'Vous avez 10 000 pièces d''or sur votre compte !', 'epic', 'userMoneyEarned', 10000, null),
+
+                                                                                    ('Panier percé', 'Vous avez dépensé 100 000 pièces d''or !', 'legendaire', 'userMoneySpent', 100000, null),
+                                                                                    ('Richissime', 'Vous avez 100 000 pièces d''or sur votre compte !', 'legendaire', 'userMoneyEarned', 100000, null),
+                                                                                    ('Trésor pirate', 'Vous avez trouvé et ouvert 500 trésors !', 'legendaire', 'userNbTreasures', 500, null),
+
                                                                                     ('E brezhoneg, mar plij', 'Vous avez écrit un mot en Breton !', 'mythique', 'messageContains', 'Breizh', null),
-                                                                                    ('Créateur de stars', '5 membres que vous avez invités sont devenus VIP', 'mythique', 'vipUserInvited', 5, null);
+                                                                                    ('Créateur de stars', '5 membres que vous avez invités sont devenus VIP', 'mythique', 'vipUserInvited', 5, null),
+                                                                                    ('Crésus', 'Vous avez 500 000 pièces d''or sur votre compte !', 'mythique', 'userMoneyEarned', 500000, null);
