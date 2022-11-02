@@ -2,7 +2,6 @@ const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require('../database/user.js');
 const inviteDB = require('../database/invite.js');
-const orAction = require("../utils/orAction");
 
 module.exports = {
     public: true,
@@ -21,7 +20,7 @@ module.exports = {
         const guest = await inviteDB.getNumberOfInvite(interaction.user.id);
         let embed = createEmbeds.createFullEmbed('', '', null, null, 0x2f3136, null);
 
-        if (!guest) {
+        if (guest == 0) {
             embed = createEmbeds.createFullEmbed('Vous n\'avez encore invité personne 😔', 'Mais il n\'est pas trop tard pour remédier à cela !\n\n Pour créer une invitation, il vous suffit de cliquer sur le bouton **\"inviter\"** de discord, de copier le lien, et enfin d\'envoyer le lien a vos amis !\n**Attention**, ne partagez que votre lien si vous souhaitez que l\'invitation soit comptabilisée.', null, null, 0x2f3136, null);
         }
         else if (guest == 1) {
