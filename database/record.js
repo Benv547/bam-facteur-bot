@@ -22,7 +22,7 @@ module.exports = {
 
     getCountForOneWeek: async function (type) {
         const pool = getPool();
-        const results = await pool.query('SELECT SUM(score) AS count FROM "Record" WHERE "date" > NOW() - INTERVAL \'7 days\' AND "type" = $1', [type]);
+        const results = await pool.query('SELECT MAX(score) AS count FROM "Record" WHERE "date" > NOW() - INTERVAL \'7 days\' AND "type" = $1', [type]);
         return results.rows[0]["count"];
     },
     getCountEachDayForOneWeek: async function (type) {
@@ -33,7 +33,7 @@ module.exports = {
 
     getCountForOneMonth: async function (type) {
         const pool = getPool();
-        const results = await pool.query('SELECT SUM(score) AS count FROM "Record" WHERE "date" > NOW() - INTERVAL \'30 days\' AND "type" = $1', [type]);
+        const results = await pool.query('SELECT MAX(score) AS count FROM "Record" WHERE "date" > NOW() - INTERVAL \'30 days\' AND "type" = $1', [type]);
         return results.rows[0]["count"];
     },
     getCountEachDayForOneMonth: async function (type) {
@@ -44,7 +44,7 @@ module.exports = {
 
     getCountForThisYear: async function (type) {
         const pool = getPool();
-        const results = await pool.query('SELECT SUM(score) AS count FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1', [type]);
+        const results = await pool.query('SELECT MAX(score) AS count FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1', [type]);
         return results.rows[0]["count"];
     },
     getCountEachMonthForThisYear: async function (type) {
