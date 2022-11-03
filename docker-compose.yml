@@ -1,6 +1,7 @@
 services:
+
  facteur:
-  image: facteur
+  build: .
   networks:
    - isolated_nw2
   volumes:
