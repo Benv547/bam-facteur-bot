@@ -28,8 +28,8 @@ module.exports = {
                 .setDescription("La période de temps")
                 .setRequired(true)
                 .setChoices(
-                    { name: '7 jour', value: 'sevenDays' },
-                    { name: '30 jour', value: 'thirtyDays' },
+                    { name: '7 jours', value: 'sevenDays' },
+                    { name: '30 jours', value: 'thirtyDays' },
                     { name: '1 an', value: 'oneYear' },
                 )),
     async execute(interaction) {

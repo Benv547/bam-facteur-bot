@@ -28,7 +28,7 @@ module.exports = {
                 .setRequired(false)),
     async execute(interaction) {
         if (await roles.userIsAdmin(interaction.member)) {
-            const embed = createEmbeds.createFullEmbed(interaction.options.getString('title'), interaction.options.getString('description'), interaction.options.getString('thumbnail'), interaction.options.getString('image'), 0x2f3136, interaction.options.getString('footer'));
+            const embed = createEmbeds.createFullEmbed(interaction.options.getString('title'), interaction.options.getString('description'), interaction.options.getString('thumbnail'), interaction.options.getString('image'), 0x2f3136, interaction.options.getString('footer'), false);
             await interaction.channel.send({ content: "", embeds: [embed] });
             return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
         }

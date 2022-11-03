@@ -45,7 +45,7 @@ module.exports = {
                     '\n' +
                     'Attention, les suggestions doivent aller dans <#1030839758361993246>.',
                     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/blue-heart_1f499.png',
-                    null, 0x2f3136, null);
+                    null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             } else if (interaction.options.getString('type') === 'suggestion') {
@@ -60,7 +60,7 @@ module.exports = {
                     'Pour faire avancer le serveur, n\'hésitez pas à nous transmettre vos suggestions.\n' +
                     'Vous pouvez aussi réagir pour les suggestions que vous trouvez intéressantes ou non.',
                     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/light-bulb_1f4a1.png',
-                    null, 0x2f3136, null);
+                    null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             } else if (interaction.options.getString('type') === 'help') {
@@ -74,7 +74,7 @@ module.exports = {
                 const embed = createEmbeds.createFullEmbed('',
                     ':warning: **Vous avez une question ?** La communauté y répond !\n' +
                     'Écrit ta question en cliquant en dessous et répond en ouvrant le fil de discussion.',
-                    null, null, 0x2f3136, null);
+                    null, null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             }

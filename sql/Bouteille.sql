@@ -296,7 +296,7 @@ INSERT INTO "Emoji" VALUES ('🍂'),
                            ('🌇');
 
 -- Insert stickers for achievements
-INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Ma bouteille', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png'),
+INSERT INTO "Sticker" ("name", "url") VALUES ('Ma bouteille', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png'),
                                                                                             ('Bouteille échouée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036280255666733087/bouteille_echouee.png'),
                                                                                             ('Trésor vide', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507425742868/tresorvide.png'),
                                                                                             ('Trésor remplis', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037428766785421432/tresor.png'),
@@ -318,7 +318,7 @@ INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percenta
                                                                                             ('Tirelire cassée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037824800149753957/cochonvide.png');
 
 -- Insert stickers
-INSERT INTO "Sticker" ("name", "url") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01),
+INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01),
                                              ('Biche', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036971155011153980/biche.png', true, true, 0.2),
                                              ('Panda', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653282252328961/panda.png', true, false, 0.1),
                                              ('Ours', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653281539305542/ours.png', true, true, 0.1),
