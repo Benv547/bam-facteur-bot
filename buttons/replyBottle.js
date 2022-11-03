@@ -13,7 +13,6 @@ module.exports = {
             .setLabel("Quel est votre message ?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
-            .setMinLength(10)
             .setMaxLength(2000);
 
         // An action row only holds one text input,
