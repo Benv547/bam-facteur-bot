@@ -6,7 +6,7 @@ const roles = require("../utils/roles");
 
 module.exports = {
     public: true,
-    price: 100,
+    price: 250,
     data: new SlashCommandBuilder()
         .setName('signature')
         .setDescription('Choisissez votre signature !')

@@ -33,7 +33,7 @@ module.exports = {
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
         // Get random price between 10 and 100
-        const price = Math.floor(Math.random() * 90) + 10;
+        const price = Math.floor(Math.random() * 40) + 10;
         await orAction.increment(interaction.user.id, price);
         try {
             await hourlyDB.insertHourly(interaction.user.id);
