@@ -29,6 +29,11 @@ module.exports = {
             name: 'ticket-n' + (count + 1),
             type: ChannelType.GuildText
         });
+
+        // Change category of the channel
+        const category = interaction.guild.channels.cache.find(c => c.id == ticket);
+        await channel.setParent(category);
+        
         // Create a button to reply to the ticket
         const rowMod = new ActionRowBuilder()
             .addComponents(
@@ -49,10 +54,6 @@ module.exports = {
         const embed = createEmbeds.createFullEmbed("Un•e illuste inconnu•e", content, null, null, 0x0000FF, null);
         // Send the message to the channel
         await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
-
-        // Change category of the channel
-        const category = interaction.guild.channels.cache.find(c => c.id == ticket);
-        await channel.setParent(category);
 
         // Create a button to reply to the ticket
         const rowUser = new ActionRowBuilder()

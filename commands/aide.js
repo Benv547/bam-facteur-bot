@@ -58,6 +58,7 @@ module.exports = {
                 let price = "";
                 let priceValue;
                 if (command.price) {
+                    priceValue = command.price;
                     if (await roles.userIsBooster(interaction.member)) {
                         priceValue = Math.round(priceValue * 0.5);
                     } else if (await roles.userIsVip(interaction.member)) {
