@@ -3,6 +3,7 @@ const path = require('node:path');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord.js');
 const { clientId, token } = require('./token.json');
+const { guildId } = require('./config.json');
 
 const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
@@ -18,10 +19,10 @@ const rest = new REST({ version: '10' }).setToken(token);
 
 
 // for global commands
-// rest.put(Routes.applicationCommands(clientId), { body: [] })
+// rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
 //     .then(() => console.log('Successfully deleted all application commands.'))
 //     .catch(console.error);
 
-rest.put(Routes.applicationCommands(clientId), { body: commands })
+rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
     .then(() => console.log('Successfully registered application commands.'))
     .catch(console.error);

@@ -3,6 +3,7 @@ const signalementDB = require("../database/signalement");
 const userDB = require("../database/user");
 const sanctionsDB = require("../database/sanctions");
 const {sanction} = require("../config.json");
+const bottleDB = require("../database/bottle");
 
 module.exports = {
     name: 'abusifWarning',
@@ -25,6 +26,15 @@ module.exports = {
 
         //Save the informations in the Sanctions tab
         await sanctionsDB.saveSanction(id_sender, mod.id,"Warn abusif", raison);
+
+        const id_bottle = await signalementDB.get_id_bottle(interaction.message.id);
+        if (id_bottle !== null) {
+            // Fetch bottle
+            const bottle = await interaction.guild.channels.fetch(id_bottle);
+            // delete the bottle
+            await bottle.delete();
+            await bottleDB.setBottleTerminated(id_bottle);
+        }
 
         // Delete message
         await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });

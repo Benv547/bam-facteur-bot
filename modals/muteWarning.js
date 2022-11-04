@@ -2,6 +2,7 @@ const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
 const sanctionsDB = require("../database/sanctions");
 const {sanction} = require("../config.json");
+const bottleDB = require("../database/bottle");
 
 module.exports = {
     name: 'muteWarning',
@@ -29,7 +30,15 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
-        
+
+        const id_bottle = await signalementDB.get_id_bottle(interaction.message.id);
+        if (id_bottle !== null) {
+            // Fetch bottle
+            const bottle = await interaction.guild.channels.fetch(id_bottle);
+            // delete the bottle
+            await bottle.delete();
+            await bottleDB.setBottleTerminated(id_bottle);
+        }
 
         // Send MP to sender
         await receiver.send({ content: '', embeds: [createEmbeds.createFullEmbed('Vous avez été muté•e', 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });

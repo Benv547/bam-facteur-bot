@@ -2,6 +2,7 @@ const createEmbeds = require("../utils/createEmbeds");
 const signalementDB = require("../database/signalement");
 const sanctionsDB = require("../database/sanctions");
 const {sanction} = require("../config.json");
+const bottleDB = require("../database/bottle");
 
 module.exports = {
     name: 'banWarning',
@@ -32,7 +33,14 @@ module.exports = {
             console.log(error);
         }
 
-        
+        const id_bottle = await signalementDB.get_id_bottle(interaction.message.id);
+        if (id_bottle !== null) {
+            // Fetch bottle
+            const bottle = await interaction.guild.channels.fetch(id_bottle);
+            // delete the bottle
+            await bottle.delete();
+            await bottleDB.setBottleTerminated(id_bottle);
+        }
 
         // Delete message
         await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });
