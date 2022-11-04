@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder} = require('discord.js');
+const roles = require("../utils/roles");
 const path = require("path");
 
 module.exports = {
@@ -54,7 +55,16 @@ module.exports = {
                         }
                     }
                 }
-                const price = command.price ? '\n*Cette commande coûte **' + command.price + ' pièces d\'or**.*' : '';
+                let price = "";
+                let priceValue;
+                if (command.price) {
+                    if (await roles.userIsBooster(interaction.member)) {
+                        priceValue = Math.round(priceValue * 0.5);
+                    } else if (await roles.userIsVip(interaction.member)) {
+                        priceValue = Math.round(priceValue * 0.8);
+                    }
+                    price = '\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
+                }
                 embed.addFields({ name: name, value: command.data.description + price, inline: false });
             }
         }

@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require("../database/user");
 const orAction = require("../utils/orAction");
+const roles = require("../utils/roles");
 
 module.exports = {
     public: true,
@@ -15,8 +16,15 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
 
-        if(!await orAction.reduce(interaction.user.id, this.price)) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature ! Economisez ' + this.price + ' pièces d\'or et revenez me voir !', null, null, null, null);
+        let price = this.price;
+        if (await roles.userIsBooster(interaction.member)) {
+            price = Math.round(price * 0.5);
+        } else if (await roles.userIsVip(interaction.member)) {
+            price = Math.round(price * 0.8);
+        }
+
+        if(!await orAction.reduce(interaction.user.id, price)) {
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature ! Economisez ' + price + ' pièces d\'or et revenez me voir !', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 
