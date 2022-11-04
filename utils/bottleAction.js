@@ -6,6 +6,7 @@ const messageDB = require("../database/message");
 const stickerDB = require("../database/sticker");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
+const xpAction = require("./xpAction");
 
 module.exports = {
     name: 'bottleAction',
@@ -115,6 +116,9 @@ module.exports = {
 
         // TODO: save message to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
+
+
+        await xpAction.increment(guild, id_user_sender, 5);
     },
     reply: async function (guild, id_user_sender, channel, content) {
 
@@ -222,6 +226,8 @@ module.exports = {
 
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
+
+        await xpAction.increment(guild, id_user_sender, 2);
     },
     unarchive: async function (guild, id_user_sender, id_bottle, content) {
 
