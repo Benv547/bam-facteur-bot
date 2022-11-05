@@ -33,7 +33,7 @@ module.exports = {
                 const content = message.embeds[0].description;
                 if (content) {
                     const user = message.interaction.user;
-                    if (content.includes('Commandes')) {
+                    if (content.includes('a Voté pour')) {
                         await orAction.increment(user.id, OR_VOTE);
                         const embed = createEmbeds.createFullEmbed(`Merci pour ton vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' pièce(s) d\'or**', null, null, null, null);
                         await message.channel.send({content: "", embeds: [embed]});
