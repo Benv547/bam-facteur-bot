@@ -33,9 +33,9 @@ module.exports = {
         }
         return null;
     },
-    get_number_of_tickets: async function (id_guild) {
+    get_number_of_tickets: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) FROM "Ticket" WHERE id_guild = $1', [id_guild]);
+        const results = await pool.query('SELECT COUNT(*) FROM "Ticket"');
         if (results.rows.length > 0) {
             return results.rows[0]["count"];
         }
