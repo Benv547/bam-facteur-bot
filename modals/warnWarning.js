@@ -14,7 +14,8 @@ module.exports = {
         const id_receiver = await signalementDB.get_id_receiver(interaction.message.id);
 
         if (id_receiver === null) {
-            return await interaction.reply({ content: "Ce signalement a déjà été traité ou n'éxiste plus.", ephemeral: true });
+            await interaction.reply({ content: "Ce signalement a déjà été traité ou n'éxiste plus.", ephemeral: true });
+            return await interaction.message.delete();
         }
 
         // Fetch receiver
