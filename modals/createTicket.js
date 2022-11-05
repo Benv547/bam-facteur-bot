@@ -9,6 +9,13 @@ module.exports = {
     name: 'createTicket',
     async execute(interaction) {
 
+        // Check if the user exists in the database
+        const userId = await userDB.getUser(interaction.user.id);
+        if (userId == null) {
+            // Add the user to the database
+            await userDB.createUser(interaction.user.id, 0, 0);
+        }
+
         // Check if user is already in a ticket
         const userTicket = await ticketDB.get_id_channel(interaction.user.id);
         if (userTicket) {
@@ -78,13 +85,6 @@ module.exports = {
         const embed = createEmbeds.createFullEmbed("Un•e illuste inconnu•e", content, null, null, 0x0000FF, null);
         // Send the message to the channel
         await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
-
-        // Check if the user exists in the database
-        const userId = await userDB.getUser(sender.user.id);
-        if (userId == null) {
-            // Add the user to the database
-            await userDB.createUser(sender.user.id, 0, 0);
-        }
 
         // Save ticket to database
         await ticketDB.insertTicket(sender.user.id, channel.id, interaction.guild.id);

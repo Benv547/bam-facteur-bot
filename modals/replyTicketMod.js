@@ -10,8 +10,6 @@ module.exports = {
 
         const content = interaction.fields.getTextInputValue('textTicket');
 
-        await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
-
         // Create a button to reply to the ticket
         const rowMod = new ActionRowBuilder()
             .addComponents(
@@ -42,10 +40,16 @@ module.exports = {
 
         // Fetch user from database
         const user = await ticketDB.get_id_user(interaction.channel.id);
+
+        if (user == null) {
+            return await interaction.reply({ content: 'Le ticket est introuvable ou a déjà été fermé..', ephemeral: true });
+        }
+
         // Fetch user from guild
         const userGuild = await interaction.guild.members.fetch(user);
         const embedUser = createEmbeds.createFullEmbed("Modérateur", content, null, null, 0x00FF00, null);
         // Send an MP message to the sender
         await userGuild.send({ content: 'Réponse du ticket', embeds: [embedUser], components: [rowUser] });
+        await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
     },
 };

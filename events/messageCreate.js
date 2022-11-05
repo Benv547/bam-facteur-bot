@@ -26,9 +26,10 @@ module.exports = {
             }
         }
 
-        else if (message.interaction) {
+        if (message.interaction) {
             await new Promise(r => setTimeout(r, 500));
             if (message.embeds.length > 0) {
+                console.log(message.embeds[0].description);
                 const content = message.embeds[0].description;
                 if (content) {
                     const user = message.interaction.user;

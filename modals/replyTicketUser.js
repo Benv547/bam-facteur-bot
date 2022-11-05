@@ -32,9 +32,6 @@ module.exports = {
             return await interaction.reply({ content: 'Votre ticket est introuvabl ou a déjà été fermé. Merci d\'en créer un nouveau.', ephemeral: true });
             return;
         }
-
-        await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
-
         // Fetch guild from client
         const guild = await interaction.client.guilds.fetch(guildId);
 
@@ -65,5 +62,6 @@ module.exports = {
         try {
             await interaction.user.send({ content: 'Votre réponse', embeds: [embedUser], components: [rowUser] });
         } catch {}
+        await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
     },
 };
