@@ -43,6 +43,7 @@ module.exports = {
                     if (member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member);
+                        await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
                     }
                 } catch (error) {
                     console.log(error);
@@ -56,6 +57,13 @@ module.exports = {
                 if (member !== null) {
                     // add permission to see the channel but not send messages
                     await channel.permissionOverwrites.edit(member, {ViewChannel: true, SendMessages: false});
+
+                    // if member is online or idle
+                    if (member.presence != null && member.presence.status !== "offline" && member.presence.status !== "dnd") {
+                        await channel.send(`** **\n🏝️ Bienvenue, illustre ${member}, sur l'île !`);
+                    } else {
+                        await channel.send(`** **\n🏝️ L'illustre **${member.user.username}** a débarqué sur l'île !`);
+                    }
                 }
                 channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
             }
