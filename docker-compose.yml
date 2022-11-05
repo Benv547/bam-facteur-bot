@@ -5,6 +5,7 @@ services:
   build: .
   networks:
    - isolated_nw2
+  restart: on-failure
   volumes:
    - /tmp
   container_name: facteur
