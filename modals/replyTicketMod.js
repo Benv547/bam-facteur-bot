@@ -46,10 +46,14 @@ module.exports = {
         }
 
         // Fetch user from guild
-        const userGuild = await interaction.guild.members.fetch(user);
+        try {
+            const userGuild = await interaction.guild.members.fetch(user);
+            await userGuild.send({ content: 'Réponse du ticket', embeds: [embedUser], components: [rowUser] });
+        } catch (e) {
+            return await interaction.reply({ content: 'La personne a quitté le serveur ou il est impossible de lui répondre pour le moment.', ephemeral: true });
+        }
         const embedUser = createEmbeds.createFullEmbed("Modérateur", content, null, null, 0x00FF00, null);
         // Send an MP message to the sender
-        await userGuild.send({ content: 'Réponse du ticket', embeds: [embedUser], components: [rowUser] });
         await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
     },
 };
