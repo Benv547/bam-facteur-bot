@@ -78,9 +78,7 @@ module.exports = {
                         const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille " + channel_name + " a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
                         try {
                             await randMember.send({content: "", embeds: [embed]});
-                        } catch (e) {
-                            console.log(e);
-                        }
+                        } catch {}
                     } catch {}
                 }
             }

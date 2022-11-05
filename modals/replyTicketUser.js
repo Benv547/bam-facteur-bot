@@ -62,6 +62,8 @@ module.exports = {
         // Create embed for the user
         const embedUser = createEmbeds.createFullEmbed("Vous", content, null, null, 0x0000FF, null);
         // Send an MP message to the sender
-        await interaction.user.send({ content: 'Votre réponse', embeds: [embedUser], components: [rowUser] });
+        try {
+            await interaction.user.send({ content: 'Votre réponse', embeds: [embedUser], components: [rowUser] });
+        } catch {}
     },
 };

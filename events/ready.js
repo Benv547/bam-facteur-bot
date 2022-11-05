@@ -262,8 +262,7 @@ module.exports = {
                                 try {
                                     await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
                                     await user.send({content: '', embeds: [embed]});
-                                } catch (error) {
-                                    console.log(error);
+                                } catch {
                                 }
                             }
                         }
@@ -320,7 +319,9 @@ module.exports = {
 
                         const embedUser = createEmbeds.createFullEmbed("JOYEUX ANNIVERSAIRE", '', null, null, 0x00FF00, null); // TO DO : Faire le message + ajuster couleur
                         // Send an MP message to the sender
-                        await member.send({ content: '', embeds: [embedUser] }); // TO DO : Faire un bouton (réclamer sticker anniversaire) components: [rowUser] 
+                        try {
+                            await member.send({ content: '', embeds: [embedUser] }); // TO DO : Faire un bouton (réclamer sticker anniversaire) components: [rowUser]
+                        } catch {}
                     }
                 }
             }
