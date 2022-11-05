@@ -20,6 +20,30 @@ module.exports = {
 
         const sender = interaction.member;
 
+        try {
+            // Create a button to reply to the ticket
+            const rowUser = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('replyTicketUser')
+                        .setLabel('Répondre')
+                        .setStyle(ButtonStyle.Primary),
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('deleteTicket')
+                        .setLabel('Fermer le ticket')
+                        .setStyle(ButtonStyle.Danger),
+                );
+
+            // Create embed for the user
+            const embedUser = createEmbeds.createFullEmbed("Vous", content, null, null, 0x0000FF, null);
+            // Send an MP message to the sender
+            await sender.send({ content: 'Votre ticket', embeds: [embedUser], components: [rowUser] });
+        } catch (e) {
+            return await interaction.reply({ content: '⚠️ Votre ticket n\'a pas été créé. **Merci d\'autoriser le bot à vous envoyer des MP**.', ephemeral: true });
+        }
+
         await interaction.reply({ content: 'Votre ticket a été envoyé.', ephemeral: true });
 
         const count = await ticketDB.get_number_of_tickets();
@@ -54,27 +78,6 @@ module.exports = {
         const embed = createEmbeds.createFullEmbed("Un•e illuste inconnu•e", content, null, null, 0x0000FF, null);
         // Send the message to the channel
         await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
-
-        // Create a button to reply to the ticket
-        const rowUser = new ActionRowBuilder()
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('replyTicketUser')
-                    .setLabel('Répondre')
-                    .setStyle(ButtonStyle.Primary),
-            )
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('deleteTicket')
-                    .setLabel('Fermer le ticket')
-                    .setStyle(ButtonStyle.Danger),
-            );
-
-        // Create embed for the user
-        const embedUser = createEmbeds.createFullEmbed("Vous", content, null, null, 0x0000FF, null);
-
-        // Send an MP message to the sender
-        await sender.send({ content: 'Votre ticket', embeds: [embedUser], components: [rowUser] });
 
         // Check if the user exists in the database
         const userId = await userDB.getUser(sender.user.id);
