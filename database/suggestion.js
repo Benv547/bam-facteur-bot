@@ -1,4 +1,4 @@
-var db = require('pgpool.js');
+var db = require('./pgpool.js');
 
 module.exports = {
     insertSuggestions: async function (id_message, id_thread, id_user, content, isReply) {

@@ -1,4 +1,4 @@
-var db = require('pgpool.js');
+var db = require('./pgpool.js');
 
 module.exports = {
     insertBottle: async function (id_bottle, id_guild, id_user_sender, id_user_receiver, id_channel, name, nb_sea) {

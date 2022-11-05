@@ -1,5 +1,4 @@
-var db = require('pgpool.js');
-
+var db = require('pgpool.js');var db = require('./pgpool.js');
 module.exports = {
     insertInvite: async function (id_user_inviter, id_user_invited) {
         const pool = db.getPool();

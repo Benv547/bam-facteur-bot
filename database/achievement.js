@@ -1,4 +1,4 @@
-var db = require('pgpool.js');
+var db = require('./pgpool.js');
 
 module.exports = {
     giveAchievementToUser: async function (id_user, id_achievement) {
