@@ -27,7 +27,7 @@ module.exports = {
         }
 
         if (message.interaction) {
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 1000));
             if (message.embeds.length > 0) {
                 const content = message.embeds[0].description;
                 if (content) {
