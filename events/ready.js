@@ -4,6 +4,7 @@ const messageDB = require("../database/message");
 const recordDB = require("../database/record");
 const achievementDB = require("../database/achievement");
 const stickerDB = require("../database/sticker");
+const message_ileDB = require("../database/message_ile");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
@@ -332,6 +333,8 @@ module.exports = {
                         } catch {}
                     }
                 }
+
+                await message_ileDB.deleteMessageFromPastDay();
             }
 
 

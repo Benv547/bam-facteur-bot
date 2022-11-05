@@ -6,6 +6,7 @@ DROP TABLE "Invite";
 DROP TABLE "User_Achievement";
 DROP TABLE "Achievement";
 DROP TABLE "Message";
+DROP TABLE "Message_ile";
 DROP TABLE "User_Sticker";
 DROP TABLE "Vote";
 DROP TABLE "Suggestion";
@@ -187,6 +188,15 @@ CREATE TABLE "Hourly" (
     "lastHourly" timestamp default current_timestamp
 );
 
+CREATE TABLE "Message_ile" (
+    "id_message" bigint PRIMARY KEY,
+    "id_user" bigint,
+    "id_channel" bigint,
+    "id_guild" bigint,
+    "content" text,
+    "date" timestamp default current_timestamp
+);
+
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -226,6 +236,8 @@ ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_inviter") REFERENCES "User" ("id_
 ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_invited") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Hourly" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "Message_ile" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO "Couleur" VALUES ('rose'),
                              ('cendrée'),

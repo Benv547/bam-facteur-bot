@@ -77,6 +77,16 @@ module.exports = {
                     null, null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
+            } else if (interaction.options.getString('type') === 'ile') {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('createIleMessage')
+                            .setLabel('Nouveau message')
+                            .setStyle(ButtonStyle.Secondary),
+                    );
+                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                return interaction.channel.send({ content: '', components: [row] });
             }
         }
         return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
