@@ -29,11 +29,11 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyIleMessage')
-                    .setLabel('Répondre')
+                    .setLabel('📩')
                     .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
                     .setCustomId('createIleMessage')
-                    .setLabel('Créer un nouveau message')
+                    .setLabel('✉️')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('warnIleMessage')

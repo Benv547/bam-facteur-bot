@@ -17,7 +17,7 @@ module.exports = {
         }
 
         // fetch role
-        const roleId = "1032619119759081502";
+        const roleId = "1038519468894203934";
         const role = await interaction.guild.roles.fetch(roleId);
 
         // add role to member interaction
