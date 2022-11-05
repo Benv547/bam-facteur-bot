@@ -2,9 +2,9 @@ var db = require('./pgpool.js');
 
 
 module.exports = {
-    insertSignalement: async function (id_message, id_sender, id_receiver, content, id_bottle, id_warn) {
+    insertSignalement: async function (id_message, id_sender, id_receiver, content, id_bottle, id_warn, id_channel) {
         const pool = db.getPool();
-        return await pool.query('INSERT INTO "Signalement" ("id_message", "id_sender", "id_receiver", "content", "id_bottle", "id_warn") VALUES ($1, $2, $3, $4, $5, $6)', [id_message, id_sender, id_receiver, content, id_bottle, id_warn]);
+        return await pool.query('INSERT INTO "Signalement" ("id_message", "id_sender", "id_receiver", "content", "id_bottle", "id_warn", "id_channel") VALUES ($1, $2, $3, $4, $5, $6, $7)', [id_message, id_sender, id_receiver, content, id_bottle, id_warn, id_channel]);
     },
     get_id_sender: async function (id_message) {
         const pool = db.getPool();
@@ -35,6 +35,22 @@ module.exports = {
         const results = await pool.query('SELECT "id_message" FROM "Signalement" WHERE id_warn = $1', [id_warn]);
         if (results.rows.length > 0) {
             return results.rows[0]["id_message"];
+        }
+        return null;
+    },
+    get_id_warn: async function (id_message) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "id_warn" FROM "Signalement" WHERE id_message = $1', [id_message]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["id_warn"];
+        }
+        return null;
+    },
+    get_id_channel: async function (id_message) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "id_channel" FROM "Signalement" WHERE id_message = $1', [id_message]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["id_channel"];
         }
         return null;
     }

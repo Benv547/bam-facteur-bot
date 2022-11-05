@@ -142,7 +142,7 @@ CREATE TABLE "Signalement" (
     "content" text,
     "id_bottle" bigint,
     "id_warn" bigint,
-    "status" boolean default false
+    "id_channel" bigint
 );
 
 CREATE TABLE "Opinion" (

@@ -57,9 +57,14 @@ module.exports = {
         const message = await channel.send({ content: mod.toString() + ', le message suivant a été signalé pour la raison "**' + content + '**"\n' + warnMessage.url, embeds: warnMessage.embeds, components: [row] });
 
         // Get message sender in database
-        const receiverId = await suggestionDB.get_id_user(message.id);
+        const receiverId = await suggestionDB.get_id_user(warnMessage.id);
 
         // Save signalement in database
-        await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id);
+        try {
+            // Save signalement in database
+            await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id, warnMessage.channel.id);
+        } catch (e) {
+            console.error(e);
+        }
     },
 };

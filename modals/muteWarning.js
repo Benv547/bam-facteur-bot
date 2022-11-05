@@ -39,6 +39,21 @@ module.exports = {
             // delete the bottle
             await bottle.delete();
             await bottleDB.setBottleTerminated(id_bottle);
+        } else {
+            const messageToDelete = await signalementDB.get_id_warn(interaction.message.id);
+            if (messageToDelete !== null) {
+                try {
+                    const channelWhereDelete = await signalementDB.get_id_channel(interaction.message.id);
+                    // Fetch channel
+                    const channel = await interaction.guild.channels.fetch(channelWhereDelete);
+                    // Fetch message
+                    const message = await channel.messages.fetch(messageToDelete);
+                    // delete the message
+                    await message.delete();
+                } catch (error) {
+                    console.log(error);
+                }
+            }
         }
 
         // Send MP to sender
