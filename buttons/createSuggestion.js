@@ -10,7 +10,7 @@ module.exports = {
         // Add components to modal
         const input = new TextInputBuilder()
             .setCustomId('textSuggestion')
-            .setLabel("Quel est votre suggestion ?")
+            .setLabel("Quelle est votre suggestion ?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);
