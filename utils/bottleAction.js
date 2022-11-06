@@ -36,11 +36,15 @@ module.exports = {
 
         // While number of channels in category is more than 45
         while (category.children.cache.size > 45) {
-            const channelToDelete = category.children.cache.first();
-            // Set archive to true
-            await bottleDB.setBottleArchived(channelToDelete.id_channel);
-            // Delete channel
-            await channelToDelete.delete();
+            try {
+                const channelToDelete = category.children.cache.first();
+                // Set archive to true
+                await bottleDB.setBottleArchived(channelToDelete.id_channel);
+                // Delete channel
+                await channelToDelete.delete();
+            } catch (error) {
+                console.error(error);
+            }
         }
 
         await channel.setParent(category);
