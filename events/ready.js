@@ -54,14 +54,14 @@ module.exports = {
             }
             while (channelSize <= guildSize) {
                 // choose a non bot member in the guild
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot).random();
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null).random();
                 // if member is not null
                 if (member !== null) {
                     // add permission to see the channel but not send messages
                     await channel.permissionOverwrites.edit(member, {ViewChannel: true, SendMessages: false});
 
                     // if member is online or idle
-                    if (member.presence != null && member.presence.status !== "offline" && member.presence.status !== "dnd") {
+                    if (member.presence != null && member.presence.status === "online") {
                         await channel.send(`** **\n🏝️ Bienvenue, illustre ${member}, sur l'île !`);
                     } else {
                         await channel.send(`** **\n🏝️ L'illustre **${member.user.username}** a débarqué sur l'île !`);

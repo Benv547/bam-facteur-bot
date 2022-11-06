@@ -52,7 +52,7 @@ module.exports = {
         // TODO: choose random member who are not a bot
 
         // Fetch all members
-        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender);
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null);
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
