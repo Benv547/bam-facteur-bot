@@ -16,6 +16,7 @@ module.exports = {
             const msg = newMessage.reactions.message;
             if (newMessage.interaction) {
                 if (msg.embeds.length > 0) {
+                    const content = msg.embeds[0].description;
                     if (content && !voteId.includes(newMessage.id)) {
                         voteId.push(newMessage.id);
                         const user = newMessage.interaction.user;
