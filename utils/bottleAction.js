@@ -116,7 +116,7 @@ module.exports = {
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
 
 
-        await xpAction.increment(guild, id_user_sender, 5);
+        await xpAction.increment(guild, id_user_sender, 20);
     },
     reply: async function (guild, id_user_sender, channel, content) {
 
@@ -225,7 +225,7 @@ module.exports = {
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
 
-        await xpAction.increment(guild, id_user_sender, 2);
+        await xpAction.increment(guild, id_user_sender, 5);
     },
     unarchive: async function (guild, id_user_sender, id_bottle, content) {
 

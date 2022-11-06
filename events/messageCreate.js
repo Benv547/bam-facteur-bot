@@ -1,8 +1,11 @@
 const orAction = require("../utils/orAction");
 const createEmbeds = require("../utils/createEmbeds");
+const xpAction = require("../utils/xpAction");
 
 const OR_VOTE = 50;
 const OR_BUMP = 150;
+const XP_VOTE = 10;
+const XP_BUMP = 20;
 
 module.exports = {
     name: 'messageCreate',
@@ -20,7 +23,8 @@ module.exports = {
                 const user = message.guild.members.cache.find(m => m.user.username === match[1]);
                 if (user) {
                     await orAction.increment(user.id, OR_VOTE);
-                    const embed = createEmbeds.createFullEmbed(`Merci pour ton vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' pièce(s) d\'or**.', null, null, null, null);
+                    await xpAction.increment(message.guild.id, user.id, XP_VOTE);
+                    const embed = createEmbeds.createFullEmbed(`Merci pour ton vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' pièce(s) d\'or** et de l\'expérience.', null, null, null, null);
                     return await message.channel.send({ content: '', embeds: [embed], ephemeral: true });
                 }
             }
@@ -34,11 +38,13 @@ module.exports = {
                     const user = message.interaction.user;
                     if (content.includes('a Vot')) {
                         await orAction.increment(user.id, OR_VOTE);
-                        const embed = createEmbeds.createFullEmbed(`Merci pour ton vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' pièce(s) d\'or**.', null, null, null, null);
+                        await xpAction.increment(message.guild.id, user.id, XP_VOTE);
+                        const embed = createEmbeds.createFullEmbed(`Merci pour ton vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' pièce(s) d\'or** et de l\'expérience.', null, null, null, null);
                         await message.channel.send({content: "", embeds: [embed]});
                     } else if (content.includes('Bump effectué !') || content.includes('a BUMP')) {
                         await orAction.increment(user.id, OR_BUMP);
-                        const embed = createEmbeds.createFullEmbed(`Merci pour ton bump !`, user.toString()  + ', vous avez reçu **' + OR_BUMP + ' pièce(s) d\'or**.', null, null, null, null);
+                        await xpAction.increment(message.guild.id, user.id, XP_BUMP);
+                        const embed = createEmbeds.createFullEmbed(`Merci pour ton bump !`, user.toString()  + ', vous avez reçu **' + OR_BUMP + ' pièce(s) d\'or** et de l\'expérience.', null, null, null, null);
                         await message.channel.send({content: "", embeds: [embed]});
                     }
                 }
