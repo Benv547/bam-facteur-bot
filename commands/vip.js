@@ -7,11 +7,21 @@ module.exports = {
         .setName('vip')
         .setDescription('Informations avantages des VIP.s !'),
     async execute(interaction) {
-        const embedVipAlready = createEmbeds.createFullEmbed('😎 Le Pass VIP de Bouteille !', `${interaction.member} tu es **déjà VIP**, super !\nVoici les avantages que tu as :\n- Faire du **surf** sur les vagues de Bouteille à la mer !\n- Être une vraie **star** du serveur, la classe !\n- Un **gros bisous** de la part de Mushiuta !`, null, null, null);
-        const embedNotVip = createEmbeds.createFullEmbed('😎 Le Pass VIP de Bouteille !', `Les VIP.s sont **les chouchous** de Bouteille à la mer ! Le Pass VIP peut t'être offert de **plusieurs manières** :\n- Inviter **5** de tes amis, *quelle célébrité* !\n- **Gagner** à un évènement ou une animation, *trop fort* !\nCe grade a plusieurs **qualités**, il peut te permettre de :\n- Diminuer le **temps d'attente** pour l'envoi de nouvelles bouteilles.\n- Avoir **accès à des objets limités** dans la boutique.\n- Et d'autres **surprises** qui t'attendent avec impatience !`, null, null, null);
+
+        const text = '\n\nVoici les avantages que tu as :' +
+            '\n- Faire du **surf** sur les vagues de Bouteille à la mer !' +
+            '\n- Avoir des **réductions** sur tes achats !' +
+            '\n- Un **temps réduit** sur l\'envoi de tes bouteilles !';
+
+        const textVIP = 'Tu es **déjà VIP**, super !' + text;
+        const textNotVIP = 'Les VIP.s sont **les chouchous** de Bouteille à la mer !' +
+            '\nLe V.I.P. peut t\'être offert de **plusieurs manières** :\n- Inviter **5** de tes amis, *quelle célébrité* !\n- **Gagner** à un évènement ou une animation, *trop fort* !' + text;
+
+        const embedVipAlready = createEmbeds.createFullEmbed('Very Illustre Personne !', textVIP, null, null, null);
+        const embedNotVip = createEmbeds.createFullEmbed('Very Illustre Personne !', textNotVIP, null, null, null);
 
 
-        if (await roles.userIsBooster(interaction.member)) {
+        if (await roles.userIsVip(interaction.member)) {
             return await interaction.reply({ ephemeral: true, embeds: [embedVipAlready] });
         } else {
             return await interaction.reply({ ephemeral: true, embeds: [embedNotVip] });

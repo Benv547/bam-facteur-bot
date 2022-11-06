@@ -79,7 +79,7 @@ module.exports = {
     },
     set_vip: async function (id_user, vip = true) {
         const pool = db.getPool();
-        return await pool.query('UPDATE "User" SET "vip" = $1 WHERE "id_user" = $2', [vip, id_user]);
+        return await pool.query('UPDATE "User" SET "isVIP" = $1 WHERE "id_user" = $2', [vip, id_user]);
     },
     incr_nb_treasures: async function (id_user) {
         const pool = db.getPool();

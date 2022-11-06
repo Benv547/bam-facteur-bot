@@ -33,7 +33,8 @@ module.exports = {
                         await inviteDB.insertInvite(invite.inviter.id, member.id);
 
                         // If number of invite of a user is equal to 5, give the role VIP
-                        if (await inviteDB.getNumberOfInvite(invite.inviter.id) === 5) {
+                        const nbInvites = await inviteDB.getNumberOfInvite(invite.inviter.id);
+                        if (parseInt(nbInvites) === 5) {
                             // Add role to the inviter
                             const inviter = await member.guild.members.fetch(invite.inviter.id);
                             await inviter.roles.add(vipRole);
