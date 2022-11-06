@@ -72,9 +72,9 @@ module.exports = {
         }
         return null;
     },
-    getAllBottleHasOnlyOneMessage: async function () {
+    getAllBottleHasOnlyOneMessageFromSixHours: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1)');
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "date" < NOW() - INTERVAL \'6 hours\'');
         return results.rows;
     },
     update_id_bottle_and_id_channel: async function (id_bottle, new_id_channel) {

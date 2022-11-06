@@ -25,10 +25,21 @@ module.exports = {
             // get the options of the command
             if (commandFile.data.options !== undefined) {
                 let options = commandFile.data.options;
+                let price = "";
+                let priceValue;
+                if (command.price) {
+                    priceValue = command.price;
+                    if (await roles.userIsBooster(interaction.member)) {
+                        priceValue = Math.round(priceValue * 0.5);
+                    } else if (await roles.userIsVip(interaction.member)) {
+                        priceValue = Math.round(priceValue * 0.8);
+                    }
+                    price = '\n\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
+                }
                 for (const option of options) {
                     // if is required
                     let name = option.required ? '[' + option.name + '] (obligatoire)' : '<' + option.name + '>  (facultatif)';
-                    embed.addFields({name: name, value: option.description});
+                    embed.addFields({name: name, value: option.description + price});
                 }
             }
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });

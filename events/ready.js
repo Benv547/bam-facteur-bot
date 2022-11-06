@@ -156,35 +156,30 @@ module.exports = {
         checkBottle = async () => {
             console.log(new Date().toLocaleString() + " - Checking bottles...");
 
-            const bottles = await bottleDB.getAllBottleHasOnlyOneMessage();
+            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromSixHours();
 
             if (bottles !== null) {
                 for (let i = 0; i < bottles.length; i++) {
                     try {
                         const guild = await client.guilds.fetch(bottles[i].id_guild);
                         const channel = await guild.channels.fetch(bottles[i].id_channel);
-                        // Get last message of the channel
-                        const lastMessageOfChannel = await channel.messages.fetch({ limit: 1 });
-                        // if the last message created timestamp is more than 6 hours ago from now
-                        const now = new Date();
-                        if (lastMessageOfChannel.first().createdTimestamp + 6 * 60 * 60 * 1000 < now.getTime()) {
-                            const nb = await bottleDB.get_sea(channel.id);
-                            // TODO: get author
-                            const sender_id = await bottleDB.getReceiver(channel.id);
-                            // TODO: get original message
-                            const original_message = await messageDB.getFirstMessage(channel.id);
-                            if (nb < 10) {
-                                await bottleDB.incr_sea(channel.id);
-                                // TODO: recreate a new bottle with the same content
-                                const result = await bottle.create(guild, sender_id, original_message, nb + 1);
-                            }
-                            else {
-                                await bottle.flow(guild, sender_id, original_message);
-                            }
-                            await messageDB.deleteAllMessagesOfBottle(channel.id);
-                            await bottleDB.deleteBottle(channel.id);
-                            await channel.delete();
+
+                        const nb = await bottleDB.get_sea(channel.id);
+                        // TODO: get author
+                        const sender_id = await bottleDB.getReceiver(channel.id);
+                        // TODO: get original message
+                        const original_message = await messageDB.getFirstMessage(channel.id);
+                        if (nb < 10) {
+                            await bottleDB.incr_sea(channel.id);
+                            // TODO: recreate a new bottle with the same content
+                            const result = await bottle.create(guild, sender_id, original_message, nb + 1);
                         }
+                        else {
+                            await bottle.flow(guild, sender_id, original_message);
+                        }
+                        await messageDB.deleteAllMessagesOfBottle(channel.id);
+                        await bottleDB.deleteBottle(channel.id);
+                        await channel.delete();
                     } catch (error) {
                         console.log(error);
                         await bottleDB.deleteBottle(bottles[i].id_channel);
