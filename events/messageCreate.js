@@ -31,7 +31,7 @@ module.exports = {
         }
 
         if (message.interaction) {
-            await new Promise(r => setTimeout(r, 2000));
+            await new Promise(r => setTimeout(r, 5000));
             // fetch channel
             const channel = await message.guild.channels.fetch(message.channelId);
             // fetch message from channel
