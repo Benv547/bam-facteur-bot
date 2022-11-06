@@ -6,6 +6,6 @@ module.exports = {
         .setName('ping')
         .setDescription('Répond avec Pong !'),
     async execute(interaction) {
-        return interaction.reply({ content: 'Pong !', ephemeral: true });
+        return interaction.reply({ content: `Pong ${Math.round(client.ws.ping)} !`, ephemeral: true });
     },
 };

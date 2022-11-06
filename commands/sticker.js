@@ -27,7 +27,7 @@ module.exports = {
                 const current_sticker = await userDB.get_id_sticker(interaction.user.id);
                 if (current_sticker !== null) {
                     const current_sticker_item = await stickerDB.getSticker(current_sticker);
-                    message += 'Votre sticker actuel est **' + current_sticker_item.name + '**';
+                    message += 'Votre sticker actuellement équipé est **' + current_sticker_item.name + '**';
                 } else {
                     message += 'Vous n\'avez pas de sticker actuellement !';
                 }
@@ -46,7 +46,8 @@ module.exports = {
                 return interaction.reply({content: 'Plusieurs bouteilles ont ce nom, veuillez préciser.', ephemeral: true});
             } else {
                 await userDB.update_id_sticker(interaction.user.id, sticker[0].id_sticker);
-                const embed = createEmbeds.createFullEmbed('Sticker changé', 'Votre sticker a bien été changé !', null, null, null, null);
+
+                const embed = createEmbeds.createFullEmbed('Sticker changé', 'Votre sticker a bien été changé !', null, sticker[0].url, null, null);
                 return interaction.reply({content: '', embeds: [embed], ephemeral: true});
             }
         }
