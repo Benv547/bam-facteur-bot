@@ -73,8 +73,12 @@ module.exports = {
                     .setCustomId('replyTicketMod')
                     .setLabel('Répondre')
                     .setStyle(ButtonStyle.Primary),
-            )
-            .addComponents(
+            ).addComponents(
+                new ButtonBuilder()
+                    .setCustomId('warnTicket')
+                    .setLabel('Signaler le ticket')
+                    .setStyle(ButtonStyle.Secondary),
+            ).addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteTicket')
                     .setLabel('Fermer le ticket')

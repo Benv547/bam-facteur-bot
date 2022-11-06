@@ -45,9 +45,7 @@ module.exports = {
                     const message = await channel.messages.fetch(messageToDelete);
                     // delete the message
                     await message.delete();
-                } catch (error) {
-                    console.log(error);
-                }
+                } catch {}
             }
         }
 

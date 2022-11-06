@@ -1,10 +1,10 @@
 const {signalement, modRole} = require("../config.json");
 const signalementDB = require("../database/signalement");
-const helpDB = require("../database/help");
+const ticketDB = require("../database/ticket");
 const {ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 
 module.exports = {
-    name: 'warnHelp',
+    name: 'warnTicket',
     async execute(interaction) {
 
         // Check if message is already in database
@@ -12,7 +12,7 @@ module.exports = {
             return await interaction.reply({content: "Ce message a déjà été signalé.", ephemeral: true});
         }
 
-        const content = interaction.fields.getTextInputValue('warnHelp');
+        const content = interaction.fields.getTextInputValue('warnTicket');
         const sender = interaction.member;
         const warnMessage = interaction.message;
 
@@ -53,11 +53,11 @@ module.exports = {
         const message = await channel.send({ content: mod.toString() + ', le message suivant a été signalé pour la raison "**' + content + '**"\n' + warnMessage.url, embeds: warnMessage.embeds, components: [row] });
 
         // Get message sender in database
-        const receiverId = await helpDB.get_id_user(warnMessage.id);
+        const receiverId = await ticketDB.get_id_user(warnMessage.channelId);
 
         try {
             // Save signalement in database
-            await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id, warnMessage.channel.id);
+            await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id, null);
         } catch (e) {
             console.log(e);
         }
