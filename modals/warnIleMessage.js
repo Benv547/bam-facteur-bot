@@ -16,15 +16,11 @@ module.exports = {
         const sender = interaction.member;
         const warnMessage = interaction.message;
 
-
         // Get message sender in database
         const receiverId = await message_ileDB.get_id_user(warnMessage.id);
         if (receiverId === null) {
             return await interaction.reply({content: "Impossible signaler un message si lointain..", ephemeral: true});
         }
-
-        // Save signalement in database
-        await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id, warnMessage.channel.id);
 
         await interaction.reply({ content: 'Votre signalement a été envoyé.', ephemeral: true });
 
@@ -61,5 +57,8 @@ module.exports = {
         const mod = interaction.guild.roles.cache.get(modRole);
         // Send message
         const message = await channel.send({ content: mod.toString() + ', le message suivant a été signalé pour la raison "**' + content + '**"\n' + warnMessage.url, embeds: warnMessage.embeds, components: [row] });
+
+        // Save signalement in database
+        await signalementDB.insertSignalement(message.id, sender.id, receiverId, content, null, warnMessage.id, warnMessage.channel.id);
     },
 };
