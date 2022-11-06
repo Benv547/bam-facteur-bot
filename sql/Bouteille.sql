@@ -32,9 +32,9 @@ CREATE TABLE "Record" (
 
 CREATE TABLE "User" (
   "id_user" bigint PRIMARY KEY,
-  "money" int,
-  "money_spent" int,
-  "xp" int,
+  "money" int default 0,
+  "money_spent" int default 0,
+  "xp" int default 0,
   "diceBearSeed" text NOT NULL default md5(random()::text),
   "signature" text NOT NULL default 'Un•e illustre inconnu•e',
   "color" varchar(6) NOT NULL default substring(md5(random()::text), 1, 6),

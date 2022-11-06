@@ -22,7 +22,9 @@ module.exports = {
                     // Fetch role from guild and send message.
                     const role = await guild.roles.fetch(level.role);
                     const embed = createEmbeds.createFullEmbed('Vous avez atteint un nouveau niveau !', 'Vous êtes maintenant **' + role.name + '** !', null, null, 0x2f3136, null);
-                    await member.send({ content: "", embeds: [embed] });
+                    try {
+                        await member.send({ content: "", embeds: [embed] });
+                    } catch {}
                     if (oldLevel) await member.roles.remove(oldLevel.role);
                 }
                 if (level.xp > newXp) break;
