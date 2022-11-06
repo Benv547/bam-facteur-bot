@@ -55,9 +55,10 @@ module.exports = {
 
         const count = await ticketDB.get_number_of_tickets();
 
+        const n = parseInt(count) + 1;
         // Create a new channel for the ticket
         var channel = await interaction.guild.channels.create({
-            name: 'ticket-n' + (count + 1),
+            name: 'ticket-n' + (n),
             type: ChannelType.GuildText
         });
 

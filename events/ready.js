@@ -160,8 +160,8 @@ module.exports = {
 
             if (bottles !== null) {
                 for (let i = 0; i < bottles.length; i++) {
-                    const guild = await client.guilds.fetch(bottles[i].id_guild);
                     try {
+                        const guild = await client.guilds.fetch(bottles[i].id_guild);
                         const channel = await guild.channels.fetch(bottles[i].id_channel);
                         // Get last message of the channel
                         const lastMessageOfChannel = await channel.messages.fetch({ limit: 1 });
