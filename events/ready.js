@@ -10,6 +10,7 @@ const userDB = require("../database/user");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
+const user_ileDB = require("../database/user_ile");
 
 module.exports = {
     name: 'ready',
@@ -334,6 +335,7 @@ module.exports = {
                     }
                 }
 
+                await user_ileDB.deleteAllUser();
                 await message_ileDB.deleteMessageFromPastDay();
             }
 

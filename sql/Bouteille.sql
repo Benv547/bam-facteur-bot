@@ -21,6 +21,8 @@ DROP TABLE "Etat";
 DROP TABLE "Emoji";
 DROP TABLE "Role";
 DROP TABLE "Sticker";
+DROP TABLE "User_ile";
+DROP TABLE "Profile_ile";
 
 CREATE TABLE "Record" (
   "score" bigint NOT NULL,
@@ -197,6 +199,21 @@ CREATE TABLE "Message_ile" (
     "date" timestamp default current_timestamp
 );
 
+CREATE TABLE "Profile_ile" (
+    "id_profile" serial PRIMARY KEY,
+    "signature" text NOT NULL default 'Un•e illustre inconnu•e',
+    "image_url" text NOT NULL
+);
+
+CREATE TABLE "User_ile" (
+    "id_user" bigint PRIMARY KEY,
+    "id_channel" bigint NOT NULL,
+    "id_profile" int NOT NULL,
+    "randNumber" int NOT NULL default trunc(random() * 8999 + 1000)
+);
+
+ALTER TABLE "User_ile" ADD FOREIGN KEY ("id_profile") REFERENCES "Profile_ile" ("id_profile") ON DELETE CASCADE ON UPDATE CASCADE;
+
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -363,3 +380,45 @@ INSERT INTO "Achievement" ("name", "description", "rarity", "type", "value", "id
                                                                                     ('E brezhoneg, mar plij', 'Vous avez écrit un mot en Breton !', 'mythique', 'messageContains', 'Breizh', 7),
                                                                                     ('Créateur de stars', '5 membres que vous avez invités sont devenus VIP', 'mythique', 'vipUserInvited', 5, 18),
                                                                                     ('Crésus', 'Vous avez 500 000 pièces d''or sur votre compte !', 'mythique', 'userMoneyEarned', 500000, 5);
+
+INSERT INTO "Profile_ile" ("image_url", "signature") VALUES ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612725594591272/america.png', 'Captain America'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612725984673833/baleine.png', 'Baleine'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612726576058448/bat.png', 'Chauve-souris'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612727012278272/batman.png', 'BatMan'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612727444279356/bouc.png', 'Bouc'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612727914053703/calamar.png', 'Calamar'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612747958628523/canard.png', 'Canard'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612748285788250/cheval.png', 'Cheval'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612748608737330/chevre.png', 'Chèvre'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612748906541147/chien.png', 'Chien'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612749204340746/cochon.png', 'Cochon'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612749527289856/colombe.png', 'Colombe'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612775678775377/crevette.png', 'Crevette'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612776039497778/crocodile.png', 'Crocodile'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612776572162179/diplo.png', 'Diplodocus'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612776848998470/dragon.png', 'Dragon'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612777155166329/dromadaire.png', 'Dromadaire'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612777473937549/ecureil.png', 'Ecureil'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612799502430238/elephant.png', 'Elephant'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612800018321418/fantome.png', 'Fantôme'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612800454533130/gollum.png', 'Gollum'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612801322758254/herisson.png', 'Herisson'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612802308411453/ironman.png', 'IronMan'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612802857869362/lapin.png', 'Lapin'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612825465176144/licorne.png', 'Licorne'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612825792319580/mario.png', 'Mario'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612826417283152/poussin.png', 'Poussin'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612826798952499/r2d2.png', 'R2D2'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612827159666820/requin.png', 'Requin'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612848995225620/serpent.png', 'Serpent'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612849364312114/thor.png', 'Thor'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612849729220719/tigre.png', 'Tigre'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612850144452618/tortue.png', 'Tortue'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612850505167008/trex.png', 'T-Rex'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612850891038821/zorro.png', 'Zorro'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622363450875924/Capybara.png', 'Capybara'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622363773841458/Giraffe.png', 'Giraffe'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364075819070/Hippocampe.png', 'Hippocampe'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364344262666/Lion.png', 'Lion'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364612702249/Loup.png', 'Loup'),
+                                                            ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364931457044/Plume.png', 'Plume');

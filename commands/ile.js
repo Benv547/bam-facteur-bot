@@ -11,7 +11,7 @@ module.exports = {
     async execute(interaction) {
 
         const xpAndMoney = await userDB.getTotalOfMoneyAndXp(interaction.user.id);
-        if (xpAndMoney === null || xpAndMoney.xp < levels[9].xp) {
+        if (xpAndMoney === null || xpAndMoney.xp < levels[7].xp) {
             return interaction.reply({content: 'Vous n\'avez pas assez d\'expérience pour rejoindre une île.', ephemeral: true});
         }
 
