@@ -303,6 +303,11 @@ module.exports = {
         await sender.send({ content: '', embeds: [embedFlow] })
     },
 
+    getNumberOfSpacesInNewBottles: async function (guild) {
+        const category = (await guild.channels.fetch()).find(c => c.id == newBottleCategory);
+        return Math.max(0, 45 - category.children.cache.size)
+    },
+
     transformEmojiToDiscordEmoji: function (guild, text) {
         const emojis = text.match(/:[a-zA-Z0-9_]+:/g);
         if (emojis !== null) {

@@ -160,7 +160,7 @@ module.exports = {
         checkBottle = async () => {
             console.log(new Date().toLocaleString() + " - Checking bottles...");
 
-            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromSixHours();
+            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromSixHoursAndNotArchived();
 
             if (bottles !== null) {
                 for (let i = 0; i < bottles.length; i++) {
@@ -174,9 +174,8 @@ module.exports = {
                         // TODO: get original message
                         const original_message = await messageDB.getFirstMessage(channel.id);
                         if (nb < 10) {
-                            await bottleDB.incr_sea(channel.id);
                             // TODO: recreate a new bottle with the same content
-                            const result = await bottle.create(guild, sender_id, original_message, nb + 1);
+                            await bottle.create(guild, sender_id, original_message, nb + 1);
                         }
                         else {
                             await bottle.flow(guild, sender_id, original_message);
@@ -191,6 +190,36 @@ module.exports = {
                     }
                 }
             }
+
+            const guild = await client.guilds.fetch(guildId);
+            const places = await bottle.getNumberOfSpacesInNewBottles(guild);
+
+            if (places > 0) {
+                const bottlesArchived = await bottleDB.getAllBottleHasOnlyOneMessageAndArchivedRandomized(places);
+                if (bottlesArchived !== null) {
+                    for (let i = 0; i < bottlesArchived.length; i++) {
+                        try {
+                            const channeId = bottlesArchived[i].id_channel;
+                            const nb = await bottleDB.get_sea(channeId);
+                            const sender_id = await bottleDB.getReceiver(channeId);
+                            // TODO: get original message
+                            const original_message = await messageDB.getFirstMessage(channeId);
+                            if (nb < 10) {
+                                // TODO: recreate a new bottle with the same content
+                                await bottle.create(guild, sender_id, original_message, nb + 1);
+                            } else {
+                                await bottle.flow(guild, sender_id, original_message);
+                            }
+                            await bottleDB.deleteBottle(channeId);
+                        } catch (error) {
+                            console.log(error);
+                            await bottleDB.deleteBottle(bottlesArchived[i].id_channel);
+                            continue;
+                        }
+                    }
+                }
+            }
+
             setTimeout(checkBottle, 1000 * 60 * 60 * 1);
         };
         checkBottle();
