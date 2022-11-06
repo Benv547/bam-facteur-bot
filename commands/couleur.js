@@ -6,7 +6,7 @@ const roles = require("../utils/roles");
 
 module.exports = {
     public: true,
-    price: 250,
+    price: 500,
     data: new SlashCommandBuilder()
         .setName('couleur')
         .setDescription('Choisissez votre couleur !')

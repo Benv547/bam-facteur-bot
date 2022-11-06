@@ -17,18 +17,14 @@ module.exports = {
         const path = require('path');
         // if a command is given, show details about it
         if (interaction.options.getString('commande') !== null) {
-            const command = interaction.options.getString('commande');
-            const commandFile = require(path.resolve(__dirname, command + '.js'));
-            const embed = new EmbedBuilder()
-                .setTitle('Commande **/' + command + '**')
-                .setDescription(commandFile.data.description);
-            // get the options of the command
-            if (commandFile.data.options !== undefined) {
-                let options = commandFile.data.options;
+            const command = interaction.options.getString('commande').toLowerCase();
+            try {
+                const commandFile = require(path.resolve(__dirname, command + '.js'));
+
                 let price = "";
                 let priceValue;
-                if (command.price) {
-                    priceValue = command.price;
+                if (commandFile.price) {
+                    priceValue = commandFile.price;
                     if (await roles.userIsBooster(interaction.member)) {
                         priceValue = Math.round(priceValue * 0.5);
                     } else if (await roles.userIsVip(interaction.member)) {
@@ -36,13 +32,23 @@ module.exports = {
                     }
                     price = '\n\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
                 }
-                for (const option of options) {
-                    // if is required
-                    let name = option.required ? '[' + option.name + '] (obligatoire)' : '<' + option.name + '>  (facultatif)';
-                    embed.addFields({name: name, value: option.description + price});
+
+                const embed = new EmbedBuilder()
+                    .setTitle('Commande **/' + command + '**')
+                    .setDescription(commandFile.data.description + price);
+                // get the options of the command
+                if (commandFile.data.options !== undefined) {
+                    let options = commandFile.data.options;
+                    for (const option of options) {
+                        // if is required
+                        let name = option.required ? '[' + option.name + '] (obligatoire)' : '<' + option.name + '>  (facultatif)';
+                        embed.addFields({name: name, value: option.description});
+                    }
                 }
+                return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+            } catch (error) {
+                return interaction.reply({ content: "Cette commande n'existe pas !", ephemeral: true });
             }
-            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
         const commandFiles = fs.readdirSync(__dirname).filter(file => file.endsWith('.js'));
         const embed = new EmbedBuilder()

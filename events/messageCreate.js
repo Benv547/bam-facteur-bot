@@ -2,9 +2,9 @@ const orAction = require("../utils/orAction");
 const createEmbeds = require("../utils/createEmbeds");
 const xpAction = require("../utils/xpAction");
 
-const OR_VOTE = 50;
+const OR_VOTE = 20;
 const OR_BUMP = 150;
-const XP_VOTE = 10;
+const XP_VOTE = 5;
 const XP_BUMP = 20;
 
 module.exports = {
