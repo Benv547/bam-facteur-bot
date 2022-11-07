@@ -37,12 +37,15 @@ module.exports = {
             await xpAction.increment(interaction.guild, interaction.user.id, random);
             gain = random + " point(s) d'expérience";
         } else {
-            const sticker = await stickerDB.getRandomWinnableSticker();
-            try {
-                await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
-            } catch {
+            const randFloat = Math.random();
+            const sticker = await stickerDB.getRandomWinnableSticker(randFloat);
+            if (sticker !== null) {
+                try {
+                    await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
+                } catch {
+                }
+                gain = 'le sticker ' + sticker.name;
             }
-            gain = 'le sticker' + sticker.name;
         }
 
         const embed = createEmbeds.createFullEmbed('Bravo !', 'Vous avez reçu **' + gain + '**', null, null, null, null);

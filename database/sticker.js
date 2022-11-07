@@ -31,9 +31,9 @@ module.exports = {
         const results = await pool.query('SELECT * FROM "Sticker" WHERE "name" LIKE $1', [`%${name}%`]);
         return results.rows;
     },
-    getRandomWinnableSticker: async function () {
+    getRandomWinnableSticker: async function (drop) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Sticker" WHERE "winnable" = true ORDER BY RANDOM() LIMIT 1');
+        const results = await pool.query('SELECT * FROM "Sticker" WHERE "winnable" = true AND "sharable_percentage" >= $1 ORDER BY RANDOM() LIMIT 1', [drop]);
         if (results.rows.length === 0) {
             return null;
         }
