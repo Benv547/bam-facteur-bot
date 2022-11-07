@@ -16,18 +16,20 @@ module.exports = {
         allAchievements.forEach(achievement => {
             let message = '';
             let status = '';
+            let rarity = '';
             let a;
             if (achievements && achievements.length > 0) {
                 a = achievements.find(a => a.id_achievement === achievement.id_achievement);
             }
             if (a) {
                 const date = new Date(a.date);
-                message = '• **' + achievement.name + '**\n';
-                status = '🏆 (' + date.toLocaleDateString('fr-FR') + ')';
+                message = '• **' + achievement.name + '**';
+                status = '🏆 (' + date.toLocaleDateString('fr-FR') + ')\n';
             } else {
-                message = '• ???\n';
-                status = '(non obtenu)';
+                message = '• ?????????';
+                status = '(non obtenu)\n';
             }
+            status += '[**' + achievement.rarity + '**]';
             fields.push({
                 name: message,
                 value: status,

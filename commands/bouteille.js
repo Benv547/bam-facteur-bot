@@ -37,7 +37,7 @@ module.exports = {
                     } else if (bottle.id_user_sender === interaction.user.id) {
                         status = '📨';
                     } else {
-                        status = '📤';
+                        status = '📥';
                     }
                     message += 'Statut : ' + status + '\n\n';
                 });

@@ -21,7 +21,13 @@ module.exports = {
                 message = 'Voici vos stickers :\n';
                 for (const sticker of stickers) {
                     const sticker_item = await stickerDB.getSticker(sticker.id_sticker);
-                    message += '• **' + sticker_item.name + '**\n';
+                    let rarity = 'commun';
+                    if (sticker_item.sharable_percentage == 0) rarity = 'trophée'; // trophée
+                    else if (sticker_item.sharable_percentage <= 0.01) rarity = 'mythique'; // 1%
+                    else if (sticker_item.sharable_percentage <= 0.1) rarity = 'légendaire'; // 10%
+                    else if (sticker_item.sharable_percentage <= 0.25) rarity = 'épic'; // 25%
+                    else if (sticker_item.sharable_percentage <= 0.5) rarity = 'rare'; // 50%
+                    message += '• **' + sticker_item.name + '** (*' + rarity + '*)\n';
                 }
                 message += '\n';
                 const current_sticker = await userDB.get_id_sticker(interaction.user.id);
