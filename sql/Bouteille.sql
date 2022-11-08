@@ -19,7 +19,6 @@ DROP TABLE "User";
 DROP TABLE "Couleur";
 DROP TABLE "Etat";
 DROP TABLE "Emoji";
-DROP TABLE "Role";
 DROP TABLE "Sticker";
 DROP TABLE "User_ile";
 DROP TABLE "Profile_ile";
@@ -178,11 +177,6 @@ CREATE TABLE "Help" (
     "content" text,
     "isReply" boolean default false,
     "date" timestamp default current_timestamp
-);
-
-CREATE TABLE "Role" (
-    "id_role" bigint PRIMARY KEY,
-    "id_message" bigint
 );
 
 CREATE TABLE "Hourly" (

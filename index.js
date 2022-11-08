@@ -73,7 +73,7 @@ for (const file of buttonFiles) {
 client.on('interactionCreate', async interaction => {
     try {
         if (interaction.isButton()) {
-            const button = client.buttons.get(interaction.customId);
+            const button = client.buttons.get(interaction.customId.split('_')[0]);
             if (!button) return;
 
             try {

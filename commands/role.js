@@ -1,7 +1,5 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require('discord.js');
 const roles = require('../utils/roles.js');
-const createEmbeds = require("../utils/createEmbeds");
-const roleDB = require("../database/role");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -12,25 +10,30 @@ module.exports = {
                 .setDescription('The emoji of the role')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('role')
-                .setDescription('The role id')
+            option.setName('message')
+                .setDescription('The message id')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('description')
-                .setDescription('The description of the role')
+            option.setName('role')
+                .setDescription('The role id')
                 .setRequired(true)),
     async execute(interaction) {
         if (await roles.userIsAdmin(interaction.member)) {
-            const row = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('getRole')
-                        .setLabel(interaction.options.getString('emoji'))
-                        .setStyle(ButtonStyle.Secondary),
+            // Fetch message from id
+            const message = await interaction.channel.messages.fetch(interaction.options.getString('message'));
+            // Get row
+            let rowMessage = message.components[0];
+            if (rowMessage == null) {
+                rowMessage = new ActionRowBuilder();
+            }
+            // Add button to row
+            rowMessage.addComponents(
+                new ButtonBuilder()
+                    .setCustomId('getRole_' + interaction.options.getString('role'))
+                    .setLabel(interaction.options.getString('emoji'))
+                    .setStyle(ButtonStyle.Secondary),
                 );
-            const embed = createEmbeds.createFullEmbed('', interaction.options.getString('description'), null, null, 0x2f3136, null);
-            const message = await interaction.channel.send({ content: "", embeds: [embed], components: [row] });
-            await roleDB.insertRole(interaction.options.getString('role'), message.id);
+            await message.edit({components: [rowMessage]});
             return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
         }
         return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
