@@ -31,26 +31,36 @@ module.exports = {
             // fetch guild
             const guild = await client.guilds.fetch(guildId);
             // fetch channel treasure
-            const channel = await guild.channels.fetch(treasure);
+            let channel = await guild.channels.fetch(treasure);
 
             // if channel members length is > to 5% of the guild members length
             // not count bots and admins
             let channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
             let guildSize = 40;
             while (channelSize > guildSize) {
+                const members = await channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole));
+                const memberWithoutPresence = members.filter((member) => member.presence === null);
                 try {
                     // choose a non bot member in the channel
-                    const member = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).random();
+                    let member = null;
+                    if (memberWithoutPresence.size > 0) {
+                        member = memberWithoutPresence.random();
+                    } else {
+                        member = members.random();
+                    }
+
                     // if member is not null
-                    if (member !== null) {
+                    if (member !== undefined && member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member);
                         await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
                     }
+
+                    channel = await guild.channels.fetch(treasure);
                 } catch (error) {
                     console.log(error);
                 }
-                channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
+                channelSize--;
             }
             while (channelSize <= guildSize) {
                 // choose a non bot member in the guild
@@ -67,7 +77,7 @@ module.exports = {
                         await channel.send(`** **\n🏝️ L'illustre **${member.user.username}** a débarqué sur l'île !`);
                     }
                 }
-                channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
+                channelSize++;
             }
 
             // choose random number between 1 and 100
