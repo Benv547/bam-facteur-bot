@@ -8,6 +8,10 @@ module.exports = {
         if (interaction.guildId === null) {
             // Fetch channel from database
             const channelId = await ticketDB.get_id_channel(interaction.user.id);
+            if (channelId == null) {
+                return await interaction.reply({ content: 'Votre ticket est introuvable ou a déjà été fermé. Merci d\'en créer un nouveau.', ephemeral: true });
+                return;
+            }
 
             // Fetch guild from database
             const guildId = await ticketDB.get_id_guild(interaction.user.id);

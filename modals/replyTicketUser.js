@@ -29,7 +29,7 @@ module.exports = {
         // Fetch guild from database
         const guildId = await ticketDB.get_id_guild(interaction.user.id);
         if (guildId == null) {
-            return await interaction.reply({ content: 'Votre ticket est introuvabl ou a déjà été fermé. Merci d\'en créer un nouveau.', ephemeral: true });
+            return await interaction.reply({ content: 'Votre ticket est introuvable ou a déjà été fermé. Merci d\'en créer un nouveau.', ephemeral: true });
             return;
         }
         // Fetch guild from client
