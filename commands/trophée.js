@@ -29,7 +29,7 @@ module.exports = {
                 message = '• ?????????';
                 status = '(non obtenu)\n';
             }
-            status += '[**' + achievement.rarity + '**]';
+            status += '[**' + achievement.rarity + '**]' + '\n** **';
             fields.push({
                 name: message,
                 value: status,

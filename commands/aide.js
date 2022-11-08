@@ -83,7 +83,7 @@ module.exports = {
                     }
                     price = '\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
                 }
-                embed.addFields({ name: name, value: command.data.description + price, inline: false });
+                embed.addFields({ name: name, value: command.data.description + price + '\n** **', inline: false });
             }
         }
         embed.setFooter({ text: 'Pour plus d\'informations sur une commande, tapez /aide [nom de la commande]' });
