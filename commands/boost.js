@@ -5,7 +5,7 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('boost')
-        .setDescription('Informations avantages des boosters !'),
+        .setDescription('Informations sur les avantages des boosters !'),
     async execute(interaction) {
 
         const text = '\n\nVoici les avantages que tu as :' +

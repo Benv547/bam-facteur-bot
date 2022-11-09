@@ -7,7 +7,7 @@ module.exports = {
     public: true,
     data: new SlashCommandBuilder()
         .setName('sticker')
-        .setDescription('Regardez et changez vos stickers !')
+        .setDescription('Regardez et changez le sticker de vos bouteilles !')
         .addStringOption(option =>
             option.setName('nom')
                 .setDescription('Le nom du sticker')),

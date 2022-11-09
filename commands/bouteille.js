@@ -12,7 +12,7 @@ module.exports = {
             option.setName('nom')
                 .setDescription('Le nom de la bouteille')),
     async execute(interaction) {
-        if (interaction.options.getString('name') === null) {
+        if (interaction.options.getString('nom') === null) {
             const bottles = await bottleDB.getBottleForUser(interaction.user.id);
             let message = '';
             if (bottles.length === 0) {

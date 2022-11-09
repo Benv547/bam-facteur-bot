@@ -9,7 +9,7 @@ module.exports = {
     price: 250,
     data: new SlashCommandBuilder()
         .setName('avatar')
-        .setDescription('Choisissez votre avatar !')
+        .setDescription('Choisissez l\'avatar de vos bouteilles !')
         .addStringOption(option =>
             option.setName('code')
                 .setDescription('The code of the avatar')),

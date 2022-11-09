@@ -5,7 +5,7 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('vip')
-        .setDescription('Informations avantages des VIP.s !'),
+        .setDescription('Informations sur les avantages des VIP.s !'),
     async execute(interaction) {
 
         const text = '\n\nVoici les avantages que tu as :' +

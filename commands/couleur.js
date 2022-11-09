@@ -9,7 +9,7 @@ module.exports = {
     price: 500,
     data: new SlashCommandBuilder()
         .setName('couleur')
-        .setDescription('Choisissez votre couleur !')
+        .setDescription('Choisissez la couleur de vos messages dans vos bouteilles !')
         .addStringOption(option =>
             option.setName('hex')
                 .setDescription('La couleur de la bouteille')),

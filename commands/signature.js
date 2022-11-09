@@ -9,7 +9,7 @@ module.exports = {
     price: 500,
     data: new SlashCommandBuilder()
         .setName('signature')
-        .setDescription('Choisissez votre signature !')
+        .setDescription('Choisissez la signature de vos bouteilles !')
         .addStringOption(option =>
             option.setName('texte')
                 .setDescription('La signature de la bouteille')
