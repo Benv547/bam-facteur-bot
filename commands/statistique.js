@@ -77,21 +77,27 @@ module.exports = {
                         const totalBottleSevenDays = await bottleDB.getBottleCountForOneWeek();
                         text = `\n\n**${totalBottleSevenDays}** bouteilles ont été envoyées sur le serveur durant cette période.`;
                         const statsBottle = await bottleDB.getBottleCountEachDayForOneWeek();
-                        chart = await charts.createChartForBottle(statsBottle);
+                        const statsBottleArchived = await bottleDB.getBottleArchivedCountEachDayForOneWeek();
+                        const statsBottleTerminated = await bottleDB.getBottleTerminatedCountEachDayForOneWeek();
+                        chart = await charts.createChartForBottle(statsBottle, statsBottleArchived, statsBottleTerminated);
                         break;
                     case 'thirtyDays':
                         periodeName = thirtyDays;
                         const totalBottleThirtyDays = await bottleDB.getBottleCountForOneMonth();
                         text = `\n\n**${totalBottleThirtyDays}** bouteilles ont été envoyées sur le serveur durant cette période.`;
                         const statsBottleThirtyDays = await bottleDB.getBottleCountEachDayForOneMonth();
-                        chart = await charts.createChartForBottle(statsBottleThirtyDays);
+                        const statsBottleArchivedThirtyDays = await bottleDB.getBottleArchivedCountEachDayForOneMonth();
+                        const statsBottleTerminatedThirtyDays = await bottleDB.getBottleTerminatedCountEachDayForOneMonth();
+                        chart = await charts.createChartForBottle(statsBottleThirtyDays, statsBottleArchivedThirtyDays, statsBottleTerminatedThirtyDays);
                         break;
                     case 'oneYear':
                         periodeName = oneYear;
                         const totalBottleOneYear = await bottleDB.getBottleCountForThisYear();
                         text = `\n\n**${totalBottleOneYear}** bouteilles ont été envoyées sur le serveur durant cette période.`;
                         const statsBottleOneYear = await bottleDB.getBottleCountEachMonthForThisYear();
-                        chart = await charts.createChartForBottle(statsBottleOneYear);
+                        const statsBottleArchivedOneYear = await bottleDB.getBottleArchivedCountEachMonthForThisYear();
+                        const statsBottleTerminatedOneYear = await bottleDB.getBottleTerminatedCountEachMonthForThisYear();
+                        chart = await charts.createChartForBottle(statsBottleOneYear, statsBottleArchivedOneYear, statsBottleTerminatedOneYear);
                         break;
                 }
                 break;

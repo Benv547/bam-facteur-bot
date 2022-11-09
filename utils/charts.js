@@ -110,12 +110,20 @@ module.exports = {
         const labels = this.setupLabelsFromSQL('time', dataBan);
         return await this.createChart(labels, datasets);
     },
-    createChartForBottle: async function (data) {
+    createChartForBottle: async function (data, archived, terminated) {
         let datasets = [];
         const dataset = this.setupDataSetFromSQL('count', data, 'Bouteilles');
         dataset.borderColor = 'rgb(218,12,193)';
-        dataset.backgroundColor = 'rgb(110,7,97)';
+        dataset.backgroundColor = 'rgba(110,7,97, .25)';
         datasets.push(dataset);
+        const datasetArchived = this.setupDataSetFromSQL('count', archived, 'Archivées');
+        datasetArchived.borderColor = 'rgb(215,66,84)';
+        datasetArchived.backgroundColor = 'rgba(215,66,84, .25)';
+        datasets.push(datasetArchived);
+        const datasetTerminated = this.setupDataSetFromSQL('count', terminated, 'Terminées');
+        datasetTerminated.borderColor = 'rgb(155,27,27)';
+        datasetTerminated.backgroundColor = 'rgba(155,27,27, .25)';
+        datasets.push(datasetTerminated);
         const labels = this.setupLabelsFromSQL('time', data);
         return await this.createChart(labels, datasets);
     },
