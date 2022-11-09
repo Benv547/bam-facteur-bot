@@ -39,7 +39,7 @@ module.exports = {
             try {
                 const channelToDelete = category.children.cache.first();
                 // Set archive to true
-                await bottleDB.setBottleArchived(channelToDelete.id_channel);
+                await bottleDB.setBottleArchived(channelToDelete.id);
                 // Delete channel
                 await channelToDelete.delete();
             } catch (error) {
