@@ -22,10 +22,20 @@ module.exports = {
             // Fetch message from id
             const message = await interaction.channel.messages.fetch(interaction.options.getString('message'));
             // Get row
-            let rowMessage = message.components[0];
-            if (rowMessage == null) {
-                rowMessage = new ActionRowBuilder();
+            let rowMessage = new ActionRowBuilder();
+
+            if (message.components.length > 0 && message.components[0].components !== undefined) {
+                for (var component of message.components[0].components) {
+                    console.log(component);
+                    rowMessage.addComponents(
+                        new ButtonBuilder()
+                            .setCustomId(component.data.custom_id)
+                            .setLabel(component.data.label)
+                            .setStyle(component.data.style),
+                    );
+                }
             }
+
             // Add button to row
             rowMessage.addComponents(
                 new ButtonBuilder()
