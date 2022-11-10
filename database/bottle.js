@@ -61,7 +61,7 @@ module.exports = {
     getBottleForUserWithName: async function (id_user, name) {
         // Get bottle if name seems to be the same with %name%
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bottle" WHERE ("id_user_sender" = $1 OR "id_user_receiver" = $1) AND "name" LIKE $2', [id_user, `%${name}%`]);
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE ("id_user_sender" = $1 OR "id_user_receiver" = $1) AND "name" ILIKE $2', [id_user, `%${name}%`]);
         return results.rows;
     },
     getBottle: async function (id_bottle) {

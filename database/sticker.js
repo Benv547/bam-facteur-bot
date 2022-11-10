@@ -23,12 +23,12 @@ module.exports = {
     },
     getStickerFromUserWithName: async function (id_user, name) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Sticker" AS s INNER JOIN "User_Sticker" AS us ON us."id_sticker" = s."id_sticker" WHERE us."id_user" = $1 AND s."name" LIKE $2', [id_user, `%${name}%`]);
+        const results = await pool.query('SELECT * FROM "Sticker" AS s INNER JOIN "User_Sticker" AS us ON us."id_sticker" = s."id_sticker" WHERE us."id_user" = $1 AND s."name" ILIKE $2', [id_user, `%${name}%`]);
         return results.rows;
     },
     getStickerWithName: async function (name) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Sticker" WHERE "name" LIKE $1', [`%${name}%`]);
+        const results = await pool.query('SELECT * FROM "Sticker" WHERE "name" ILIKE $1', [`%${name}%`]);
         return results.rows;
     },
     getRandomWinnableSticker: async function (drop) {

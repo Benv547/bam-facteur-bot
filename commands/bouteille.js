@@ -46,10 +46,10 @@ module.exports = {
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
             let bottle;
-            const bottles = await bottleDB.getBottleForUserWithName(interaction.user.id, interaction.options.getString('name'));
+            const bottles = await bottleDB.getBottleForUserWithName(interaction.user.id, interaction.options.getString('nom'));
             if (bottles.length === 0) {
                 try {
-                    bottle = await bottleDB.getBottle(interaction.options.getString('name'));
+                    bottle = await bottleDB.getBottle(interaction.options.getString('nom'));
                 }
                 catch (e) {
                     return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});

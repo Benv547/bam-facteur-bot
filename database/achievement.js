@@ -63,7 +63,7 @@ module.exports = {
     // List all users who have sent a message that contains "value" and don't have the achievement
     achievementXMessageContains: async function (id_achievement, value) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT id_user FROM "User" WHERE "id_user" NOT IN (SELECT "id_user" FROM "User_Achievement" WHERE "id_achievement" = $1) AND "id_user" IN (SELECT "id_user" FROM "Message" WHERE "content" LIKE $2)', [id_achievement, `%${value}%`]);
+        const results = await pool.query('SELECT id_user FROM "User" WHERE "id_user" NOT IN (SELECT "id_user" FROM "User_Achievement" WHERE "id_achievement" = $1) AND "id_user" IN (SELECT "id_user" FROM "Message" WHERE "content" ILIKE $2)', [id_achievement, `%${value}%`]);
         if (results.rows.length === 0) {
             return null;
         }
