@@ -1,0 +1,122 @@
+const bottle = require("../utils/bottleAction");
+const userDB = require("../database/user");
+const stateAndColorDB = require("../database/statesAndColors");
+const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const {wantedChannel} = require("../config.json");
+const wantedDB = require("../database/wanted");
+const bottleDB = require("../database/bottle");
+const messageDB = require("../database/message");
+const createEmbeds = require("../utils/createEmbeds");
+const stickerDB = require("../database/sticker");
+
+module.exports = {
+    name: 'replyWanted',
+    async execute(interaction) {
+
+        const content = interaction.fields.getTextInputValue('textWanted');
+
+        let sender = await userDB.getUser(interaction.member.id);
+        if (sender === null) {
+            await userDB.createUser(interaction.member.id, 0, 0);
+            sender = await userDB.getUser(interaction.member.id);
+        }
+
+
+        const id_channel = await wantedDB.get_id_channel(interaction.message.id);
+        if (id_channel === null) {
+
+            const id_channel = interaction.channelId;
+            const id_message = await wantedDB.get_id_message(interaction.channel.id);
+
+            const channel = await interaction.guild.channels.fetch(wantedChannel);
+            const message = await channel.messages.fetch(id_message);
+            await message.delete();
+
+            await interaction.update({ content: '', components: [] });
+
+            const listMessageIds = await wantedDB.getAllReplies(id_channel);
+            for (let i = 0; i < listMessageIds.length; i++) {
+                if (listMessageIds[i].id_message !== interaction.message.id) {
+                    const message = await interaction.channel.messages.fetch(listMessageIds[i].id_message);
+                    await message.delete();
+                }
+            }
+
+            const id_user = await wantedDB.get_id_user_response(interaction.message.id);
+
+            await bottleDB.insertBottle(id_channel, interaction.guildId, interaction.member.id, id_user, interaction.channelId, interaction.channel.name, 0);
+
+            const wanted = await wantedDB.get_wanted(id_channel);
+            const response = await wantedDB.get_wanted_response(interaction.message.id);
+            await wantedDB.deleteWanted(id_channel);
+
+            // Insert initial message...
+            await messageDB.insertMessage(wanted.id_message, id_channel, wanted.id_user, wanted.content);
+            await messageDB.insertMessage(response.id_message, id_channel, response.id_user, response.content);
+
+            await bottle.reply(interaction.guild, interaction.member.id, interaction.channel, content);
+
+        } else {
+
+            const reply = await wantedDB.get_reply_for_user_and_channel(interaction.member.id, id_channel);
+            if (reply !== null) {
+                return await interaction.reply({ content: 'Vous avez déjà répondu à cette recherche.', ephemeral: true });
+            }
+
+            const id_user = await wantedDB.get_id_user(interaction.message.id);
+            if (id_user === interaction.member.id) {
+                return await interaction.reply({ content: 'Vous ne pouvez pas répondre à votre propre recherche.', ephemeral: true });
+            }
+
+            const channel = await interaction.guild.channels.fetch(id_channel);
+            await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
+
+            const sticker = await stickerDB.getSticker(sender.id_sticker);
+            let stickerUrl = null;
+            if (sticker !== null) {
+                stickerUrl = sticker.url;
+            }
+
+            const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+
+            const row = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('replyWanted')
+                        .setLabel('📨 Répondre')
+                        .setStyle(ButtonStyle.Primary),
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('warningWanted')
+                        .setLabel('⚠️ Signaler')
+                        .setStyle(ButtonStyle.Danger),
+                );
+
+            const member = await interaction.guild.members.fetch(id_user);
+
+            // Send message to channel of interaction
+            const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), embeds: [embed], components: [row] });
+
+            await wantedDB.insertWantedResponse(id_channel, interaction.guildId, interaction.member.id, message.id, content);
+        }
+    },
+
+    transformEmojiToDiscordEmoji: function (guild, text) {
+        const emojis = text.match(/:[a-zA-Z0-9_]+:/g);
+        if (emojis !== null) {
+            for (const e of emojis) {
+                text = text.replace(e, this.emojiToDiscordEmoji(guild, e));
+            }
+        }
+        return text;
+    },
+    emojiToDiscordEmoji: function (guild, emoji) {
+        const emojiName = emoji.replace(/:/g, '');
+        const emojiFetched = guild.emojis.cache.find(emoji => emoji.name === emojiName);
+        if (emojiFetched !== undefined) {
+            return emojiFetched.toString();
+        }
+        return emoji;
+    }
+};

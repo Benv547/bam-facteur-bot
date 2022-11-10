@@ -32,6 +32,16 @@ module.exports = {
                     );
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
+            } else if (interaction.options.getString('type') === 'wanted') {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('createWanted')
+                            .setLabel('Créer un avis de recherche')
+                            .setStyle(ButtonStyle.Primary),
+                    );
+                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'opinion') {
                 const row = new ActionRowBuilder()
                     .addComponents(

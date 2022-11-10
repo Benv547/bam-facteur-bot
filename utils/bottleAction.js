@@ -1,5 +1,5 @@
 const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newBottleCategory, conversations} = require("../config.json");
+const {newBottleCategory, newWantedCategory, conversations} = require("../config.json");
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
@@ -153,7 +153,7 @@ module.exports = {
         const messageTemp = await channel.send({ content: "", embeds: [embed] });
 
         // If category is not "conversations", move channel to "conversations"
-        if (channel.parentId === newBottleCategory || channel.parentId === null) {
+        if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
             let moved = false;
             // Foreach conversations
             for (const conversation of conversations) {

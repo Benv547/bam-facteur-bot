@@ -123,6 +123,25 @@ CREATE TABLE "Bottle" (
   "date" timestamp default current_timestamp
 );
 
+CREATE TABLE "Wanted" (
+    "id_channel" bigint PRIMARY KEY,
+    "id_guild" bigint NOT NULL,
+    "id_user" bigint NOT NULL,
+    "id_message" bigint NOT NULL,
+    "name" varchar(50) NOT NULL,
+    "content" text NOT NULL,
+    "date" timestamp default current_timestamp
+);
+
+CREATE TABLE "WantedResponse" (
+    "id_channel" bigint NOT NULL,
+    "id_guild" bigint NOT NULL,
+    "id_user" bigint NOT NULL,
+    "id_message" bigint NOT NULL,
+    "content" text NOT NULL,
+    "date" timestamp default current_timestamp
+);
+
 CREATE TABLE "Sanctions" (
   "id_user" bigint,
   "id_mod" bigint,
@@ -249,6 +268,11 @@ ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_invited") REFERENCES "User" ("id_
 ALTER TABLE "Hourly" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Message_ile" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "Wanted" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "WantedResponse" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "WantedResponse" ADD FOREIGN KEY ("id_channel") REFERENCES "Wanted" ("id_channel") ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO "Couleur" VALUES ('rose'),
                              ('cendrée'),
