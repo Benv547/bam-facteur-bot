@@ -28,18 +28,20 @@ module.exports = {
                 message += '\n\n'
 
                 bottles.forEach(bottle => {
-                    message += '• **' + bottle.name + '** (' + bottle.id_bottle + ')\n';
+                    message += '• **' + bottle.name + '**\n';
                     let status = '';
+                    if (bottle.archived) {
+                        status = '🗄';
+                    }
+                    if (bottle.id_user_sender === interaction.user.id) {
+                        status += '📨';
+                    } else {
+                        status += '📥';
+                    }
                     if (bottle.terminated) {
                         status = '💀';
-                    } else if (bottle.archived) {
-                        status = '🗄';
-                    } else if (bottle.id_user_sender === interaction.user.id) {
-                        status = '📨';
-                    } else {
-                        status = '📥';
                     }
-                    message += 'Statut : ' + status + '\n\n';
+                    message += '**Statut** : ' + status + '\n\n';
                 });
             }
             const embed = createEmbeds.createFullEmbed("Vos bouteilles", message, null, null, 0x2f3136, null);
@@ -88,16 +90,18 @@ module.exports = {
             }
 
             let status = '';
+            if (bottle.archived) {
+                status = '🗄️archivée, ';
+            }
+            if (bottle.id_user_sender === interaction.user.id) {
+                status += '📨 en attente de votre réponse';
+            } else {
+                status += '📥 en attente de réponse de votre correspondant';
+            }
             if (bottle.terminated) {
                 status = '💀 terminée';
-            } else if (bottle.archived) {
-                status = '🗄️archivée';
-            } else if (bottle.id_user_sender === interaction.user.id) {
-                status = '📨 en attente de votre réponse';
-            } else {
-                status = '📥 en attente de réponse de votre correspondant';
             }
-            message += '\nStatut : ' + status + '\n';
+            message += '\n**Statut** : ' + status + '\n';
             const embed = createEmbeds.createFullEmbed(bottle.name, message, null, null, 0x2f3136, null);
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         }
