@@ -228,34 +228,34 @@ module.exports = {
                 switch (periode) {
                     case 'sevenDays':
                         periodeName = sevenDays;
-                        const totalBanSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("Ban");
-                        const totalMuteSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("Mute");
-                        const totalWarnSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("Warn");
-                        const totalWarnabusifSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("Warn abusif");
+                        const totalBanSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("ban");
+                        const totalMuteSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("mute");
+                        const totalWarnSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("warn");
+                        const totalWarnabusifSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("abusif");
                         text = `\n\n**${totalBanSanctionSevenDays}** bannissement ont été appliqués sur le serveur durant cette période.`;
                         text += `\n**${totalMuteSanctionSevenDays}** mutes ont été appliqués sur le serveur durant cette période.`;
                         text += `\n**${totalWarnSanctionSevenDays}** warns ont été appliqués sur le serveur durant cette période.`;
                         text += `\n**${totalWarnabusifSanctionSevenDays}** warns abusifs ont été appliqués sur le serveur durant cette période.`;
-                        const statsBanSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("Ban");
-                        const statsMuteSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("Mute");
-                        const statsWarnSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("Warn");
-                        const statsWarnabusifSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("Warn abusif");
+                        const statsBanSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("ban");
+                        const statsMuteSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("mute");
+                        const statsWarnSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("warn");
+                        const statsWarnabusifSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("abusif");
                         chart = await charts.createChartForSanction(statsBanSanctionSevenDays, statsMuteSanctionSevenDays, statsWarnSanctionSevenDays, statsWarnabusifSanctionSevenDays);
                         break;
                     case 'thirtyDays':
                         periodeName = thirtyDays;
-                        const totalBanSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("Ban");
-                        const totalMuteSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("Mute");
-                        const totalWarnSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("Warn");
-                        const totalWarnabusifSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("Warn abusif");
+                        const totalBanSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("ban");
+                        const totalMuteSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("mute");
+                        const totalWarnSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("warn");
+                        const totalWarnabusifSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("abusif");
                         text = `\n\n**${totalBanSanctionThirtyDays}** bannissement ont été appliqués sur le serveur durant cette période.`;
                         text += `\n**${totalMuteSanctionThirtyDays}** mutes ont été appliqués sur le serveur durant cette période.`;
                         text += `\n**${totalWarnSanctionThirtyDays}** warns ont été appliqués sur le serveur durant cette période.`;
                         text += `\n**${totalWarnabusifSanctionThirtyDays}** warns abusifs ont été appliqués sur le serveur durant cette période.`;
-                        const statsBanSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("Ban");
-                        const statsMuteSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("Mute");
-                        const statsWarnSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("Warn");
-                        const statsWarnabusifSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("Warn abusif");
+                        const statsBanSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("ban");
+                        const statsMuteSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("mute");
+                        const statsWarnSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("warn");
+                        const statsWarnabusifSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("abusif");
                         chart = await charts.createChartForSanction(statsBanSanctionThirtyDays, statsMuteSanctionThirtyDays, statsWarnSanctionThirtyDays, statsWarnabusifSanctionThirtyDays);
                         break;
                     case 'oneYear':

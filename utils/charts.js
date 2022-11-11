@@ -62,11 +62,17 @@ module.exports = {
         }
         return dateset;
     },
-    setupLabelsFromSQL: function (label, sqlData) {
+    setupLabelsFromSQL: function (label, sqlDatas) {
         let labels = [];
-        for (let i = 0; i < sqlData.length; i++) {
-            labels.push(sqlData[i][label]);
+        for (let y = 0; y < sqlDatas.length; y++) {
+            for (let i = 0; i < sqlDatas[y].length; i++) {
+                labels.push(sqlDatas[y][i][label]);
+            }
         }
+        // Set unique values
+        labels = [...new Set(labels)];
+        // Sort
+        labels.sort();
         return labels;
     },
     transformTimestampToDay: function (timestamp) {
@@ -79,48 +85,50 @@ module.exports = {
 
     createChartForAll: async function (dataBottle, dataMessage, dataUser) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', dataBottle);
+        const labels = this.setupLabelsFromSQL('time', [dataBottle, dataMessage, dataUser]);
         const datasetBottle = this.setupDataSetFromSQL('count', dataBottle, 'Bouteilles', labels);
         datasetBottle.borderColor = 'rgb(218,12,193)';
+        datasetBottle.backgroundColor = 'rgba(218,12,193, .25)';
         datasetBottle.fill = false;
         datasets.push(datasetBottle);
         const datasetMessage = this.setupDataSetFromSQL('count', dataMessage, 'Messages', labels);
         datasetMessage.borderColor = 'rgb(132,0,255)';
-        datasetMessage.fill = false;
+        datasetMessage.backgroundColor = 'rgba(132,0,255, .25)';
         datasets.push(datasetMessage);
         const datasetUser = this.setupDataSetFromSQL('count', dataUser, 'Utilisateurs', labels);
         datasetUser.borderColor = 'rgb(0,178,255)';
+        datasetUser.backgroundColor = 'rgba(0,178,255, .25)';
         datasetUser.fill = false;
         datasets.push(datasetUser);
         return await this.createChart(labels, datasets);
     },
     createChartForSanction: async function (dataBan, dataMute, dataWarn, dataWarnAbus) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', dataBan);
+        const labels = this.setupLabelsFromSQL('time', [dataBan, dataMute, dataWarn, dataWarnAbus]);
         const datasetBan = this.setupDataSetFromSQL('count', dataBan, 'Bans', labels);
         datasetBan.borderColor = 'rgb(218,12,12)';
-        datasetBan.fill = false;
+        datasetBan.backgroundColor = 'rgba(218,12,12,.25)';
         datasets.push(datasetBan);
         const datasetMute = this.setupDataSetFromSQL('count', dataMute, 'Mutes', labels);
         datasetMute.borderColor = 'rgb(255,128,0)';
-        datasetMute.fill = false;
+        datasetMute.backgroundColor = 'rgba(255,128,0,.25)';
         datasets.push(datasetMute);
         const datasetWarn = this.setupDataSetFromSQL('count', dataWarn, 'Warns', labels);
         datasetWarn.borderColor = 'rgb(255,196,0)';
-        datasetWarn.fill = false;
+        datasetWarn.backgroundColor = 'rgba(255,196,0,.25)';
         datasets.push(datasetWarn);
         const datasetWarnAbus = this.setupDataSetFromSQL('count', dataWarnAbus, 'Warns abusifs', labels);
         datasetWarnAbus.borderColor = 'rgb(152,134,66)';
-        datasetWarnAbus.fill = false;
+        datasetWarnAbus.backgroundColor = 'rgba(152,134,66,.25)';
         datasets.push(datasetWarnAbus);
         return await this.createChart(labels, datasets);
     },
     createChartForBottle: async function (data, archived, terminated) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', data);
+        const labels = this.setupLabelsFromSQL('time', [data, archived, terminated]);
         const dataset = this.setupDataSetFromSQL('count', data, 'Bouteilles', labels);
         dataset.borderColor = 'rgb(218,12,193)';
-        dataset.backgroundColor = 'rgba(110,7,97, .25)';
+        dataset.backgroundColor = 'rgba(218,12,193, .25)';
         datasets.push(dataset);
         const datasetArchived = this.setupDataSetFromSQL('count', archived, 'Archivées', labels);
         datasetArchived.borderColor = 'rgb(215,66,84)';
@@ -134,7 +142,7 @@ module.exports = {
     },
     createChartForMessage: async function (data) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', data);
+        const labels = this.setupLabelsFromSQL('time', [data]);
         const dataset = this.setupDataSetFromSQL('count', data, 'Messages', labels);
         dataset.borderColor = 'rgb(132,0,255)';
         dataset.backgroundColor = 'rgb(65,0,133)';
@@ -143,44 +151,44 @@ module.exports = {
     },
     createChartForUser: async function (user, vip, boost) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', user);
+        const labels = this.setupLabelsFromSQL('time', [user, vip, boost]);
         const dataset = this.setupDataSetFromSQL('count', user, 'Utilisateurs', labels);
         dataset.borderColor = 'rgb(0,178,255)';
-        dataset.fill = false;
+        dataset.backgroundColor = 'rgba(0,178,255, .25)';
         datasets.push(dataset);
         const datasetVip = this.setupDataSetFromSQL('count', vip, 'VIP', labels);
         datasetVip.borderColor = 'rgb(255,255,0)';
-        datasetVip.fill = false;
+        datasetVip.backgroundColor = 'rgba(255,255,0, .25)';
         datasets.push(datasetVip);
         const datasetBoost = this.setupDataSetFromSQL('count', boost, 'Boost', labels);
         datasetBoost.borderColor = 'rgb(244, 127, 255)';
-        datasetBoost.fill = false;
+        datasetBoost.backgroundColor = 'rgba(244, 127, 255, .25)';
         datasets.push(datasetBoost);
         return await this.createChart(labels, datasets);
     },
     createChartForBird: async function (bird, reaction) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', bird);
+        const labels = this.setupLabelsFromSQL('time', [bird, reaction]);
         const dataset = this.setupDataSetFromSQL('count', bird, 'Oiseaux', labels);
         dataset.borderColor = 'rgb(21,147,21)';
-        dataset.fill = false;
+        dataset.backgroundColor = 'rgba(21,147,21, .25)';
         datasets.push(dataset);
         const datasetReaction = this.setupDataSetFromSQL('count', reaction, 'Réactions', labels);
         datasetReaction.borderColor = 'rgb(52,175,138)';
-        datasetReaction.fill = false;
+        datasetReaction.backgroundColor = 'rgba(52,175,138, .25)';
         datasets.push(datasetReaction);
         return await this.createChart(labels, datasets);
     },
     createChartForWanted: async function (wanted, reply) {
         let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', wanted);
+        const labels = this.setupLabelsFromSQL('time', [wanted, reply]);
         const dataset = this.setupDataSetFromSQL('count', wanted, 'Recherches', labels);
         dataset.borderColor = 'rgb(164,71,5)';
-        dataset.fill = false;
+        dataset.backgroundColor = 'rgba(164,71,5, .25)';
         datasets.push(dataset);
         const datasetReply = this.setupDataSetFromSQL('count', reply, 'Réponses', labels);
         datasetReply.borderColor = 'rgb(201,121,91)';
-        datasetReply.fill = false;
+        datasetReply.backgroundColor = 'rgba(201,121,91, .25)';
         datasets.push(datasetReply);
         return await this.createChart(labels, datasets);
     }
