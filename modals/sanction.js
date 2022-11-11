@@ -46,7 +46,8 @@ module.exports = {
         } else if (sanctionType === 'warn' || sanctionType === 'abusif') {
             title = 'Vous avez été averti•e';
         } else if (sanctionType === 'mute') {
-            title = 'Vous avez été mute';
+            const timeout = parseInt(interaction.fields.getTextInputValue('timeout'));
+            title = 'Vous avez été mute pour ' + timeout + ' minutes';
             // Mute receiver
             try {
                 await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);

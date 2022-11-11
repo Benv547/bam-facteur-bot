@@ -24,13 +24,21 @@ module.exports = {
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);
-
         // An action row only holds one text input,
         // so you need one action row per text input.
         const primaryActionRow = new ActionRowBuilder().addComponents(hobbiesInput);
-
         // Add inputs to the modal
         modal.addComponents(primaryActionRow);
+
+        if (sanctionType === 'mute') {
+            const timeoutInput = new TextInputBuilder()
+                .setCustomId('timeout')
+                .setLabel("Combien de temps ? (en minutes)")
+                .setStyle(TextInputStyle.Short);
+            const secondActionRow = new ActionRowBuilder().addComponents(timeoutInput);
+            // Add inputs to the modal
+            modal.addComponents(secondActionRow);
+        }
 
         // Show the modal to the user
         await interaction.showModal(modal);

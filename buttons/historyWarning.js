@@ -8,8 +8,9 @@ module.exports = {
     async execute(interaction) {
         // TODO : Display bottle history
 
-        const channelId = await signalementDB.get_id_bottle(interaction.message.id);
-        const senderId = await signalementDB.get_id_sender(interaction.message.id);
+        const signalement = await signalementDB.getSignalement(interaction.message.id);
+        const channelId = signalement.id_channel;
+        const senderId = signalement.id_sender;
 
         let text = "";
         const messages = await messageDB.get10LastMessages(channelId);
