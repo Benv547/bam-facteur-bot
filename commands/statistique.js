@@ -3,6 +3,8 @@ const bottleDB = require('../database/bottle');
 const messageDB = require('../database/message');
 const recordDB = require('../database/record');
 const userDB = require('../database/user');
+const birdDB = require('../database/bird');
+const wantedDB = require('../database/wanted');
 const sanctionDB = require('../database/sanctions');
 const charts = require('../utils/charts');
 const createEmbeds = require('../utils/createEmbeds');
@@ -21,6 +23,8 @@ module.exports = {
                     { name: 'Bouteilles', value: 'bottle' },
                     { name: 'Utilisateurs', value: 'user' },
                     { name: 'Sanctions', value: 'sanction' },
+                    { name: 'Oiseaux', value: 'bird' },
+                    { name: 'Recherches', value: 'wanted' },
                     { name: 'Tout', value: 'all' },
                 ))
         .addStringOption(option =>
@@ -149,6 +153,74 @@ module.exports = {
                         const statsVIPUserOneYear = await recordDB.getCountEachMonthForThisYear("vip");
                         const statsBoostUserOneYear = await recordDB.getCountEachMonthForThisYear("boost");
                         chart = await charts.createChartForUser(statsUserOneYear, statsVIPUserOneYear, statsBoostUserOneYear);
+                        break;
+                }
+                break;
+            case 'bird':
+                switch (periode) {
+                    case 'sevenDays':
+                        periodeName = sevenDays;
+                        const totalBirdSevenDays = await birdDB.getBirdCountForOneWeek();
+                        const totalReactionSevenDays = await birdDB.getReactionCountForOneWeek();
+                        text = `\n\n**${totalBirdSevenDays}** oiseaux ont été envoyés sur le serveur durant cette période.`;
+                        text += `\n**${totalReactionSevenDays}** réactions ont été envoyées sur le serveur durant cette période.`;
+                        const statsBird = await birdDB.getBirdCountEachDayForOneWeek();
+                        const statsReaction = await birdDB.getReactionCountEachDayForOneWeek();
+                        chart = await charts.createChartForBird(statsBird, statsReaction);
+                        break;
+                    case 'thirtyDays':
+                        periodeName = thirtyDays;
+                        const totalBirdThirtyDays = await birdDB.getBirdCountForOneMonth();
+                        const totalReactionThirtyDays = await birdDB.getReactionCountForOneMonth();
+                        text = `\n\n**${totalBirdThirtyDays}** oiseaux ont été envoyés sur le serveur durant cette période.`;
+                        text += `\n**${totalReactionThirtyDays}** réactions ont été envoyées sur le serveur durant cette période.`;
+                        const statsBirdThirtyDays = await birdDB.getBirdCountEachDayForOneMonth();
+                        const statsReactionThirtyDays = await birdDB.getReactionCountEachDayForOneMonth();
+                        chart = await charts.createChartForBird(statsBirdThirtyDays, statsReactionThirtyDays);
+                        break;
+                    case 'oneYear':
+                        periodeName = oneYear;
+                        const totalBirdOneYear = await birdDB.getBirdCountForThisYear();
+                        const totalReactionOneYear = await birdDB.getReactionCountForThisYear();
+                        text = `\n\n**${totalBirdOneYear}** oiseaux ont été envoyés sur le serveur durant cette période.`;
+                        text += `\n**${totalReactionOneYear}** réactions ont été envoyées sur le serveur durant cette période.`;
+                        const statsBirdOneYear = await birdDB.getBirdCountEachMonthForThisYear();
+                        const statsReactionOneYear = await birdDB.getReactionCountEachMonthForThisYear();
+                        chart = await charts.createChartForBird(statsBirdOneYear, statsReactionOneYear);
+                        break;
+                }
+                break;
+            case 'wanted':
+                switch (periode) {
+                    case 'sevenDays':
+                        periodeName = sevenDays;
+                        const totalWantedSevenDays = await wantedDB.getWantedCountForOneWeek();
+                        const totalRepliesSevenDays = await wantedDB.getRepliesCountForOneWeek();
+                        text = `\n\n**${totalWantedSevenDays}** recherches ont été envoyées sur le serveur durant cette période.`;
+                        text += `\n**${totalRepliesSevenDays}** réponses ont été envoyées sur le serveur durant cette période.`;
+                        const statsWanted = await wantedDB.getWantedCountEachDayForOneWeek();
+                        const statsReplies = await wantedDB.getRepliesCountEachDayForOneWeek();
+                        chart = await charts.createChartForWanted(statsWanted, statsReplies);
+                        break;
+                    case 'thirtyDays':
+                        periodeName = thirtyDays;
+                        const totalWantedThirtyDays = await wantedDB.getWantedCountForOneMonth();
+                        const totalRepliesThirtyDays = await wantedDB.getRepliesCountForOneMonth();
+                        text = `\n\n**${totalWantedThirtyDays}** recherches ont été envoyées sur le serveur durant cette période.`;
+                        text += `\n**${totalRepliesThirtyDays}** réponses ont été envoyées sur le serveur durant cette période.`;
+                        const statsWantedThirtyDays = await wantedDB.getWantedCountEachDayForOneMonth();
+                        const statsRepliesThirtyDays = await wantedDB.getRepliesCountEachDayForOneMonth();
+                        chart = await charts.createChartForWanted(statsWantedThirtyDays, statsRepliesThirtyDays);
+                        break;
+                    case 'oneYear':
+                        periodeName = oneYear;
+                        const totalWantedOneYear = await wantedDB.getWantedCountForThisYear();
+                        const totalRepliesOneYear = await wantedDB.getRepliesCountForThisYear();
+                        text = `\n\n**${totalWantedOneYear}** recherches ont été envoyées sur le serveur durant cette période.`;
+                        text += `\n**${totalRepliesOneYear}** réponses ont été envoyées sur le serveur durant cette période.`;
+                        const statsWantedOneYear = await wantedDB.getWantedCountEachMonthForThisYear();
+                        const statsRepliesOneYear = await wantedDB.getRepliesCountEachMonthForThisYear();
+                        chart = await charts.createChartForWanted(statsWantedOneYear, statsRepliesOneYear);
                         break;
                 }
                 break;

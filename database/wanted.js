@@ -66,6 +66,10 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('DELETE FROM "Wanted" WHERE "id_channel" = $1', [id_channel]);
     },
+    setArchived: async function (id_channel) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "Wanted" SET "archived" = true WHERE "id_channel" = $1', [id_channel]);
+    },
 
 
     insertWantedResponse: async function (id_channel, id_guild, id_user, id_message, content) {
@@ -92,5 +96,75 @@ module.exports = {
             return results.rows[0]["id_message"];
         }
         return null;
+    },
+
+
+
+
+    getWantedCountForOneWeek: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Wanted" WHERE "date" > NOW() - INTERVAL \'7 days\'');
+        return results.rows[0]["count"];
+    },
+    getWantedCountEachDayForOneWeek: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Wanted" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getWantedCountForOneMonth: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Wanted" WHERE "date" > NOW() - INTERVAL \'30 days\'');
+        return results.rows[0]["count"];
+    },
+    getWantedCountEachDayForOneMonth: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Wanted" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getWantedCountForThisYear: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "Wanted" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date)');
+        return results.rows[0]["count"];
+    },
+    getWantedCountEachMonthForThisYear: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/YYYY\') AS time FROM "Wanted" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+
+    getRepliesCountForOneWeek: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "WantedResponse" WHERE "date" > NOW() - INTERVAL \'7 days\'');
+        return results.rows[0]["count"];
+    },
+    getRepliesCountEachDayForOneWeek: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "WantedResponse" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getRepliesCountForOneMonth: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "WantedResponse" WHERE "date" > NOW() - INTERVAL \'30 days\'');
+        return results.rows[0]["count"];
+    },
+    getRepliesCountEachDayForOneMonth: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "WantedResponse" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        return results.rows;
+    },
+
+    getRepliesCountForThisYear: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "WantedResponse" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date)');
+        return results.rows[0]["count"];
+    },
+    getRepliesCountEachMonthForThisYear: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/YYYY\') AS time FROM "WantedResponse" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        return results.rows;
     }
 };

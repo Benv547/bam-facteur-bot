@@ -21,22 +21,4 @@ module.exports = {
             console.log(e);
         }
     },
-
-    transformEmojiToDiscordEmoji: function (guild, text) {
-        const emojis = text.match(/:[a-zA-Z0-9_]+:/g);
-        if (emojis !== null) {
-            for (const e of emojis) {
-                text = text.replace(e, this.emojiToDiscordEmoji(guild, e));
-            }
-        }
-        return text;
-    },
-    emojiToDiscordEmoji: function (guild, emoji) {
-        const emojiName = emoji.replace(/:/g, '');
-        const emojiFetched = guild.emojis.cache.find(emoji => emoji.name === emojiName);
-        if (emojiFetched !== undefined) {
-            return emojiFetched.toString();
-        }
-        return emoji;
-    }
 };

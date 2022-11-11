@@ -340,7 +340,7 @@ module.exports = {
             try {
                 const channelToDelete = category.children.cache.first();
                 // Set archive to true
-                await birdDB.deleteBird(channelToDelete.id);
+                await birdDB.setArchived(channelToDelete.id);
                 // Delete channel
                 await channelToDelete.delete();
             } catch (error) {
@@ -433,7 +433,7 @@ module.exports = {
         const embedFlow = createEmbeds.createFullEmbed("Votre oiseau est revenu !", 'Votre oiseau est revenu, il contenait le message :\n"**' + bird.content + '**"\n\nIl a reçu :\n **' + love + '** ❤️\n**' + joy + '** 😂\n**' + mouth + '** 😮\n**' + cry + '** 😢', null, null, null, null);
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] });
-        await birdDB.deleteBird(id_channel);
+        await birdDB.setArchived(id_channel);
     },
 
     getNumberOfSpacesInNewBottles: async function (guild) {

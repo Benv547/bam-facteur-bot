@@ -1,9 +1,15 @@
 const birdDB = require("../database/bird");
+const userDB = require("../database/user");
 module.exports = {
     name: 'replyBird',
     async execute(interaction) {
         const emojiId = interaction.customId.split('_')[1];
         if (emojiId) {
+
+            if (await userDB.getUser(interaction.member.id) === null) {
+                await userDB.createUser(interaction.member.id, 0, 0);
+            }
+
             const bird = await birdDB.getBird(interaction.channelId);
             if (bird == null) {
                 return await interaction.reply({ content: 'Ce message n\'est plus disponible.', ephemeral: true });

@@ -157,5 +157,31 @@ module.exports = {
         datasetBoost.fill = false;
         datasets.push(datasetBoost);
         return await this.createChart(labels, datasets);
+    },
+    createChartForBird: async function (bird, reaction) {
+        let datasets = [];
+        const labels = this.setupLabelsFromSQL('time', bird);
+        const dataset = this.setupDataSetFromSQL('count', bird, 'Oiseaux', labels);
+        dataset.borderColor = 'rgb(21,147,21)';
+        dataset.fill = false;
+        datasets.push(dataset);
+        const datasetReaction = this.setupDataSetFromSQL('count', reaction, 'Réactions', labels);
+        datasetReaction.borderColor = 'rgb(52,175,138)';
+        datasetReaction.fill = false;
+        datasets.push(datasetReaction);
+        return await this.createChart(labels, datasets);
+    },
+    createChartForWanted: async function (wanted, reply) {
+        let datasets = [];
+        const labels = this.setupLabelsFromSQL('time', wanted);
+        const dataset = this.setupDataSetFromSQL('count', wanted, 'Recherches', labels);
+        dataset.borderColor = 'rgb(164,71,5)';
+        dataset.fill = false;
+        datasets.push(dataset);
+        const datasetReply = this.setupDataSetFromSQL('count', reply, 'Réponses', labels);
+        datasetReply.borderColor = 'rgb(201,121,91)';
+        datasetReply.fill = false;
+        datasets.push(datasetReply);
+        return await this.createChart(labels, datasets);
     }
 };

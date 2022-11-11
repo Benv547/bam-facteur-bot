@@ -2,7 +2,7 @@ const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
 const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newWantedCategory} = require("../config.json");
+const {newWantedCategory, wantedChannel} = require("../config.json");
 const wantedDB = require("../database/wanted");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
@@ -41,8 +41,15 @@ module.exports = {
         while (category.children.cache.size > 45) {
             try {
                 const channelToDelete = category.children.cache.first();
+                try {
+                    const wanted = await wantedDB.get_wanted(channelToDelete.id);
+                    const globalWantedChannel = await interaction.guild.channels.fetch(wantedChannel);
+
+                    const message = await globalWantedChannel.messages.fetch(wanted.id_message);
+                    await message.delete();
+                } catch {}
                 // Set archive to true
-                await wantedDB.deleteWanted(channelToDelete.id);
+                await wantedDB.setArchived(channelToDelete.id);
                 // Delete channel
                 await channelToDelete.delete();
             } catch (error) {

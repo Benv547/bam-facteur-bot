@@ -130,6 +130,7 @@ CREATE TABLE "Wanted" (
     "id_message" bigint NOT NULL,
     "name" varchar(50) NOT NULL,
     "content" text NOT NULL,
+    "archived" boolean NOT NULL default false,
     "date" timestamp default current_timestamp
 );
 
@@ -150,6 +151,7 @@ CREATE TABLE "Bird" (
     "name" varchar(50) NOT NULL,
     "content" text NOT NULL,
     "sea" int NOT NULL default 0,
+    "archived" boolean NOT NULL default false,
     "date" timestamp default current_timestamp
 );
 

@@ -48,7 +48,7 @@ module.exports = {
 
             const wanted = await wantedDB.get_wanted(id_channel);
             const response = await wantedDB.get_wanted_response(interaction.message.id);
-            await wantedDB.deleteWanted(id_channel);
+            await wantedDB.setArchived(id_channel);
 
             // Insert initial message...
             await messageDB.insertMessage(wanted.id_message, id_channel, wanted.id_user, wanted.content);
