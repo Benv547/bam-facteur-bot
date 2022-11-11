@@ -7,6 +7,7 @@ const stickerDB = require("../database/sticker");
 const message_ileDB = require("../database/message_ile");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
+const birdDB = require("../database/bird");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");

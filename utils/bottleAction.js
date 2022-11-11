@@ -170,19 +170,25 @@ module.exports = {
                 }
             }
             // If channel not moved
-            if (!moved) {
+            while (!moved) {
                 // Get oldest bottle channel
                 const oldestChannel = await bottleDB.getOldestBottleNotArchived();
                 // Fetch channel
-                const oldestChannelFetched = await guild.channels.fetch(oldestChannel);
-                // Get category
-                const category = (await guild.channels.fetch()).find(c => c.id == oldestChannelFetched.parentId);
-                // Set archive to true
-                await bottleDB.setBottleArchived(oldestChannel.id_channel);
-                // Delete channel
-                await oldestChannelFetched.delete();
-                // Move channel to category
-                await channel.setParent(category);
+                try {
+                    const oldestChannelFetched = await guild.channels.fetch(oldestChannel);
+                    // Get category
+                    const category = (await guild.channels.fetch()).find(c => c.id == oldestChannelFetched.parentId);
+                    // Set archive to true
+                    await bottleDB.setBottleArchived(oldestChannel);
+                    // Delete channel
+                    await oldestChannelFetched.delete();
+                    // Move channel to category
+                    await channel.setParent(category);
+                    moved = true;
+                } catch (e) {
+                    await bottleDB.setBottleArchived(oldestChannel);
+                    console.log(e);
+                }
             }
         }
 

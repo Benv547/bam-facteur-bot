@@ -35,7 +35,7 @@ module.exports = {
     },
     getOldestBottleNotArchived: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT id_bottle FROM "Message" WHERE "id_message" IN (SELECT MAX("id_message") FROM "Message" GROUP BY "id_bottle") ORDER BY "date" ASC LIMIT 1;');
+        const results = await pool.query('SELECT m.id_bottle FROM "Message" as m, "Bottle" as b WHERE m."id_message" IN (SELECT MAX("id_message") FROM "Message" GROUP BY "id_bottle") AND m."id_bottle" = b."id_bottle" AND b."archived" = false ORDER BY m."date" ASC LIMIT 1');
         if (results.rows.length > 0) {
             return results.rows[0].id_bottle;
         }
