@@ -123,20 +123,24 @@ module.exports = {
         if (sanctionType !== 'abusif') {
             //Save the informations in the Sanctions tab
             await sanctionsDB.saveSanction(id_receiver, mod.id, sanctionType, raison);
-            await receiver.send({
-                content: '',
-                embeds: [createEmbeds.createFullEmbed(title, description, null, null, 0x2f3136, null)]
-            });
+            try {
+                await receiver.send({
+                    content: '',
+                    embeds: [createEmbeds.createFullEmbed(title, description, null, null, 0x2f3136, null)]
+                });
+            } catch {}
             // save sanction to channel
             const channel = await interaction.guild.channels.fetch(sanction);
             await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed(sanctionType, 'L\'utilisateur ' + receiver.toString() + ' a été '+ sanctionType +' par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
         } else {
             //Save the informations in the Sanctions tab
             await sanctionsDB.saveSanction(id_sender, mod.id, sanctionType, raison);
-            await sender.send({
-                content: '',
-                embeds: [createEmbeds.createFullEmbed(title, description, null, null, 0x2f3136, null)]
-            });
+            try {
+                await sender.send({
+                    content: '',
+                    embeds: [createEmbeds.createFullEmbed(title, description, null, null, 0x2f3136, null)]
+                });
+            } catch {}
             // save sanction to channel
             const channel = await interaction.guild.channels.fetch(sanction);
             await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed(sanctionType, 'L\'utilisateur ' + sender.toString() + ' a été '+ sanctionType +' par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
