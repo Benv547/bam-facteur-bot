@@ -328,7 +328,7 @@ module.exports = {
                                     await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
                                     textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
                                 }
-                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, null, null, null);
+                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, sticker.id_sticker.url, null, null);
                                 try {
                                     await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
                                     await user.send({content: '', embeds: [embed]});
@@ -382,18 +382,21 @@ module.exports = {
 
                 if (users !== null) {
                     for (let i = 0; i < users.length; i++) {
+                        const OR_ANNIV = 150
                         const memberId = users[i].id_user;
                         const member = await guild.members.fetch(memberId);
 
                         await member.roles.add(anniversaireRole);
+                        await orAction.increment(memberId, OR_ANNIV); // give or to the user
 
-                        const embedUser = createEmbeds.createFullEmbed("JOYEUX ANNIVERSAIRE", '', null, null, 0x00FF00, null); // TO DO : Faire le message + ajuster couleur
+                        const embedAnniv = createEmbeds.createFullEmbed("🎂 Joyeux anniversaire !", `C'est aujourd'hui ton anniversaire ! Tient, voilà ${OR_ANNIV} pièces d'or pour fêter ça. \nProfite et passe du bon temps sur Bouteille à la mer ! 😉`, null, null, 0x6BB3F2, null);
                         // Send an MP message to the sender
                         try {
-                            await member.send({ content: '', embeds: [embedUser] }); // TO DO : Faire un bouton (réclamer sticker anniversaire) components: [rowUser]
+                            await member.send({ content: '', embeds: [embedAnniv] });
                         } catch {}
                     }
                 }
+
 
                 await user_ileDB.deleteAllUser();
                 await message_ileDB.deleteMessageFromPastDay();

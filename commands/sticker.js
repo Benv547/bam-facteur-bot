@@ -48,7 +48,7 @@ module.exports = {
             if (sticker.length === 0) {
                 return interaction.reply({content: 'Ce sticker n\'existe pas.', ephemeral: true});
             } else if (sticker.length > 1) {
-                return interaction.reply({content: 'Plusieurs bouteilles ont ce nom, veuillez préciser.', ephemeral: true});
+                return interaction.reply({content: 'Plusieurs stickers ont ce nom, veuillez préciser.', ephemeral: true});
             } else {
                 await userDB.update_id_sticker(interaction.user.id, sticker[0].id_sticker);
 
