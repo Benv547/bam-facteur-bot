@@ -32,6 +32,16 @@ module.exports = {
                     );
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
+            } else if (interaction.options.getString('type') === 'bird') {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('createBird')
+                            .setLabel('Créer un oiseau')
+                            .setStyle(ButtonStyle.Primary),
+                    );
+                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'wanted') {
                 const row = new ActionRowBuilder()
                     .addComponents(

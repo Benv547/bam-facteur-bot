@@ -88,7 +88,7 @@ module.exports = {
                 )
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId('warningWanted')
+                        .setCustomId('warning_wantedReply')
                         .setLabel('⚠️ Signaler')
                         .setStyle(ButtonStyle.Danger),
                 );

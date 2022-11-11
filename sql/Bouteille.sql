@@ -142,6 +142,24 @@ CREATE TABLE "WantedResponse" (
     "date" timestamp default current_timestamp
 );
 
+CREATE TABLE "Bird" (
+    "id_bird" serial PRIMARY KEY,
+    "id_channel" bigint NOT NULL,
+    "id_guild" bigint NOT NULL,
+    "id_user" bigint NOT NULL,
+    "name" varchar(50) NOT NULL,
+    "content" text NOT NULL,
+    "sea" int NOT NULL default 0,
+    "date" timestamp default current_timestamp
+);
+
+CREATE TABLE "BirdReaction" (
+    "id_bird" int NOT NULL,
+    "id_user" bigint NOT NULL,
+    "id_emoji" varchar(10) NOT NULL,
+    "date" timestamp default current_timestamp
+);
+
 CREATE TABLE "Sanctions" (
   "id_user" bigint,
   "id_mod" bigint,
@@ -161,8 +179,39 @@ CREATE TABLE "Signalement" (
     "id_sender" bigint,
     "id_receiver" bigint,
     "content" text,
-    "id_bottle" bigint,
-    "id_warn" bigint,
+    "type" varchar(255) NOT NULL
+);
+CREATE TABLE "SignalementBottle" (
+    "id_message" bigint PRIMARY KEY,
+    "id_bottle" bigint
+);
+CREATE TABLE "SignalementWanted" (
+    "id_message" bigint PRIMARY KEY,
+    "id_message_wanted" bigint,
+    "id_channel" bigint
+);
+CREATE TABLE "SignalementTicket" (
+    "id_message" bigint PRIMARY KEY,
+    "id_message_ticket" bigint,
+    "id_channel" bigint
+);
+CREATE TABLE "SignalementSuggestion" (
+    "id_message" bigint PRIMARY KEY,
+    "id_message_suggestion" bigint,
+    "id_channel" bigint
+);
+CREATE TABLE "SignalementHelp" (
+    "id_message" bigint PRIMARY KEY,
+    "id_message_help" bigint,
+    "id_channel" bigint
+);
+CREATE TABLE "SignalementBird" (
+    "id_message" bigint PRIMARY KEY,
+    "id_channel" bigint
+);
+CREATE TABLE "SignalementIleMessage" (
+    "id_message" bigint PRIMARY KEY,
+    "id_message_ile" bigint,
     "id_channel" bigint
 );
 
@@ -240,7 +289,13 @@ ALTER TABLE "Sanctions" ADD FOREIGN KEY ("id_mod") REFERENCES "User" ("id_user")
 
 ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_sender") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_receiver") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "Signalement" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementBottle" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementWanted" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementSuggestion" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementTicket" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementHelp" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementBird" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SignalementIleMessage" ADD FOREIGN KEY ("id_message") REFERENCES "Signalement" ("id_message") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Opinion" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -273,6 +328,11 @@ ALTER TABLE "Wanted" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") O
 
 ALTER TABLE "WantedResponse" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "WantedResponse" ADD FOREIGN KEY ("id_channel") REFERENCES "Wanted" ("id_channel") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "Bird" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "BirdReaction" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "BirdReaction" ADD FOREIGN KEY ("id_bird") REFERENCES "Bird" ("id_bird") ON DELETE CASCADE ON UPDATE CASCADE;
 
 INSERT INTO "Couleur" VALUES ('rose'),
                              ('cendrée'),

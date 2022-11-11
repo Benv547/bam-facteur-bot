@@ -30,5 +30,13 @@ module.exports = {
             return results.rows[0]["id_thread"];
         }
         return null;
+    },
+    getSuggestion: async function (id_message) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "Suggestion" WHERE id_message = $1', [id_message]);
+        if (results.rows.length > 0) {
+            return results.rows[0];
+        }
+        return null;
     }
 };

@@ -75,7 +75,7 @@ module.exports = {
                     .setStyle(ButtonStyle.Primary),
             ).addComponents(
                 new ButtonBuilder()
-                    .setCustomId('warnTicket')
+                    .setCustomId('warning_ticket')
                     .setLabel('Signaler le ticket')
                     .setStyle(ButtonStyle.Secondary),
             ).addComponents(

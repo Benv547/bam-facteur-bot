@@ -38,7 +38,7 @@ module.exports = {
                     .setLabel('✉️')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('warnIleMessage')
+                    .setCustomId('warning_ileMessage')
                     .setLabel('⚠️')
                     .setStyle(ButtonStyle.Secondary),
             );

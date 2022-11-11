@@ -108,7 +108,7 @@ for (const file of modalFiles) {
 client.on('interactionCreate', async interaction => {
     try {
         if(interaction.isModalSubmit()) {
-            const modal = client.modals.get(interaction.customId);
+            const modal = client.modals.get(interaction.customId.split('_')[0]);
             if(!modal) return;
 
             try {

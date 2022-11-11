@@ -1,16 +1,16 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
 
 module.exports = {
-    name: 'warnWarning',
+    name: 'warning',
     async execute(interaction) {
         const modal = new ModalBuilder()
-            .setCustomId('warnWarning')
-            .setTitle('Raison de l\'avertissement');
+            .setCustomId(interaction.customId)
+            .setTitle('Raison du signalement');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
-            .setCustomId('raison')
-            .setLabel("Pourquoi le signalement est justifié ?")
+            .setCustomId('textWarning')
+            .setLabel("Pourquoi avez-vous signalé le message ?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);

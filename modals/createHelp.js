@@ -25,7 +25,7 @@ module.exports = {
                     .setLabel('Répondre')
                     .setStyle(ButtonStyle.Primary),
                 new ButtonBuilder()
-                    .setCustomId('warnHelp')
+                    .setCustomId('warning_help')
                     .setLabel('⚠️')
                     .setStyle(ButtonStyle.Secondary),
             );

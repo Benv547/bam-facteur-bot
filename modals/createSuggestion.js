@@ -33,7 +33,7 @@ module.exports = {
                     .setLabel('Répondre')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
-                    .setCustomId('warnSuggestion')
+                    .setCustomId('warning_suggestion')
                     .setLabel('⚠️')
                     .setStyle(ButtonStyle.Secondary),
             );

@@ -1,16 +1,26 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
 
 module.exports = {
-    name: 'warningBottle',
+    name: 'sanction',
     async execute(interaction) {
         const modal = new ModalBuilder()
-            .setCustomId('warningBottle')
-            .setTitle('Raison du signalement');
+            .setCustomId(interaction.customId);
+
+        const sanctionType = interaction.customId.split('_')[1];
+        if (sanctionType === 'ban') {
+            modal.setTitle('Raison du bannissement');
+        } else if (sanctionType === 'mute') {
+            modal.setTitle('Raison du mute');
+        } else if (sanctionType === 'warn') {
+            modal.setTitle('Raison du warn');
+        } else if (sanctionType === 'abusif') {
+            modal.setTitle('Raison du warn abusif');
+        }
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
-            .setCustomId('textWarning')
-            .setLabel("Pourquoi avez-vous signalé le message ?")
+            .setCustomId('raison')
+            .setLabel("Pourquoi le signalement est justifié ?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);

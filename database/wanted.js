@@ -14,6 +14,14 @@ module.exports = {
         }
         return null;
     },
+    get_wanted_by_id: async function (id_message) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "Wanted" WHERE id_message = $1', [id_message]);
+        if (results.rows.length > 0) {
+            return results.rows[0];
+        }
+        return null;
+    },
     get_wanted_response: async function (id_message) {
         const pool = db.getPool();
         const results = await pool.query('SELECT * FROM "WantedResponse" WHERE id_message = $1', [id_message]);
