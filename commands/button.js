@@ -3,19 +3,23 @@ const roles = require('../utils/roles.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('role')
-        .setDescription('Permet de créer un rôle dans le salon.')
+        .setName('button')
+        .setDescription('Permet de créer un bouton sur le message.')
         .addStringOption(option =>
-            option.setName('emoji')
-                .setDescription('The emoji of the role')
+            option.setName('texte')
+                .setDescription('The text of the button')
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('message')
                 .setDescription('The message id')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('role')
-                .setDescription('The role id')
+            option.setName('custom_id')
+                .setDescription('The id of button')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('style')
+                .setDescription('The style id')
                 .setRequired(true)),
     async execute(interaction) {
         if (await roles.userIsAdmin(interaction.member)) {
@@ -38,10 +42,10 @@ module.exports = {
             // Add button to row
             rowMessage.addComponents(
                 new ButtonBuilder()
-                    .setCustomId('getRole_' + interaction.options.getString('role'))
-                    .setLabel(interaction.options.getString('emoji'))
-                    .setStyle(ButtonStyle.Secondary),
-                );
+                    .setCustomId(interaction.options.getString('custom_id'))
+                    .setLabel(interaction.options.getString('texte'))
+                    .setStyle(interaction.options.getString('style')),
+            );
             await message.edit({components: [rowMessage]});
             return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
         }
