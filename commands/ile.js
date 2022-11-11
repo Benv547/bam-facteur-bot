@@ -11,7 +11,7 @@ module.exports = {
     async execute(interaction) {
 
         const user = await userDB.getUser(interaction.user.id);
-        if (user === null || user.xp < levels[7].xp) {
+        if (user === null || user.xp < levels[4].xp) {
             // Fetch role
             const role = await interaction.guild.roles.fetch(levels[7].role);
             return interaction.reply({content: 'Vous n\'avez pas assez d\'expérience pour rejoindre une île.\nRevenez me voir quand vous aurez atteint le **' + role.name + '**.', ephemeral: true});
