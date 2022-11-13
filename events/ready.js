@@ -195,7 +195,8 @@ module.exports = {
                         await channel.delete();
                     } catch (error) {
                         console.log(error);
-                        await bottleDB.deleteBottle(bottles[i].id_channel);
+                        await bottleDB.setBottleArchived(bottles[i].id_channel);
+                        await bottleDB.setBottleTerminated(bottles[i].id_channel);
                         continue;
                     }
                 }

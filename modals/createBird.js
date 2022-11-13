@@ -7,9 +7,17 @@ const birdDB = require("../database/bird");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
 
+let semaphore = [];
+
 module.exports = {
     name: 'createBird',
     async execute(interaction) {
+
+        if (semaphore.includes(interaction.user.id)) {
+            return await interaction.reply({ content: 'Vous avez déjà un oiseau en cours de création !', ephemeral: true });
+        }
+
+        semaphore.push(interaction.user.id);
 
         const content = interaction.fields.getTextInputValue('textBird');
 
@@ -20,5 +28,7 @@ module.exports = {
         } catch (e) {
             console.log(e);
         }
+
+        semaphore = semaphore.filter(item => item !== interaction.user.id);
     },
 };

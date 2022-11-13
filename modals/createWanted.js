@@ -7,9 +7,17 @@ const wantedDB = require("../database/wanted");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
 
+let semaphore = [];
+
 module.exports = {
     name: 'createWanted',
     async execute(interaction) {
+
+        if (semaphore.includes(interaction.user.id)) {
+            return await interaction.reply({ content: 'Vous avez déjà un avis de recherche en cours de création !', ephemeral: true });
+        }
+
+        semaphore.push(interaction.user.id);
 
         const content = interaction.fields.getTextInputValue('textWanted');
 
@@ -92,6 +100,8 @@ module.exports = {
         const message = await interaction.channel.send({ content: '', embeds: [embed], components: [row] });
 
         await wantedDB.insertWanted(channel.id, interaction.guildId, interaction.member.id, message.id, channel_name, content);
+
+        semaphore = semaphore.filter(item => item !== interaction.user.id);
     },
 
     transformEmojiToDiscordEmoji: function (guild, text) {

@@ -1,8 +1,16 @@
 const bottle = require("../utils/bottleAction");
 
+let semaphore = [];
+
 module.exports = {
     name: 'createBottle',
     async execute(interaction) {
+
+        if (semaphore.includes(interaction.user.id)) {
+            return await interaction.reply({ content: 'Vous avez déjà une bouteille en cours de création !', ephemeral: true });
+        }
+
+        semaphore.push(interaction.user.id);
 
         const content = interaction.fields.getTextInputValue('textBottle');
 
@@ -15,5 +23,7 @@ module.exports = {
         } catch (e) {
             console.log(e);
         }
+
+        semaphore = semaphore.filter(item => item !== interaction.user.id);
     },
 };
