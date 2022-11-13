@@ -21,12 +21,6 @@ module.exports = {
         } else if (await roles.userIsVip(interaction.member)) {
             price = Math.round(price * 0.8);
         }
-
-        if(!await orAction.reduce(interaction.user.id, price)) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de couleur !\nEconomisez **' + price + ' pièces d\'or** et revenez me voir !', null, null, null, null);
-            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
-        }
-
         // set random hex color
         let color = Math.floor(Math.random()*16777215).toString(16);
 
@@ -38,6 +32,13 @@ module.exports = {
                 return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
             }
         }
+
+
+        if(!await orAction.reduce(interaction.user.id, price)) {
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de couleur !\nEconomisez **' + price + ' pièces d\'or** et revenez me voir !', null, null, null, null);
+            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        }
+
 
         // set lowerCase
         color = color.toLowerCase();
