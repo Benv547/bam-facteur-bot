@@ -59,6 +59,7 @@ module.exports = {
         const thread_id = await suggestionDB.get_id_thread(interaction.message.id);
         if (thread_id == null) {
             const message = await interaction.channel.messages.fetch(interaction.message.id);
+            if (interaction.channel.isThread() && interaction.channel.archived) return await interaction.reply({ content: 'La suggestion est archivée.', ephemeral: true });
             reply = await message.reply({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
         } else {
             const thread = await interaction.guild.channels.fetch(thread_id);
