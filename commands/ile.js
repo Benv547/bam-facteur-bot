@@ -1,6 +1,6 @@
 const {SlashCommandBuilder} = require("discord.js");
 const userDB = require("../database/user");
-const { ile } = require('../config.json');
+const { ile, ileVoice } = require('../config.json');
 const { levels } = require('../xp.json');
 
 module.exports = {
@@ -25,8 +25,11 @@ module.exports = {
             return interaction.reply({content: 'Vous êtes déjà sur l\'île.', ephemeral: true});
         }
 
+        const channelVoice = await interaction.guild.channels.fetch(ileVoice);
+
         // add user to channel
         await channel.permissionOverwrites.edit(interaction.member, {ViewChannel: true, SendMessages: false});
+        await channelVoice.permissionOverwrites.edit(interaction.member, {ViewChannel: true, Connect: true});
         return interaction.reply({content: 'Vous avez rejoint l\'île !', ephemeral: true});
     },
 };
