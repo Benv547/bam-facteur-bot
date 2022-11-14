@@ -31,21 +31,13 @@ module.exports = {
         const row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId('replyIleMessage')
-                    .setLabel('📩️')
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
                     .setCustomId('createIleMessage')
-                    .setLabel('✉️')
-                    .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                    .setCustomId('warning_ileMessage')
-                    .setLabel('⚠️')
+                    .setLabel('✉️ Envoyer un message')
                     .setStyle(ButtonStyle.Secondary),
             );
 
         // Create embed
-        const embed = createEmbeds.createFullEmbed("", content, null, null, 0x2F3136, null, false);
+        //const embed = createEmbeds.createFullEmbed("", content, null, null, 0x2F3136, null, false);
 
         // Fetch user
         const user_profileId = await user_ileDB.get_id_profile(interaction.user.id);
@@ -63,24 +55,41 @@ module.exports = {
         const randNumber = await user_ileDB.getRandNumber(interaction.user.id);
 
         // Add author to embed
-        embed.setAuthor({ name: profile.signature + ' anonyme#' + randNumber, iconURL: profile.image_url});
+        //embed.setAuthor({ name: profile.signature + ' anonyme#' + randNumber, iconURL: profile.image_url});
+
+        // Fetch webhook from channel by name
+        const name = "IleMessage";
+        const webhooks = await interaction.channel.fetchWebhooks();
+        let webhook = webhooks.find(webhook => webhook.name === name);
+
+        // If the webhook doesn't exist, create it
+        if (!webhook) {
+            webhook = await interaction.channel.createWebhook(name);
+        }
+
+        // Send message
+        const message = await webhook.send({ content: content, username: profile.signature + ' anonyme#' + randNumber, avatarURL: profile.image_url, components: [row] });
 
         // Send embed
-        const message = await interaction.channel.send({ content: '** **', embeds: [embed], components: [row] });
+        const button = await interaction.channel.send({ content: '', components: [row] });
 
         // Save message id in database
         await message_ileDB.insertMessage(message.id, userId.id_user, interaction.channel.id, interaction.guild.id, content);
 
-        if (finded) {
-            // Don't change interaction message
+        if (!finded) {
+            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **10 pièces d'or**.", ephemeral: true });
+        } else {
             await interaction.update({
                 content: interaction.message.content,
                 embeds: interaction.message.embeds,
                 components: interaction.message.components
             });
-        } else {
-            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **10 pièces d'or**.", ephemeral: true });
         }
+
+        // fetch message
+        const messageToDelete = await interaction.channel.messages.fetch(interaction.message.id);
+        // Delete message
+        await messageToDelete.delete();
     },
 
     transformEmojiToDiscordEmoji: function (guild, text) {
