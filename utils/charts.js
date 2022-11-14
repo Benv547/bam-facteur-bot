@@ -145,7 +145,7 @@ module.exports = {
         const labels = this.setupLabelsFromSQL('time', [data]);
         const dataset = this.setupDataSetFromSQL('count', data, 'Messages', labels);
         dataset.borderColor = 'rgb(132,0,255)';
-        dataset.backgroundColor = 'rgb(65,0,133)';
+        dataset.backgroundColor = 'rgba(132,0,255, .25)';
         datasets.push(dataset);
         return await this.createChart(labels, datasets);
     },
