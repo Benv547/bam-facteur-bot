@@ -5,6 +5,11 @@ const roles = require("../utils/roles");
 module.exports = {
     name: 'createWanted',
     async execute(interaction) {
+
+        if (global.semaphore.includes(interaction.user.id)) {
+            return await interaction.reply({ content: 'Vous avez déjà une recherche en cours de création !', ephemeral: true });
+        }
+
         const modal = new ModalBuilder()
             .setCustomId('createWanted')
             .setTitle('Ma recherche');

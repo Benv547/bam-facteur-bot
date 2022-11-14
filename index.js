@@ -6,6 +6,7 @@ const { Client, GatewayIntentBits, Collection} = require('discord.js');
 const { token } = require('./token.json');
 
 global.invites = new Collection();
+global.semaphore = [];
 
 // Create a new client instance
 const client = new Client({

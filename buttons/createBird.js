@@ -5,6 +5,11 @@ const roles = require("../utils/roles");
 module.exports = {
     name: 'createBird',
     async execute(interaction) {
+
+        if (global.semaphore.includes(interaction.user.id)) {
+            return await interaction.reply({ content: 'Vous avez déjà un oiseau en cours de création !', ephemeral: true });
+        }
+
         const modal = new ModalBuilder()
             .setCustomId('createBird')
             .setTitle('Mon oiseau');
