@@ -17,9 +17,12 @@ module.exports = {
             return await interaction.reply({ content: 'Vous avez déjà un avis de recherche en cours de création !', ephemeral: true });
         }
 
-        semaphore.push(interaction.user.id);
-
         const content = interaction.fields.getTextInputValue('textWanted');
+        if (!content.toLowerCase().startsWith('je recherche')) {
+            return await interaction.reply({ content: 'Le message doit commencer par "Je recherche" !\nVotre message : ' + content, ephemeral: true });
+        }
+
+        semaphore.push(interaction.user.id);
 
         let sender = await userDB.getUser(interaction.member.id);
         if (sender === null) {
@@ -55,7 +58,12 @@ module.exports = {
 
                     const message = await globalWantedChannel.messages.fetch(wanted.id_message);
                     await message.delete();
+
+                    const sender = await interaction.guild.members.fetch(wanted.id_user);
+                    const embed = createEmbeds.createFullEmbed("Mince...", "Votre avis de recherche a été supprimé car il y avait trop d'avis de recherche dans la catégorie et vous n'avez pas choisi de réponse (ou n'en avez pas reçu).", null, null, null, null);
+                    await sender.send({ content: '', embeds: [embed] });
                 } catch {}
+
                 // Set archive to true
                 await wantedDB.setArchived(channelToDelete.id);
                 // Delete channel

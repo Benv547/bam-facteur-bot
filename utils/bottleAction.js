@@ -430,7 +430,7 @@ module.exports = {
 
         const sender = await guild.members.fetch(bird.id_user);
         //Crée l'embed
-        const embedFlow = createEmbeds.createFullEmbed("Votre oiseau est revenu !", 'Votre oiseau est revenu, il contenait le message :\n"**' + bird.content + '**"\n\nIl a reçu :\n **' + love + '** ❤️\n**' + joy + '** 😂\n**' + mouth + '** 😮\n**' + cry + '** 😢', null, null, null, null);
+        const embedFlow = createEmbeds.createFullEmbed("Votre oiseau est revenu !", 'Votre oiseau est revenu, il contenait le message :\n"**' + bird.content + '**"\n\nIl a reçu :\n **' + love + '** 😍\n**' + joy + '** 😂\n**' + mouth + '** 😮\n**' + cry + '** 😢', null, null, null, null);
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] });
         await birdDB.setArchived(bird.id_bird);
