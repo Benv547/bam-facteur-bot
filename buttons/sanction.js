@@ -18,12 +18,22 @@ module.exports = {
         }
 
         // Add components to modal
-        const hobbiesInput = new TextInputBuilder()
+        let hobbiesInput = new TextInputBuilder()
             .setCustomId('raison')
             .setLabel("Pourquoi le signalement est justifié ?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);
+
+        if (sanctionType === 'abusif') {
+            hobbiesInput = new TextInputBuilder()
+                .setCustomId('raison')
+                .setLabel("Pourquoi le signalement est abusif ?")
+                // Paragraph means multiple lines of text.
+                .setStyle(TextInputStyle.Paragraph)
+                .setMaxLength(1500);
+        }
+
         // An action row only holds one text input,
         // so you need one action row per text input.
         const primaryActionRow = new ActionRowBuilder().addComponents(hobbiesInput);

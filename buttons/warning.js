@@ -5,7 +5,7 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId(interaction.customId)
-            .setTitle('Raison du signalement');
+            .setTitle('🚨⚠️ Raison du signalement ⚠️🚨');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
