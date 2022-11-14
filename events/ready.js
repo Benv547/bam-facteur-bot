@@ -208,14 +208,13 @@ module.exports = {
                     try {
                         const guild = await client.guilds.fetch(birds[i].id_guild);
                         const channel = await guild.channels.fetch(birds[i].id_channel);
+                        await channel.delete();
 
                         if (birds[i].sea < 10) {
                             await bottle.createBird(guild, birds[i].id_user, birds[i].content, birds[i].sea + 1, birds[i].id_bird);
                         } else {
                             await bottle.flowBird(guild, birds[i].id_channel);
                         }
-
-                        await channel.delete();
                     } catch (error) {
                         console.log(error);
                         await birdDB.deleteBird(birds[i].id_channel);
