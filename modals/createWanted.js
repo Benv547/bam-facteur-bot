@@ -72,7 +72,8 @@ module.exports = {
         }
         await channel.setParent(category);
 
-
+        await channel.permissionOverwrites.create(interaction.member.id, {ViewChannel: true, SendMessages: false});
+        
         const sticker = await stickerDB.getSticker(sender.id_sticker);
         let stickerUrl = null;
         if (sticker !== null) {
