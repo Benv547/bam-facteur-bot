@@ -12,7 +12,7 @@ module.exports = {
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textSuppression')
-            .setLabel("Ecrivez 'supprimer' pour confirmer :")
+            .setLabel("⚠️ Ecrivez 'supprimer' pour confirmer :")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph);
 
