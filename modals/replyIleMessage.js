@@ -24,7 +24,8 @@ module.exports = {
         }
 
         // Get content
-        const content = interaction.fields.getTextInputValue('textMessage');
+        let content = interaction.fields.getTextInputValue('textMessage');
+        content = this.transformEmojiToDiscordEmoji(interaction.guild, content);
 
         // Create buttons to upvote and downvote and warn
         const row = new ActionRowBuilder()
@@ -81,5 +82,23 @@ module.exports = {
         } else {
             await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **10 pièces d'or**.", ephemeral: true });
         }
+    },
+
+    transformEmojiToDiscordEmoji: function (guild, text) {
+        const emojis = text.match(/:[a-zA-Z0-9_]+:/g);
+        if (emojis !== null) {
+            for (const e of emojis) {
+                text = text.replace(e, this.emojiToDiscordEmoji(guild, e));
+            }
+        }
+        return text;
+    },
+    emojiToDiscordEmoji: function (guild, emoji) {
+        const emojiName = emoji.replace(/:/g, '');
+        const emojiFetched = guild.emojis.cache.find(emoji => emoji.name === emojiName);
+        if (emojiFetched !== undefined) {
+            return emojiFetched.toString();
+        }
+        return emoji;
     }
 };
