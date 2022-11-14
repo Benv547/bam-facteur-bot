@@ -62,6 +62,7 @@ module.exports = {
             reply = await message.reply({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
         } else {
             const thread = await interaction.guild.channels.fetch(thread_id);
+            if (thread.locked) return await interaction.reply({ content: 'La suggestion est verrouillée.', ephemeral: true });
             reply = await thread.send({ content: 'Réponse n°' + repliesNumber, embeds: [embed], components: [row] });
         }
 
