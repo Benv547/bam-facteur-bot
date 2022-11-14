@@ -10,7 +10,7 @@ module.exports = {
 
         const signalement = await signalementDB.getSignalement(interaction.message.id);
         const signalementBottle = await signalementDB.getSignalementBottle(interaction.message.id);
-        const channelId = signalementBottle.id_channel;
+        const channelId = signalementBottle.id_bottle;
         const senderId = signalement.id_sender;
 
         let text = "";
