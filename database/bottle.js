@@ -72,9 +72,9 @@ module.exports = {
         }
         return null;
     },
-    getAllBottleHasOnlyOneMessageFromSixHoursAndNotArchived: async function () {
+    getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchived: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "date" < NOW() - INTERVAL \'6 hours\' AND "archived" = false');
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "date" < NOW() - INTERVAL \'3 hours\' AND "archived" = false');
         return results.rows;
     },
     getAllBottleHasOnlyOneMessageAndArchivedRandomized: async function (limit) {

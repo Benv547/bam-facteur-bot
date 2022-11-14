@@ -171,7 +171,7 @@ module.exports = {
         checkBottle = async () => {
             console.log(new Date().toLocaleString() + " - Checking bottles...");
 
-            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromSixHoursAndNotArchived();
+            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchived();
             if (bottles !== null) {
                 for (let i = 0; i < bottles.length; i++) {
                     try {
