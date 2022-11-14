@@ -32,12 +32,12 @@ module.exports = {
 
         // If last bottle date is less than 5minutes
         const dateLastBottle = await bottleDB.getDateOfLastBottleWithOneMessageOfUser(interaction.user.id);
-        let waitMinutes = 10;
+        let waitMinutes = 20;
 
         if (await roles.userIsBooster(interaction.member)) {
-            waitMinutes = 1;
-        } else if (await roles.userIsVip(interaction.member)) {
             waitMinutes = 5;
+        } else if (await roles.userIsVip(interaction.member)) {
+            waitMinutes = 10;
         }
 
         if (dateLastBottle) {

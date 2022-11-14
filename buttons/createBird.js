@@ -32,12 +32,12 @@ module.exports = {
 
         // If last bottle date is less than 5minutes
         const dateLastBottle = await birdDB.getDateOfLastBirdForUser(interaction.user.id);
-        let waitMinutes = 10;
+        let waitMinutes = 180;
 
         if (await roles.userIsBooster(interaction.member)) {
-            waitMinutes = 1;
+            waitMinutes = 60;
         } else if (await roles.userIsVip(interaction.member)) {
-            waitMinutes = 5;
+            waitMinutes = 90;
         }
 
         if (dateLastBottle) {
