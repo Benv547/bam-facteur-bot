@@ -392,10 +392,14 @@ module.exports = {
                     .setStyle(ButtonStyle.Danger),
             );
 
-        await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
-        for (let i = 0; i < 5; i++) {
-            const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender).random();
-            await channel.permissionOverwrites.edit(member.id, {ViewChannel: true, SendMessages: false});
+        try {
+            await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
+            for (let i = 0; i < 5; i++) {
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender).random();
+                await channel.permissionOverwrites.edit(member.id, {ViewChannel: true, SendMessages: false});
+            }
+        } catch (error) {
+            console.error(error);
         }
 
         // Send to channel
