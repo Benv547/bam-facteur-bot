@@ -89,7 +89,6 @@ module.exports = {
         const datasetBottle = this.setupDataSetFromSQL('count', dataBottle, 'Bouteilles', labels);
         datasetBottle.borderColor = 'rgb(218,12,193)';
         datasetBottle.backgroundColor = 'rgba(218,12,193, .25)';
-        datasetBottle.fill = false;
         datasets.push(datasetBottle);
         const datasetMessage = this.setupDataSetFromSQL('count', dataMessage, 'Messages', labels);
         datasetMessage.borderColor = 'rgb(132,0,255)';
@@ -98,7 +97,6 @@ module.exports = {
         const datasetUser = this.setupDataSetFromSQL('count', dataUser, 'Utilisateurs', labels);
         datasetUser.borderColor = 'rgb(0,178,255)';
         datasetUser.backgroundColor = 'rgba(0,178,255, .25)';
-        datasetUser.fill = false;
         datasets.push(datasetUser);
         return await this.createChart(labels, datasets);
     },

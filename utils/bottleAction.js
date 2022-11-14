@@ -53,7 +53,7 @@ module.exports = {
         // TODO: choose random member who are not a bot
 
         // Fetch all members
-        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null);
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender);
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
@@ -394,7 +394,7 @@ module.exports = {
 
         await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
         for (let i = 0; i < 5; i++) {
-            const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null).random();
+            const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender).random();
             await channel.permissionOverwrites.edit(member.id, {ViewChannel: true, SendMessages: false});
         }
 
