@@ -9,7 +9,8 @@ module.exports = {
         // TODO : Display bottle history
 
         const signalement = await signalementDB.getSignalement(interaction.message.id);
-        const channelId = signalement.id_channel;
+        const signalementBottle = await signalementDB.getSignalementBottle(interaction.message.id);
+        const channelId = signalementBottle.id_channel;
         const senderId = signalement.id_sender;
 
         let text = "";
