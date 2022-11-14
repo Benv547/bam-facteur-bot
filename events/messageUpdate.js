@@ -4,8 +4,8 @@ const createEmbeds = require("../utils/createEmbeds");
 
 const OR_VOTE = 50;
 const OR_BUMP = 150;
-const XP_VOTE = 10;
-const XP_BUMP = 20;
+const XP_VOTE = 25;
+const XP_BUMP = 50;
 
 let voteId = [];
 

@@ -3,6 +3,7 @@ const createEmbeds = require("../utils/createEmbeds");
 const suggestionDB = require("../database/suggestion");
 const userDB = require("../database/user");
 const roles = require("../utils/roles");
+const xpAction = require("../utils/xpAction");
 
 module.exports = {
     name: 'replySuggestion',
@@ -67,5 +68,7 @@ module.exports = {
         // Save message id in database
         await suggestionDB.insertSuggestions(reply.id, null, interaction.user.id, content, true);
         await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
+
+        await xpAction.increment(interaction.guild, interaction.member.id, 15);
     }
 };

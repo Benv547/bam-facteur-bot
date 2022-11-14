@@ -4,8 +4,8 @@ const xpAction = require("../utils/xpAction");
 
 const OR_VOTE = 20;
 const OR_BUMP = 150;
-const XP_VOTE = 5;
-const XP_BUMP = 20;
+const XP_VOTE = 10;
+const XP_BUMP = 50;
 
 module.exports = {
     name: 'messageCreate',

@@ -121,7 +121,7 @@ module.exports = {
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
 
 
-        await xpAction.increment(guild, id_user_sender, 20);
+        await xpAction.increment(guild, id_user_sender, 50);
     },
     reply: async function (guild, id_user_sender, channel, content) {
 
@@ -236,7 +236,7 @@ module.exports = {
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
 
-        await xpAction.increment(guild, id_user_sender, 5);
+        await xpAction.increment(guild, id_user_sender, 10);
     },
     unarchive: async function (guild, id_user_sender, id_bottle, content) {
 
@@ -434,6 +434,8 @@ module.exports = {
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] });
         await birdDB.setArchived(bird.id_bird);
+
+        await xpAction.increment(guild, bird.id_user, 50);
     },
 
     getNumberOfSpacesInNewBottles: async function (guild) {

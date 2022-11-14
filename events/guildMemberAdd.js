@@ -2,6 +2,8 @@ const userDB = require("../database/user");
 const inviteDB = require("../database/invite");
 const {join, vipRole} = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
+const xpAction = require("../utils/xpAction");
+const orAction = require("../utils/orAction");
 
 module.exports = {
     name: 'guildMemberAdd',
@@ -40,12 +42,25 @@ module.exports = {
                             await inviter.roles.add(vipRole);
                             await userDB.set_vip(inviter.id, true);
 
+                            try {
+                            // Send message to the inviter
+                                await invite.inviter.send({
+                                    content: '',
+                                    embeds: [createEmbeds.createFullEmbed('Une very importante personne !', 'Vous avez atteint le nombre d\'invitation nécessaire pour obtenir **le rôle VIP** !', null, null, 0x2f3136, null)]
+                                });
+                            } catch {}
+                        }
+
+                        await xpAction.increment(member.guild, member.id, 250);
+                        await orAction.increment(member.id, 250);
+
+                        try {
                             // Send message to the inviter
                             await invite.inviter.send({
                                 content: '',
-                                embeds: [createEmbeds.createFullEmbed('Une very importante personne !', 'Vous avez atteint le nombre d\'invitation nécessaire pour obtenir **le rôle VIP** !', null, null, 0x2f3136, null)]
+                                embeds: [createEmbeds.createFullEmbed('Plus un !', 'Vous avez invité une nouvelle personne sur le serveur.\nVous avez gagné **250** pièces d\'or et de l\'expérience.', null, null, 0x2f3136, null)]
                             });
-                        }
+                        } catch {}
                     }
 
                     // Send message

@@ -8,6 +8,7 @@ const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
+const xpAction = require("../utils/xpAction");
 
 module.exports = {
     name: 'replyWanted',
@@ -56,6 +57,7 @@ module.exports = {
 
             await bottle.reply(interaction.guild, interaction.member.id, interaction.channel, content);
 
+            await xpAction.increment(interaction.guild, interaction.member.id, 50);
         } else {
 
             const reply = await wantedDB.get_reply_for_user_and_channel(interaction.member.id, id_channel);
@@ -99,6 +101,8 @@ module.exports = {
             const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), embeds: [embed], components: [row] });
 
             await wantedDB.insertWantedResponse(id_channel, interaction.guildId, interaction.member.id, message.id, content);
+
+            await xpAction.increment(interaction.guild, interaction.member.id, 10);
         }
     },
 

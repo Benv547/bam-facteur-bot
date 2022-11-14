@@ -2,6 +2,7 @@ const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("dis
 const createEmbeds = require("../utils/createEmbeds");
 const opinionDB = require("../database/opinion");
 const userDB = require("../database/user");
+const xpAction = require("../utils/xpAction");
 
 module.exports = {
     name: 'createOpinion',
@@ -33,6 +34,8 @@ module.exports = {
                 console.error(e);
                 return await interaction.reply({ content: 'Une erreur est survenue lors de la suppression de votre avis.', ephemeral: true });
             }
+        } else {
+            await xpAction.increment(interaction.guild, interaction.member.id, 250);
         }
 
         // Get content
