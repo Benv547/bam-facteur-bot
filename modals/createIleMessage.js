@@ -79,11 +79,13 @@ module.exports = {
         if (!finded) {
             await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **10 pièces d'or**.", ephemeral: true });
         } else {
-            await interaction.update({
-                content: interaction.message.content,
-                embeds: interaction.message.embeds,
-                components: interaction.message.components
-            });
+            try {
+                await interaction.update({
+                    content: interaction.message.content,
+                    embeds: interaction.message.embeds,
+                    components: interaction.message.components
+                });
+            } catch {}
         }
 
         // fetch message
