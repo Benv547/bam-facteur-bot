@@ -217,7 +217,7 @@ module.exports = {
                         }
                     } catch (error) {
                         console.log(error);
-                        await birdDB.deleteBird(birds[i].id_channel);
+                        await birdDB.setArchived(birds[i].id_bird);
                         continue;
                     }
                 }
