@@ -27,16 +27,18 @@ module.exports = {
 
         // Get sender id
         const id_sender = signalement.id_sender;
+        let sender = null;
         try {
-            const sender = await interaction.guild.members.fetch(id_sender);
+            sender = await interaction.guild.members.fetch(id_sender);
         } catch (e) {
             return await interaction.reply({content: "Impossible de trouver le membre concerné (sender) (" + id_sender + ").", ephemeral: true});
         }
 
         // Get receiver id
         const id_receiver = signalement.id_receiver;
+        let receiver = null;
         try {
-            const receiver = await interaction.guild.members.fetch(id_receiver);
+            receiver = await interaction.guild.members.fetch(id_receiver);
         } catch (e) {
             return await interaction.reply({content: "Impossible de trouver le membre concerné (receiver) (" + id_receiver + ").", ephemeral: true});
         }
