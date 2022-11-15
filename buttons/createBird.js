@@ -41,7 +41,7 @@ module.exports = {
         }
 
         if (dateLastBottle) {
-            const diff = Math.abs(new Date() - new Date(dateLastBottle));
+            const diff = Math.abs(new Date().getMilliseconds() - new Date(dateLastBottle).getMilliseconds());
             const diffMinutes = Math.ceil(diff / (1000 * 60));
             if (diffMinutes < waitMinutes) {
                 return await interaction.reply({ content: `Vous devez attendre ${waitMinutes - diffMinutes} minutes avant de pouvoir créer un nouvel oiseau.`, ephemeral: true });
