@@ -51,8 +51,8 @@ module.exports = {
                             } catch {}
                         }
 
-                        await xpAction.increment(member.guild, member.id, 250);
-                        await orAction.increment(member.id, 250);
+                        await xpAction.increment(member.guild, invite.inviter.id, 250);
+                        await orAction.increment(invite.inviter.id, 250);
 
                         try {
                             // Send message to the inviter
