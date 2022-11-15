@@ -1,5 +1,6 @@
 const birdDB = require("../database/bird");
 const userDB = require("../database/user");
+const xpAction = require("../utils/xpAction");
 module.exports = {
     name: 'replyBird',
     async execute(interaction) {
@@ -19,6 +20,7 @@ module.exports = {
                 return await interaction.reply({ content: 'Vous avez déjà réagi à ce message.', ephemeral: true });
             }
             await birdDB.insertBirdReaction(bird.id_bird, interaction.member.id, emojiId);
+            await xpAction.increment(interaction.guild, interaction.member.id, 15);
             return await interaction.reply({ content: 'Votre réaction a été prise en compte.', ephemeral: true });
         }
     }
