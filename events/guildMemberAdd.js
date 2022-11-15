@@ -20,7 +20,7 @@ module.exports = {
             // Fetch sanctions channel by id
             const channel = await member.guild.channels.fetch(join);
 
-            if (invite !== null && invite.inviter !== null) {
+            if ((invite !== null || invite !== undefined) && invite.inviter !== null) {
                 try {
                     if (await userDB.getUser(member.id) === null) {
                         // Create a new user in the database.
