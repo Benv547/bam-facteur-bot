@@ -47,7 +47,7 @@ module.exports = {
     },
     getAllBirdAfterOneHour: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bird" WHERE "date" < NOW() - INTERVAL \'1 hour\'');
+        const results = await pool.query('SELECT * FROM "Bird" WHERE "date" < NOW() - INTERVAL \'1 hour\' AND "archived" = false');
         if (results.rows.length > 0) {
             return results.rows;
         }
