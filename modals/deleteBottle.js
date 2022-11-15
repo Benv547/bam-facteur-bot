@@ -6,7 +6,7 @@ module.exports = {
 
         // Check if the user has confirmed the deletion
         const textSuppression = interaction.fields.getTextInputValue('textSuppression');
-        if (textSuppression.toLocaleLowerCase() !== 'supprimer') {
+        if (textSuppression.toLocaleLowerCase().includes('supprimer')) {
             await interaction.reply({ content: 'La bouteille n\'a pas été supprimée.', ephemeral: true });
             return;
         }
