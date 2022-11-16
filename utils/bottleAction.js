@@ -31,6 +31,7 @@ module.exports = {
             name: channel_name,
             type: ChannelType.GuildText
         })
+        await channel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
 
         // TODO: move channel to "nouvelles bouteilles"
         const category = (await guild.channels.fetch()).find(c => c.id == newBottleCategory);
@@ -258,12 +259,11 @@ module.exports = {
         }
 
         // Create channel
+        const everyoneRole = guild.roles.everyone;
         const newChannel = await guild.channels.create({
             name: bottle.name,
             type: ChannelType.GuildText
         })
-
-        const everyoneRole = guild.roles.everyone;
         await newChannel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
 
         // Get all old messages
@@ -330,6 +330,7 @@ module.exports = {
             name: channel_name,
             type: ChannelType.GuildText
         })
+        await channel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
 
         // TODO: move channel to "nouvelles bouteilles"
         const category = (await guild.channels.fetch()).find(c => c.id == newBirdCategory);
