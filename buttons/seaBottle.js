@@ -15,7 +15,7 @@ module.exports = {
         // TODO: get original message
         const original_message = await messageDB.getFirstMessage(interaction.channel.id);
 
-        if (nb < 10) {
+        if (nb < 7) {
             await bottleDB.incr_sea(interaction.channel.id);
             // TODO: recreate a new bottle with the same content
             const result = await bottle.create(interaction.guild, sender_id, original_message, nb + 1);

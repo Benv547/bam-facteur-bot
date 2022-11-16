@@ -183,7 +183,7 @@ module.exports = {
                         const sender_id = await bottleDB.getReceiver(channel.id);
                         // TODO: get original message
                         const original_message = await messageDB.getFirstMessage(channel.id);
-                        if (nb < 10) {
+                        if (nb < 7) {
                             // TODO: recreate a new bottle with the same content
                             await bottle.create(guild, sender_id, original_message, nb + 1);
                         }
@@ -237,7 +237,7 @@ module.exports = {
                             const sender_id = await bottleDB.getReceiver(channeId);
                             // TODO: get original message
                             const original_message = await messageDB.getFirstMessage(channeId);
-                            if (nb < 10) {
+                            if (nb < 7) {
                                 // TODO: recreate a new bottle with the same content
                                 await bottle.create(guild, sender_id, original_message, nb + 1);
                             } else {
