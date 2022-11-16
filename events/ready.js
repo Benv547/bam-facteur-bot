@@ -227,6 +227,7 @@ module.exports = {
             const places = await bottle.getNumberOfSpacesInNewBottles(guild);
 
             if (places > 0) {
+                console.log(new Date().toLocaleString() + " - Unarchive " + places + " new bottles...");
                 const bottlesArchived = await bottleDB.getAllBottleHasOnlyOneMessageAndArchivedRandomized(places);
                 if (bottlesArchived !== null) {
                     for (let i = 0; i < bottlesArchived.length; i++) {
