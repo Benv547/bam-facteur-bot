@@ -51,7 +51,7 @@ module.exports = {
                             } catch {}
                         }
 
-                        await xpAction.increment(member.guild, invite.inviter.id, 250);
+                        await xpAction.increment(member.guild, invite.inviter.id, 100);
                         await orAction.increment(invite.inviter.id, 250);
 
                         try {
