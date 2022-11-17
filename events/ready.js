@@ -189,7 +189,9 @@ module.exports = {
                             await bottle.create(guild, sender_id, original_message, nb + 1);
                         }
                         else {
-                            await bottle.flow(guild, sender_id, original_message);
+                            try {
+                                await bottle.flow(guild, sender_id, original_message);
+                            } catch {}
                         }
                         await messageDB.deleteAllMessagesOfBottle(channel.id);
                         await bottleDB.deleteBottle(channel.id);
