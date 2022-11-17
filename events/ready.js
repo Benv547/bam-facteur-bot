@@ -12,6 +12,7 @@ const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("dis
 const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
+const orAction = require("../utils/orAction");
 
 module.exports = {
     name: 'ready',
