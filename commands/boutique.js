@@ -1,59 +1,81 @@
 const { SlashCommandBuilder, EmbedBuilder} = require('discord.js');
-const roles = require("../utils/roles");
-const path = require("path");
-const fs = require("fs");
+
+const stickerDB = require("../database/sticker");
+const userDB = require("../database/user");
+const boutiqueDB = require("../database/boutique");
+const orAction = require("../utils/orAction");
+const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
         .setName('boutique')
-        .setDescription('Voir la liste des commandes payantes du bot !'),
+        .setDescription('Voir les boutiques du bot !')
+        .addStringOption(option =>
+            option.setName('catégorie')
+                .setDescription('La catégorie de boutique')
+                .setRequired(true)
+                .setChoices(
+                    { name: 'Sticker', value: 'sticker' },
+                ))
+        .addStringOption(option =>
+            option.setName('item')
+                .setDescription('L\'item à acheter')),
     async execute(interaction) {
-        // Read commands folder
-        const { EmbedBuilder } = require('discord.js');
-        const fs = require('fs');
-        const path = require('path');
-        // if a command is given, show details about it
 
-        const commandFiles = fs.readdirSync(__dirname).filter(file => file.endsWith('.js'));
-        const embed = new EmbedBuilder()
-            .setColor(0x2f3136)
-            .setDescription('Nous n\'avons **pas encore de boutique**, mais voici la liste des commandes payantes du bot !')
-            .setTitle('Liste des commandes payantes');
-        // Add fields
-        for (const file of commandFiles) {
-            const filePath = path.join(__dirname, file);
-            const command = require(filePath);
-            if (command.public && command.price) {
-                let name = '/' + command.data.name + ' ';
-                // Get options
-                let options = command.data.options;
-                if (options !== undefined) {
-                    for (const option of options) {
-                        // if is required
-                        if (option.required) {
-                            name +=  '[' + option.name + '] ';
-                        } else {
-                            name +=  '<' + option.name + '> ';
-                        }
-                    }
+        const categorie = interaction.options.get('catégorie').value;
+        const item = interaction.options.get('item')?.value;
+
+        if (item) {
+
+            if (categorie == 'sticker') {
+                let stickers = await stickerDB.getStickerFromUserWithName(interaction.user.id, item);
+                if (stickers !== null && stickers.length > 0) {
+                    return await interaction.reply({ content: 'Vous avez déjà cet item.', ephemeral: true });
                 }
-                let price = "";
-                let priceValue;
-                if (command.price) {
-                    priceValue = command.price;
-                    if (await roles.userIsBooster(interaction.member)) {
-                        priceValue = Math.round(priceValue * 0.5);
-                    } else if (await roles.userIsVip(interaction.member)) {
-                        priceValue = Math.round(priceValue * 0.8);
-                    }
-                    price = '\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
+                stickers = await stickerDB.getStickerWithName(item);
+                if (stickers === null || stickers.length == 0) {
+                    return await interaction.reply({ content:'Aucun sticker ne correspond à ce nom.', ephemeral: true });
+                } else if (stickers.length > 1) {
+                    return await interaction.reply({ content:'Plusieurs stickers correspondent à ce nom, veuillez préciser.', ephemeral: true });
                 }
-                embed.addFields({ name: name, value: command.data.description + price + '\n** **', inline: false });
+                const sticker = stickers[0];
+
+                const product = await boutiqueDB.getProductByIdItem(sticker.id_sticker);
+                if (product === null) {
+                    return await interaction.reply({ content:'Ce sticker n\'est pas en vente.', ephemeral: true });
+                }
+                if (await orAction.reduce(interaction.user.id, product.price)) {
+                    await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guildId);
+                    return await interaction.reply({ content:'Vous avez acheté le sticker **' + sticker.name + '** pour **' + product.price + ' pièces d\'or**.', ephemeral: true });
+                }
+                return await interaction.reply({ content:'Vous n\'avez pas assez d\'or pour acheter ce sticker.', ephemeral: true });
+            }
+            return await interaction.reply({ content:'Cette catégorie n\'existe pas.', ephemeral: true });
+        }
+
+        const items = await boutiqueDB.getProductByTypeOnBoutique(categorie);
+
+        if (item === null || items.length == 0) {
+            return await interaction.reply('Cette catégorie n\'existe pas ou est vide.');
+        }
+
+        let message = '';
+        for (const item of items) {
+            if (categorie == 'sticker') {
+                const sticker = await stickerDB.getSticker(item.id_item);
+                const stickers = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker.name);
+                if (stickers.length > 0) {
+                    message += '**~~' + sticker.name + '~~** - possédé\n';
+                } else {
+                    message += '• **' + sticker.name + '** : ' + item.price + ' pièces d\'or\n';
+                }
             }
         }
-        embed.setFooter({ text: 'Pour plus d\'informations sur une commande, tapez /aide [nom de la commande]' });
+
+        const embed = createEmbeds.createFullEmbed('Boutique de Bouteille à la mer', '**Voici les items de la catégorie "__' + categorie + '__" :**\n\n' + message, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/shopping-cart_1f6d2.png', null, 0x2f3136, 'Pour acheter un item, utilisez la commande /boutique [catégorie] <item>', false);
+
         // Send embed
-        return interaction.reply({ embeds: [embed], ephemeral: true });
+        return await interaction.reply({ embeds: [embed], ephemeral: true });
     },
 };

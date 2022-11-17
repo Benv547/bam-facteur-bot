@@ -33,6 +33,15 @@ DROP TABLE IF EXISTS "Wanted" CASCADE;
 DROP TABLE IF EXISTS "WantedResponse" CASCADE;
 DROP TABLE IF EXISTS "BirdReaction" CASCADE;
 DROP TABLE IF EXISTS "SignalementBottle" CASCADE;
+DROP TABLE IF EXISTS "Product" CASCADE;
+
+CREATE TABLE "Product" (
+    "id_product" SERIAL NOT NULL,
+    "id_item" INT NOT NULL,
+    "price" INT NOT NULL,
+    "type" VARCHAR(255) NOT NULL,
+    "boutique" BOOLEAN NOT NULL DEFAULT FALSE
+);
 
 CREATE TABLE "Record" (
   "score" bigint NOT NULL,

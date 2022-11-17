@@ -81,10 +81,10 @@ module.exports = {
             }
             text += warnDetail[i].content + "\n\n";
         }
-        const nbWarnAbus = await sanctionDB.countDetail(receiver_id, "Warn abusif");
-        const nbWarn = await sanctionDB.countDetail(receiver_id, "Warn");
-        const nbMute = await sanctionDB.countDetail(receiver_id, "Mute");
-        const nbBan = await sanctionDB.countDetail(receiver_id, "Ban");
+        const nbWarnAbus = await sanctionDB.countDetail(receiver_id, "abusif");
+        const nbWarn = await sanctionDB.countDetail(receiver_id, "warn");
+        const nbMute = await sanctionDB.countDetail(receiver_id, "mute");
+        const nbBan = await sanctionDB.countDetail(receiver_id, "ban");
         let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, ⛔️ **" + nbBan + "**";
 
         // Get guild channel by id
