@@ -184,7 +184,12 @@ module.exports = {
                     // Delete channel
                     await oldestChannelFetched.delete();
                     // Move channel to category
-                    await channel.setParent(category);
+                    try {
+                        await channel.setParent(category);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
                     moved = true;
                 } catch (e) {
                     await bottleDB.setBottleArchived(oldestChannel);
