@@ -41,7 +41,7 @@ module.exports = {
             }
         }
         const jourValue = parseInt(interaction.options.get('jour').value);
-        if (jourValue >= 31 || jourValue < 1) {
+        if (jourValue > 31 || jourValue < 1) {
             return await interaction.reply({ content: 'Veuillez insérer un jour valide.', ephemeral: true });
         }
 
