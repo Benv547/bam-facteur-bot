@@ -102,6 +102,8 @@ module.exports = {
 
         await wantedDB.insertWanted(channel.id, interaction.guildId, interaction.member.id, message.id, channel_name, content);
 
+        await userDB.set_date_wanted(interaction.member.id, new Date());
+
         global.semaphore = global.semaphore.filter(item => item !== interaction.user.id);
     },
 

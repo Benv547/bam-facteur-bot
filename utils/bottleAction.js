@@ -14,6 +14,10 @@ module.exports = {
     create: async function (guild, id_user_sender, content, nb_sea) {
         // TODO: check if message is OK (moderation, sad text, injuries, ...)
 
+        if (nb_sea === 0) {
+            await userDB.set_date_bottle(id_user_sender, new Date());
+        }
+
         let sender = await userDB.getUser(id_user_sender);
         if (sender === null) {
             await userDB.createUser(id_user_sender, 0, 0);
@@ -117,7 +121,6 @@ module.exports = {
 
         // TODO: save message to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
-
 
         await xpAction.increment(guild, id_user_sender, 50);
     },
@@ -298,6 +301,10 @@ module.exports = {
 
 
     createBird: async function (guild, id_user_sender, content, nb_sea, id) {
+
+        if (nb_sea === 0) {
+            await userDB.set_date_bird(id_user_sender, new Date());
+        }
 
         let sender = await userDB.getUser(id_user_sender);
         if (sender === null) {

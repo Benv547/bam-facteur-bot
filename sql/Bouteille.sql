@@ -62,7 +62,10 @@ CREATE TABLE "User" (
   "anniversaireJour" int,
   "anniversaireMois" int,
   "isVIP" boolean NOT NULL default false,
-  "nb_treasures" int NOT NULL default 0
+  "nb_treasures" int NOT NULL default 0,
+  "date_bottle" timestamp,
+  "date_bird" timestamp,
+  "date_wanted" timestamp
 );
 
 CREATE TABLE "Sticky" (
@@ -118,6 +121,7 @@ CREATE TABLE "Footer" (
 CREATE TABLE "User_Footer" (
     "id_user" bigint NOT NULL,
     "id_footer" int NOT NULL,
+    "id_guild" bigint NOT NULL,
     PRIMARY KEY ("id_user", "id_footer")
 );
 

@@ -1,5 +1,5 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
-const birdDB = require("../database/bird");
+const userDB = require("../database/user");
 const roles = require("../utils/roles");
 
 module.exports = {
@@ -31,7 +31,7 @@ module.exports = {
         modal.addComponents(primaryActionRow);
 
         // If last bottle date is less than 5minutes
-        const dateLastBottle = await birdDB.getDateOfLastBirdForUser(interaction.user.id);
+        const dateLastBottle = await userDB.get_date_bird(interaction.user.id);
         let waitMinutes = 180;
 
         if (await roles.userIsBooster(interaction.member)) {

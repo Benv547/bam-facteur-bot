@@ -124,4 +124,41 @@ module.exports = {
         }
         return null;
     },
+
+    set_date_bottle: async function (id_user, date) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "date_bottle" = $1 WHERE "id_user" = $2', [date, id_user]);
+    },
+    set_date_bird: async function (id_user, date) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "date_bird" = $1 WHERE "id_user" = $2', [date, id_user]);
+    },
+    set_date_wanted: async function (id_user, date) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "date_wanted" = $1 WHERE "id_user" = $2', [date, id_user]);
+    },
+    get_date_bottle: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "date_bottle" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].date_bottle;
+        }
+        return null;
+    },
+    get_date_bird: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "date_bird" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].date_bird;
+        }
+        return null;
+    },
+    get_date_wanted: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "date_wanted" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].date_wanted;
+        }
+        return null;
+    }
 }
