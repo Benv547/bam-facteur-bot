@@ -1,6 +1,7 @@
 const {SlashCommandBuilder} = require("discord.js");
 
 const stickerDB = require("../database/sticker");
+const footerDB = require("../database/footer");
 const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
                 .setRequired(true)
                 .setChoices(
                     { name: 'Sticker', value: 'sticker' },
+                    { name: 'Arabesque', value: 'arabesque' },
                 ))
         .addStringOption(option =>
             option.setName('item')
@@ -34,6 +36,18 @@ module.exports = {
                 return await interaction.reply({content: "", embeds: [embed], ephemeral: true});
             } else {
                 return await interaction.reply('Plusieurs stickers correspondent à ce nom, veuillez préciser.');
+            }
+        } else if (categorie == 'arabesque') {
+            const footers = await footerDB.getFooterWithName(item);
+            if (footers === null || footers.length == 0) {
+                return await interaction.reply('Aucune arabesque ne correspond à ce nom.');
+            }
+            if (footers.length === 1) {
+                const footer = footers[0];
+                const embed = createEmbeds.createFullEmbed('Arabesque ' + footer.name, null, null, footer.url, 0x2f3136, null);
+                return await interaction.reply({content: "", embeds: [embed], ephemeral: true});
+            } else {
+                return await interaction.reply('Plusieurs arabesques correspondent à ce nom, veuillez préciser.');
             }
         }
 

@@ -49,6 +49,18 @@ module.exports = {
         }
         return null;
     },
+    update_id_footer: async function (id_user, id_footer) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "id_footer" = $1 WHERE "id_user" = $2', [id_footer, id_user]);
+    },
+    get_id_footer: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "id_footer" FROM "User" WHERE "id_user" = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["id_footer"];
+        }
+        return null;
+    },
     update_anniversaire: async function (id_user, jour, mois) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "anniversaireJour" = $1, "anniversaireMois" = $2 WHERE "id_user" = $3', [jour, mois, id_user]);

@@ -9,6 +9,7 @@ const messageDB = require("../database/message");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
 const xpAction = require("../utils/xpAction");
+const footerDB = require("../database/footer");
 
 module.exports = {
     name: 'replyWanted',
@@ -73,13 +74,7 @@ module.exports = {
             const channel = await interaction.guild.channels.fetch(id_channel);
             await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
 
-            const sticker = await stickerDB.getSticker(sender.id_sticker);
-            let stickerUrl = null;
-            if (sticker !== null) {
-                stickerUrl = sticker.url;
-            }
-
-            const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
             const row = new ActionRowBuilder()
                 .addComponents(

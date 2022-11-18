@@ -58,6 +58,7 @@ CREATE TABLE "User" (
   "signature" text NOT NULL default 'Un•e illustre inconnu•e',
   "color" varchar(6) NOT NULL default substring(md5(random()::text), 1, 6),
   "id_sticker" int NOT NULL default 1,
+  "id_footer" int,
   "anniversaireJour" int,
   "anniversaireMois" int,
   "isVIP" boolean NOT NULL default false,
@@ -106,6 +107,18 @@ CREATE TABLE "User_Sticker" (
     "id_sticker" int NOT NULL,
     "id_guild" bigint NOT NULL,
     PRIMARY KEY ("id_user", "id_sticker", "id_guild")
+);
+
+CREATE TABLE "Footer" (
+    "id_footer" SERIAL PRIMARY KEY,
+    "name" text NOT NULL,
+    "url" text NOT NULL
+);
+
+CREATE TABLE "User_Footer" (
+    "id_user" bigint NOT NULL,
+    "id_footer" int NOT NULL,
+    PRIMARY KEY ("id_user", "id_footer")
 );
 
 CREATE TABLE "Message" (
@@ -330,9 +343,13 @@ ALTER TABLE "Help" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON 
 ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "User" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "User" ADD FOREIGN KEY ("id_footer") REFERENCES "Footer" ("id_footer") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "User_Footer" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Footer" ADD FOREIGN KEY ("id_footer") REFERENCES "Footer" ("id_footer") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_achievement") REFERENCES "Achievement" ("id_achievement") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -522,3 +539,12 @@ INSERT INTO "Profile_ile" ("image_url", "signature") VALUES ('https://cdn.discor
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364344262666/Lion.png', 'Lion'),
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364612702249/Loup.png', 'Loup'),
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364931457044/Plume.png', 'Plume');
+
+
+INSERT INTO "Footer" ("name", "url") VALUES ('Fin', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844978667343966/Illustration_sans_titre_2.png'),
+                                            ('Partition', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979191631942/Partition.png'),
+                                            ('Poissons', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979573293106/Illustration_sans_titre_3.png'),
+                                            ('Élégant', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979246157916/arabesque-par-defaut.png'),
+                                            ('Feuilles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844980688977980/Illustration_sans_titre_1.png'),
+                                            ('Printemps', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844981825650698/bas-de-page.png'),
+                                            ('Aurore polaire', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844981695627384/Illustration_sans_titre.png');

@@ -6,6 +6,7 @@ const {newWantedCategory, wantedChannel} = require("../config.json");
 const wantedDB = require("../database/wanted");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
+const footerDB = require("../database/footer");
 
 module.exports = {
     name: 'createWanted',
@@ -73,15 +74,8 @@ module.exports = {
         await channel.setParent(category);
 
         await channel.permissionOverwrites.create(interaction.member.id, {ViewChannel: true, SendMessages: false});
-        
-        const sticker = await stickerDB.getSticker(sender.id_sticker);
-        let stickerUrl = null;
-        if (sticker !== null) {
-            stickerUrl = sticker.url;
-        }
 
-
-        const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()

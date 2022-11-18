@@ -70,10 +70,7 @@ module.exports = {
 
         // TODO: create bottle message ...
         const sticker = await stickerDB.getSticker(sender.id_sticker);
-        let stickerUrl = null;
         if (sticker !== null) {
-            stickerUrl = sticker.url;
-
             if (sticker.sharable) {
                 // choose random float between 0 and 1
                 const randFloat = Math.random();
@@ -89,7 +86,7 @@ module.exports = {
                 }
             }
         }
-        const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -143,13 +140,7 @@ module.exports = {
             return;
         }
 
-        // Create embedded bottle message ...
-        const sticker = await stickerDB.getSticker(sender.id_sticker);
-        let stickerUrl = null;
-        if (sticker !== null) {
-            stickerUrl = sticker.url;
-        }
-        const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // Send message
         const messageTemp = await channel.send({ content: "", embeds: [embed] });
@@ -278,22 +269,12 @@ module.exports = {
         for (const message of messages) {
             if (message.id_user === bottle.id_user_sender) {
                 // Create embedded bottle message ...
-                const sticker = await stickerDB.getSticker(sender.id_sticker);
-                let stickerUrl = null;
-                if (sticker !== null) {
-                    stickerUrl = sticker.url;
-                }
-                const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, message.content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+                const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, message.content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(newMessage.id, message.id_message);
             } else {
                 // Create embedded bottle message ...
-                const sticker = await stickerDB.getSticker(receiver.id_sticker);
-                let stickerUrl = null;
-                if (sticker !== null) {
-                    stickerUrl = sticker.url;
-                }
-                const embed = createEmbeds.createBottle(message.content, receiver.diceBearSeed, stickerUrl, receiver.signature, receiver.color);
+                const embed = await createEmbeds.createBottle(message.content, receiver.diceBearSeed, sender.id_sticker, receiver.signature, receiver.color, sender.id_footer);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(message.id_message, newMessage.id);
             }
@@ -355,15 +336,7 @@ module.exports = {
         }
         await channel.setParent(category);
 
-
-        const sticker = await stickerDB.getSticker(sender.id_sticker);
-        let stickerUrl = null;
-        if (sticker !== null) {
-            stickerUrl = sticker.url;
-        }
-
-
-        const embed = createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, stickerUrl, sender.signature, sender.color);
+        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
