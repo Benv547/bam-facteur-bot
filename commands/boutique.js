@@ -63,7 +63,7 @@ module.exports = {
                 } else if (footers.length > 1) {
                     return await interaction.reply({ content:'Plusieurs arabesques correspondent à ce nom, veuillez préciser.', ephemeral: true });
                 }
-                const footer = footer[0];
+                const footer = footers[0];
 
                 const product = await boutiqueDB.getProductByIdItem(footer.id_footer, categorie);
                 if (product === null) {
