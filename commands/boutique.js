@@ -81,7 +81,7 @@ module.exports = {
         const items = await boutiqueDB.getProductByTypeOnBoutique(categorie);
 
         if (items === null || items.length == 0) {
-            return await interaction.reply('Cette catégorie n\'existe pas ou est vide.');
+            return await interaction.reply({ content: 'Cette catégorie n\'existe pas ou est vide.', ephemeral: true });
         }
 
         let message = '';
