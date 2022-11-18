@@ -96,7 +96,7 @@ module.exports = {
                 }
             } else if (categorie === 'arabesque') {
                 const footer = await footerDB.getFooter(item.id_item);
-                const footers = await footerDB.getFooterFromUserWithName(interaction.user.id, sticker.name);
+                const footers = await footerDB.getFooterFromUserWithName(interaction.user.id, footer.name);
                 if (footers.length > 0) {
                     message += '**~~' + footer.name + '~~** - possédé\n';
                 } else {
