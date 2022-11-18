@@ -43,7 +43,7 @@ module.exports = {
                 }
                 const sticker = stickers[0];
 
-                const product = await boutiqueDB.getProductByIdItem(sticker.id_sticker);
+                const product = await boutiqueDB.getProductByIdItem(sticker.id_sticker, categorie);
                 if (product === null) {
                     return await interaction.reply({ content:'Ce sticker n\'est pas en vente.', ephemeral: true });
                 }
@@ -65,7 +65,7 @@ module.exports = {
                 }
                 const footer = footer[0];
 
-                const product = await boutiqueDB.getProductByIdItem(footer.id_footer);
+                const product = await boutiqueDB.getProductByIdItem(footer.id_footer, categorie);
                 if (product === null) {
                     return await interaction.reply({ content:'Cette arabesque n\'est pas en vente.', ephemeral: true });
                 }

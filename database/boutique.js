@@ -9,9 +9,9 @@ module.exports = {
         }
         return null;
     },
-    getProductByIdItem: async function (id_item) {
+    getProductByIdItem: async function (id_item, type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Product" WHERE id_item = $1', [id_item]);
+        const results = await pool.query('SELECT * FROM "Product" WHERE id_item = $1 AND type = $2', [id_item, type]);
         if (results.rows.length > 0) {
             return results.rows[0];
         }
