@@ -75,7 +75,7 @@ module.exports = {
 
         await channel.permissionOverwrites.create(interaction.member.id, {ViewChannel: true, SendMessages: false});
 
-        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender, sender.id_footer);
+        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
