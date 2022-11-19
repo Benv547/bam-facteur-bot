@@ -27,6 +27,11 @@ module.exports = {
         let content = interaction.fields.getTextInputValue('textMessage');
         content = this.transformEmojiToDiscordEmoji(interaction.guild, content);
 
+        content = content.replace(/<@&/g, '$%@&#$');
+        content = content.replace(/<@/g, '$%@&#$');
+        content = content.replace('@everyone', '$%@&#$');
+        content = content.replace('@here', '$%@&#$');
+
         // Create buttons to upvote and downvote and warn
         const row = new ActionRowBuilder()
             .addComponents(
