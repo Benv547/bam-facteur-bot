@@ -75,9 +75,6 @@ module.exports = {
         // Send message
         const message = await webhook.send({ content: content, username: profile.signature + ' anonyme#' + randNumber, avatarURL: profile.image_url, components: [row] });
 
-        // Send embed
-        const button = await interaction.channel.send({ content: '', components: [row] });
-
         // Save message id in database
         await message_ileDB.insertMessage(message.id, userId.id_user, interaction.channel.id, interaction.guild.id, content);
 
@@ -93,10 +90,17 @@ module.exports = {
             } catch {}
         }
 
-        // fetch message
-        const messageToDelete = await interaction.channel.messages.fetch(interaction.message.id);
-        // Delete message
-        await messageToDelete.delete();
+        // delete all message from the user
+        await interaction.channel.messages.fetch({ limit: 10 }).then(messages => {
+            messages.forEach(message => {
+                if (message.author.id == 774024235261362197) {
+                    message.delete();
+                }
+            });
+        });
+
+        // Send embed
+        const button = await interaction.channel.send({ content: '', components: [row] });
     },
 
     transformEmojiToDiscordEmoji: function (guild, text) {
