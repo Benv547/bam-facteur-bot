@@ -79,7 +79,7 @@ module.exports = {
         await message_ileDB.insertMessage(message.id, userId.id_user, interaction.channel.id, interaction.guild.id, content);
 
         if (!finded) {
-            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **10 pièces d'or**.", ephemeral: true });
+            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **" + price + " pièces d'or**.", ephemeral: true });
         } else {
             try {
                 await interaction.update({
