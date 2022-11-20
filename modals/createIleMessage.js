@@ -17,7 +17,7 @@ module.exports = {
             await userDB.createUser(interaction.user.id, 0, 0);
         }
 
-        const price = 10;
+        const price = 5;
         if(!await orAction.reduce(interaction.user.id, price)) {
             const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour envoyer un message ! Economisez **' + price + ' pièces d\'or** et revenez me voir !', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
