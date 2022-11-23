@@ -23,6 +23,20 @@ module.exports = {
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 
+        // Fetch user
+        const user_profileId = await user_ileDB.get_id_profile(interaction.user.id);
+        let profile = null;
+        let finded = false;
+        if (user_profileId == null) {
+            let randomProfileId = await profile_ileDB.getRandomProfileId();
+            // Add the user to the database
+            await user_ileDB.createUser(interaction.user.id, interaction.channel.id, randomProfileId);
+            profile = await profile_ileDB.getProfile(randomProfileId);
+        } else {
+            finded = true;
+            profile = await profile_ileDB.getProfile(user_profileId);
+        }
+
         if (!finded) {
             await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **" + price + " pièces d'or**.", ephemeral: true });
         } else {
@@ -56,19 +70,6 @@ module.exports = {
         // Create embed
         //const embed = createEmbeds.createFullEmbed("", content, null, null, 0x2F3136, null, false);
 
-        // Fetch user
-        const user_profileId = await user_ileDB.get_id_profile(interaction.user.id);
-        let profile = null;
-        let finded = false;
-        if (user_profileId == null) {
-            let randomProfileId = await profile_ileDB.getRandomProfileId();
-            // Add the user to the database
-            await user_ileDB.createUser(interaction.user.id, interaction.channel.id, randomProfileId);
-            profile = await profile_ileDB.getProfile(randomProfileId);
-        } else {
-            finded = true;
-            profile = await profile_ileDB.getProfile(user_profileId);
-        }
         const randNumber = await user_ileDB.getRandNumber(interaction.user.id);
 
         // Add author to embed
