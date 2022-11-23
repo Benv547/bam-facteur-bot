@@ -97,8 +97,11 @@ module.exports = {
         }
         return null;
     },
-
-
+    getWantedFromThreeHoursAndNotArchived: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "Wanted" WHERE "date" < NOW() - INTERVAL \'48 hours\' AND "archived" = false');
+        return results.rows;
+    },
 
 
     getWantedCountForOneWeek: async function () {

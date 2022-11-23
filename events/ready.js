@@ -8,8 +8,9 @@ const message_ileDB = require("../database/message_ile");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const birdDB = require("../database/bird");
+const wantedDB = require("../database/wanted");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole, wantedChannel} = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -204,6 +205,36 @@ module.exports = {
                     }
                 }
             }
+
+            const wanteds = await wantedDB.getWantedFromThreeHoursAndNotArchived();
+            if (wanteds !== null) {
+                for (let i = 0; i < wanteds.length; i++) {
+                    try {
+                        const guild = await client.guilds.fetch(wanteds[i].id_guild);
+                        const channel = await guild.channels.fetch(wanteds[i].id_channel);
+                        await channel.delete();
+
+                        const wChannel = await guild.channels.fetch(wantedChannel);
+                        const message = await wChannel.messages.fetch(wanteds[i].id_message);
+                        await message.delete();
+
+                        try {
+                            const sender = await guild.members.fetch(wanteds[i].id_user);
+                            //Crée l'embed
+                            const embedFlow = createEmbeds.createFullEmbed("Votre recherche a été supprimée", 'Vous n\'avez pas répondu à l\'une de vos réponses de votre avis de recherche dans les **48h** après sa publication et votre avis de recherche a été supprimé.', null, null, null, null);
+                            //Envoie l'embed crée à l'utilisateur
+                            await sender.send({content: '', embeds: [embedFlow]});
+                        } catch {}
+
+                        await wantedDB.setArchived(wanteds[i].id_channel);
+                    } catch (error) {
+                        console.log(error);
+                        await wantedDB.setArchived(wanteds[i].id_channel);
+                        continue;
+                    }
+                }
+            }
+
 
             const birds = await birdDB.getAllBirdAfterOneHour();
             if (birds !== null) {
