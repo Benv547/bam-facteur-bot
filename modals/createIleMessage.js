@@ -36,6 +36,7 @@ module.exports = {
             finded = true;
             profile = await profile_ileDB.getProfile(user_profileId);
         }
+        const randNumber = await user_ileDB.getRandNumber(interaction.user.id);
 
         if (!finded) {
             await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **" + price + " pièces d'or**.", ephemeral: true });
@@ -69,8 +70,6 @@ module.exports = {
 
         // Create embed
         //const embed = createEmbeds.createFullEmbed("", content, null, null, 0x2F3136, null, false);
-
-        const randNumber = await user_ileDB.getRandNumber(interaction.user.id);
 
         // Add author to embed
         //embed.setAuthor({ name: profile.signature + ' anonyme#' + randNumber, iconURL: profile.image_url});
