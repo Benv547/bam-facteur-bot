@@ -156,12 +156,11 @@ module.exports = {
         for (let i = 0; i < warnDetail.length; i++) {
             switch (warnDetail[i].gravity) {
                 case "abusif":
-                    textAcusateur += "😡 ";
+                    textAcusateur += "😡 " + warnDetail[i].content + "\n";
                     break;
                 default :
                     break;
             }
-            textAcusateur += warnDetail[i].content + "\n";
         }
         const nbWarnAbusSender = await sanctionDB.countDetail(sender.id, "abusif");
         const nbWarnAbus = await sanctionDB.countDetail(receiver_id, "abusif");
@@ -174,7 +173,7 @@ module.exports = {
         const channel = interaction.guild.channels.cache.get(signalement);
         // Get mod role by id
         const mod = interaction.guild.roles.cache.get(modRole);
-        const embed = createEmbeds.createFullEmbed('Nouveau signalement', '**Message :** ' + warningContent + '\n**Raison : **' + content + '\n\n**L\'accusateur a : ' + nbWarnAbusSender +'** warn abusifs\n**L\'accusé a : **' + resume + "\n**Détail de l'accusé :** \n" + text +"\n**Détail de l'accusateur :**" + textAcusateur, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Nouveau signalement', '**Message :** ' + warningContent + '\n**Raison : **' + content + '\n\n**L\'accusateur a : ' + nbWarnAbusSender +'** warn abusifs\n**L\'accusé a : **' + resume + "\n**Détail de l'accusé :** \n" + text +"\n**Détail de l'accusateur :**\n" + textAcusateur, null, null, 0x2f3136, null);
         // Send message
         const message = await channel.send({ content: mod.toString(), embeds: [embed], components: [row] });
 
