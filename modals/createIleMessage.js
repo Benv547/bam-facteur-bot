@@ -23,6 +23,18 @@ module.exports = {
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 
+        if (!finded) {
+            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **" + price + " pièces d'or**.", ephemeral: true });
+        } else {
+            try {
+                await interaction.update({
+                    content: interaction.message.content,
+                    embeds: interaction.message.embeds,
+                    components: interaction.message.components
+                });
+            } catch {}
+        }
+
         // Get content
         let content = interaction.fields.getTextInputValue('textMessage');
         content = this.transformEmojiToDiscordEmoji(interaction.guild, content);
@@ -75,20 +87,10 @@ module.exports = {
         // Send message
         const message = await webhook.send({ content: content, username: profile.signature + ' anonyme#' + randNumber, avatarURL: profile.image_url, components: [row] });
 
+        // partern = 'https:\/\/discord\.com\/channels\/([0-9]*)\/([0-9]*)\/([0-9]*)'
+
         // Save message id in database
         await message_ileDB.insertMessage(message.id, userId.id_user, interaction.channel.id, interaction.guild.id, content);
-
-        if (!finded) {
-            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages sur l'île !\n⚠️ **Attention**, chaque message te coûtera **" + price + " pièces d'or**.", ephemeral: true });
-        } else {
-            try {
-                await interaction.update({
-                    content: interaction.message.content,
-                    embeds: interaction.message.embeds,
-                    components: interaction.message.components
-                });
-            } catch {}
-        }
 
         // delete all message from the user
         await interaction.channel.messages.fetch({ limit: 10 }).then(messages => {
