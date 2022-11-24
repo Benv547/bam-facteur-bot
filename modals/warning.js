@@ -128,7 +128,9 @@ module.exports = {
         }
 
 
-
+        if (warningContent.length > 1500) {
+            warningContent = warningContent.substring(0, 1500) + "...";
+        }
 
 
         const warnDetail = await sanctionDB.getOldWarn(receiver_id);
