@@ -90,7 +90,7 @@ module.exports = {
                 const sticker = await stickerDB.getSticker(item.id_item);
                 const stickers = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker.name);
                 if (stickers.length > 0) {
-                    message += '**~~' + sticker.name + '~~** - possédé\n';
+                    message += '• **~~' + sticker.name + '~~** - possédé\n';
                 } else {
                     message += '• **' + sticker.name + '** : ' + item.price + ' pièces d\'or\n';
                 }
@@ -98,14 +98,14 @@ module.exports = {
                 const footer = await footerDB.getFooter(item.id_item);
                 const footers = await footerDB.getFooterFromUserWithName(interaction.user.id, footer.name);
                 if (footers.length > 0) {
-                    message += '**~~' + footer.name + '~~** - possédé\n';
+                    message += '• **~~' + footer.name + '~~** - possédé\n';
                 } else {
                     message += '• **' + footer.name + '** : ' + item.price + ' pièces d\'or\n';
                 }
             }
         }
 
-        const embed = createEmbeds.createFullEmbed('Boutique de Bouteille à la mer', '**Voici les items de la catégorie "__' + categorie + '__" :**\n\n' + message, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/shopping-cart_1f6d2.png', null, 0x2f3136, 'Pour acheter un item, utilisez la commande /boutique [catégorie] <item>', false);
+        const embed = createEmbeds.createFullEmbed('Boutique de Bouteille à la mer', '**Voici les items de la catégorie "__' + categorie + '__" :**\n\n' + message, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/shopping-cart_1f6d2.png', null, 0x2f3136, 'Pour acheter un item, faites /boutique [catégorie] <item> ou /voir [catégorie] [item] pour le voir.', false);
 
         // Send embed
         return await interaction.reply({ embeds: [embed], ephemeral: true });
