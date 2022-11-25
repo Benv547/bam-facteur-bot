@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle} = require('discord.js');
 const roles = require('../utils/roles.js');
 const createEmbeds = require("../utils/createEmbeds");
+const boutiqueAction = require("../utils/boutiqueAction");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -107,6 +108,9 @@ module.exports = {
                     );
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
+            } else if (interaction.options.getString('type') === 'shop') {
+                await boutiqueAction.diplayShop(interaction);
+                return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
             }
         }
         return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
