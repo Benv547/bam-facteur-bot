@@ -63,9 +63,9 @@ module.exports = {
 
             if (!types.includes(item.type)) {
                 if (types.length === 0) {
-                    await interaction.channel.send({ content: '**' + item.type.toUpperCase() + '**' });
+                    await interaction.channel.send({ content: '**' + item.type.toUpperCase() + 'S**' });
                 } else {
-                    await interaction.channel.send({ content: '** **\n\n\n**' + item.type.toUpperCase() + '**' });
+                    await interaction.channel.send({ content: '** **\n\n\n**' + item.type.toUpperCase() + 'S**' });
                 }
                 types.push(item.type);
             }
@@ -81,11 +81,11 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('buyItem_' + item.type + '_' + sticker.name)
-                            .setLabel(item.price + ' (acheter)')
+                            .setLabel(item.price + ' (' + sticker.name + ')')
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji('1045638309235404860'),
                     );
-                await interaction.channel.send({ embeds: [embed], components: [row] });
+                await interaction.channel.send({ content: "** **", embeds: [embed], components: [row] });
             } else if (item.type === 'arabesque') {
                 const footer = await footerDB.getFooter(item.id_item);
                 const embed = await createEmbeds.createBottle(textExample, randomText, 1, "Un•e illustre inconnu•e", randomHexColor, footer.id_footer);
@@ -93,11 +93,11 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('buyItem_' + item.type + '_' + footer.name)
-                            .setLabel(item.price + ' (acheter)')
+                            .setLabel(item.price + ' (' + footer.name + ')')
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji('1045638309235404860'),
                     );
-                await interaction.channel.send({ embeds: [embed], components: [row] });
+                await interaction.channel.send({ content: "** **", embeds: [embed], components: [row] });
             }
         }
     }
