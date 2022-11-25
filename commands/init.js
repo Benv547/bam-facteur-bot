@@ -109,8 +109,8 @@ module.exports = {
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'shop') {
-                await boutiqueAction.diplayShop(interaction);
-                return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                return await boutiqueAction.diplayShop(interaction);
             }
         }
         return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});

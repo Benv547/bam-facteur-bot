@@ -62,8 +62,12 @@ module.exports = {
         for (const item of items) {
 
             if (!types.includes(item.type)) {
+                if (types.length === 0) {
+                    await interaction.channel.send({ content: '**' + item.type.toUpperCase() + '**' });
+                } else {
+                    await interaction.channel.send({ content: '** **\n\n\n**' + item.type.toUpperCase() + '**' });
+                }
                 types.push(item.type);
-                await interaction.channel.send({ content: '**' + item.type.toUpperCase() + '**' });
             }
 
             const textExample = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer enim neque volutpat ac tincidunt vitae semper. Fames ac turpis egestas integer eget aliquet nibh. Faucibus purus in massa tempor nec feugiat nisl pretium fusce.";
