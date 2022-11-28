@@ -65,7 +65,8 @@ CREATE TABLE "User" (
   "nb_treasures" int NOT NULL default 0,
   "date_bottle" timestamp,
   "date_bird" timestamp,
-  "date_wanted" timestamp
+  "date_wanted" timestamp,
+  "date_treasure" timestamp
 );
 
 CREATE TABLE "Sticky" (

@@ -10,7 +10,7 @@ const userDB = require("../database/user");
 const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, vipRole, boostRole, wantedChannel} = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel} = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -36,38 +36,29 @@ module.exports = {
             // fetch channel treasure
             let channel = await guild.channels.fetch(treasure);
 
+            const usersToRemove = [];
+            const users = await userDB.getUsersWhenDateTreasureIsOlderThan20Min();
+            users.forEach((user) => {
+                usersToRemove.push(user.id_user);
+            });
+
+            let guildSize = 40;
+            while (usersToRemove.length > 0) {
+                const user = guild.members.fetch(usersToRemove.pop());
+                if (user !== null) {
+                    // remove permission to see the channel
+                    await channel.permissionOverwrites.delete(member);
+                    await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
+                }
+            }
+
             // if channel members length is > to 5% of the guild members length
             // not count bots and admins
             let channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
-            let guildSize = 40;
-            while (channelSize > guildSize) {
-                const members = await channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole));
-                const memberWithoutPresence = members.filter((member) => member.presence === null);
-                try {
-                    // choose a non bot member in the channel
-                    let member = null;
-                    if (memberWithoutPresence.size > 0) {
-                        member = memberWithoutPresence.random();
-                    } else {
-                        member = members.random();
-                    }
 
-                    // if member is not null
-                    if (member !== undefined && member !== null) {
-                        // remove permission to see the channel
-                        await channel.permissionOverwrites.delete(member);
-                        await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
-                    }
-
-                    channel = await guild.channels.fetch(treasure);
-                } catch (error) {
-                    console.log(error);
-                }
-                channelSize--;
-            }
             while (channelSize <= guildSize) {
                 // choose a non bot member in the guild
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null).random();
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && (member.roles.cache.has(memberRole)).size).random();
                 // if member is not null
                 if (member !== null) {
                     // add permission to see the channel but not send messages

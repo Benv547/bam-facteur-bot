@@ -160,5 +160,25 @@ module.exports = {
             return results.rows[0].date_wanted;
         }
         return null;
+    },
+    get_date_treasure: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "date_treasure" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].date_treasure;
+        }
+        return null;
+    },
+    getUsersWhenDateTreasureIsOlderThan20Min: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "User" WHERE "date_treasure" < NOW() - INTERVAL \'20 minutes\'');
+        if (results.rows.length > 0) {
+            return results.rows;
+        }
+        return null;
+    },
+    remove_date_treasure: async function (id_user) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "date_treasure" = NULL WHERE "id_user" = $1', [id_user]);
     }
 }
