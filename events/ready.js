@@ -45,6 +45,7 @@ module.exports = {
             }
 
             let guildSize = 40;
+            let membersLeaved = [];
             while (usersToRemove.length > 0) {
                 try {
                     const member_id = usersToRemove.pop();
@@ -53,13 +54,15 @@ module.exports = {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member_id);
                         await userDB.remove_date_treasure(member_id);
-                        await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
+                        membersLeaved.push(member.user.username);
                     }
                 }
                 catch (e) {
                     console.log(e);
                 }
             }
+            let text = `** **\n🚣️ Les illustres **${membersLeaved.join(", ")}** ont été éjecté•e de l'île !`;
+            await channel.send(text);
 
             // if channel members length is > to 5% of the guild members length
             // not count bots and admins
@@ -74,15 +77,18 @@ module.exports = {
                     await channel.permissionOverwrites.edit(member, {ViewChannel: true, SendMessages: false});
 
                     // if member is online or idle
+                    let membersArrived = [];
                     if (member.presence != null && member.presence.status === "online") {
-                        await channel.send(`** **\n🏝️ Bienvenue, illustre ${member}, sur l'île !`);
+                        membersArrived.push(member);
                     } else {
-                        await channel.send(`** **\n🏝️ L'illustre **${member.user.username}** a débarqué sur l'île !`);
+                        membersArrived.push(member.user.username);
                     }
                     await userDB.set_date_treasure(member.id, new Date());
                 }
                 channelSize++;
             }
+            text = `** **\n🏝️Les illustres **${membersArrived.join(", ")}** ont rejoint l'île !`;
+            await channel.send(text);
 
             // choose random number between 1 and 100
             const random = Math.floor(Math.random() * 100) + 1;
