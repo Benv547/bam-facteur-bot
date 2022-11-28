@@ -52,7 +52,7 @@ module.exports = {
                     if (member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member_id);
-                        await channel.send(`** **\n🚣 L'illustre **${member.username}** a été éjecté•e de l'île !`);
+                        await channel.send(`** **\n🚣 L'illustre **${member}** a été éjecté•e de l'île !`);
                     }
                 }
                 catch (e) {
