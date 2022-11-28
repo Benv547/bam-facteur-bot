@@ -48,11 +48,11 @@ module.exports = {
             while (usersToRemove.length > 0) {
                 try {
                     const member_id = usersToRemove.pop();
-                    const member = guild.members.fetch(member_id);
+                    const member = await guild.members.fetch(member_id);
                     if (member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member_id);
-                        await channel.send(`** **\n🚣 L'illustre **${member}** a été éjecté•e de l'île !`);
+                        await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
                     }
                 }
                 catch (e) {
