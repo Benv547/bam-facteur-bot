@@ -38,9 +38,11 @@ module.exports = {
 
             const usersToRemove = [];
             const users = await userDB.getUsersWhenDateTreasureIsOlderThan20Min();
-            users.forEach((user) => {
-                usersToRemove.push(user.id_user);
-            });
+            if (users !== null || users.length > 0) {
+                users.forEach((user) => {
+                    usersToRemove.push(user.id_user);
+                });
+            }
 
             let guildSize = 40;
             while (usersToRemove.length > 0) {
@@ -58,7 +60,7 @@ module.exports = {
 
             while (channelSize <= guildSize) {
                 // choose a non bot member in the guild
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && (member.roles.cache.has(memberRole)).size).random();
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.roles.cache.has(memberRole)).random();
                 // if member is not null
                 if (member !== null) {
                     // add permission to see the channel but not send messages
