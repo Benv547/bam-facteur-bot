@@ -52,6 +52,7 @@ module.exports = {
                     if (member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member_id);
+                        await userDB.remove_date_treasure(member_id);
                         await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
                     }
                 }
