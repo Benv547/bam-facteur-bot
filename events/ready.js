@@ -46,12 +46,17 @@ module.exports = {
 
             let guildSize = 40;
             while (usersToRemove.length > 0) {
-                const member_id = usersToRemove.pop();
-                const member = guild.members.fetch(member_id);
-                if (member !== null) {
-                    // remove permission to see the channel
-                    await channel.permissionOverwrites.delete(member_id);
-                    await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
+                try {
+                    const member_id = usersToRemove.pop();
+                    const member = guild.members.fetch(member_id);
+                    if (member !== null) {
+                        // remove permission to see the channel
+                        await channel.permissionOverwrites.delete(member_id);
+                        await channel.send(`** **\n🚣 L'illustre **${member.username}** a été éjecté•e de l'île !`);
+                    }
+                }
+                catch (e) {
+                    console.log(e);
                 }
             }
 
