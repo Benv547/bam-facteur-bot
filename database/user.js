@@ -175,7 +175,7 @@ module.exports = {
         if (results.rows.length > 0) {
             return results.rows;
         }
-        return null;
+        return [];
     },
     remove_date_treasure: async function (id_user) {
         const pool = db.getPool();
