@@ -46,8 +46,8 @@ module.exports = {
 
             let guildSize = 40;
             while (usersToRemove.length > 0) {
-                const user = guild.members.fetch(usersToRemove.pop());
-                if (user !== null) {
+                const member = guild.members.fetch(usersToRemove.pop());
+                if (member !== null) {
                     // remove permission to see the channel
                     await channel.permissionOverwrites.delete(member);
                     await channel.send(`** **\n🚣 L'illustre **${member.user.username}** a été éjecté•e de l'île !`);
