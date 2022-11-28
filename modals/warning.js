@@ -154,11 +154,13 @@ module.exports = {
             }
             text += warnDetail[i].content + "\n";
         }
+
+        const warnSenderDetail = await sanctionDB.getOldWarn(sender.id);
         let textAcusateur = "";
-        for (let i = 0; i < warnDetail.length; i++) {
-            switch (warnDetail[i].gravity) {
+        for (let i = 0; i < warnSenderDetail.length; i++) {
+            switch (warnSenderDetail[i].gravity) {
                 case "abusif":
-                    textAcusateur += "😡 " + warnDetail[i].content + "\n";
+                    textAcusateur += "😡 " + warnSenderDetail[i].content + "\n";
                     break;
                 default :
                     break;
