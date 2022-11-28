@@ -69,6 +69,7 @@ module.exports = {
                     // if member is online or idle
                     if (member.presence != null && member.presence.status === "online") {
                         await channel.send(`** **\n🏝️ Bienvenue, illustre ${member}, sur l'île !`);
+                        await userDB.set_date_treasure(member.id, new Date());
                     } else {
                         await channel.send(`** **\n🏝️ L'illustre **${member.user.username}** a débarqué sur l'île !`);
                     }

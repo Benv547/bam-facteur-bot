@@ -161,6 +161,10 @@ module.exports = {
         }
         return null;
     },
+    set_date_treasure: async function (id_user, date) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "date_treasure" = $1 WHERE "id_user" = $2', [date, id_user]);
+    },
     get_date_treasure: async function (id_user) {
         const pool = db.getPool();
         const results = await pool.query('SELECT "date_treasure" FROM "User" WHERE id_user = $1', [id_user]);
