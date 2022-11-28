@@ -68,6 +68,7 @@ module.exports = {
             // not count bots and admins
             let channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
 
+            let membersArrived = [];
             while (channelSize <= guildSize) {
                 // choose a non bot member in the guild
                 const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.roles.cache.has(memberRole)).random();
@@ -77,7 +78,6 @@ module.exports = {
                     await channel.permissionOverwrites.edit(member, {ViewChannel: true, SendMessages: false});
 
                     // if member is online or idle
-                    let membersArrived = [];
                     if (member.presence != null && member.presence.status === "online") {
                         membersArrived.push(member);
                     } else {
