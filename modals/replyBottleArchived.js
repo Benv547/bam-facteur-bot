@@ -4,8 +4,11 @@ module.exports = {
     name: 'replyBottleArchived',
     async execute(interaction) {
 
-        const idBottle = interaction.fields.getTextInputValue('idBottle');
+        const idBottle = interaction.customId.split('_')[1];
         const content = interaction.fields.getTextInputValue('textBottle');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
 
         const sender = interaction.member;
 

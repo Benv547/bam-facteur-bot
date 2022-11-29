@@ -16,6 +16,9 @@ module.exports = {
     async execute(interaction) {
 
         const content = interaction.fields.getTextInputValue('textWanted');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
 
         let sender = await userDB.getUser(interaction.member.id);
         if (sender === null) {

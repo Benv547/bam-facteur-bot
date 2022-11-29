@@ -9,6 +9,9 @@ module.exports = {
     async execute(interaction) {
 
         const content = interaction.fields.getTextInputValue('textTicket');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
 
         // Create a button to reply to the ticket
         const rowMod = new ActionRowBuilder()

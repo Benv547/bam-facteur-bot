@@ -15,6 +15,12 @@ module.exports = {
             await userDB.createUser(interaction.user.id, 0, 0);
         }
 
+        // Get content
+        const content = interaction.fields.getTextInputValue('textOpinion');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
+
         // Check if the user dont have a opinion
         const opinion = await opinionDB.getOpinion(interaction.user.id);
         if (opinion !== null) {
@@ -37,9 +43,6 @@ module.exports = {
         } else {
             await xpAction.increment(interaction.guild, interaction.member.id, 250);
         }
-
-        // Get content
-        const content = interaction.fields.getTextInputValue('textOpinion');
 
         // Create embed
         const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x2F3136, null);

@@ -16,14 +16,17 @@ module.exports = {
             await userDB.createUser(interaction.user.id, 0, 0);
         }
 
+        const content = interaction.fields.getTextInputValue('textTicket');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
+
         // Check if user is already in a ticket
         const userTicket = await ticketDB.get_id_channel(interaction.user.id);
         if (userTicket) {
             await interaction.reply({ content: '⚠️ Vous avez déjà un ticket en cours.', ephemeral: true });
             return;
         }
-
-        const content = interaction.fields.getTextInputValue('textTicket');
 
         const sender = interaction.member;
 

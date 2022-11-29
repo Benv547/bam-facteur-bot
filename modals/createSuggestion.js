@@ -16,6 +16,9 @@ module.exports = {
 
         // Get content
         const content = interaction.fields.getTextInputValue('textSuggestion');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
 
         // Create buttons to upvote and downvote and warn
         const row = new ActionRowBuilder()

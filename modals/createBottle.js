@@ -11,6 +11,9 @@ module.exports = {
         global.semaphore.push(interaction.user.id);
 
         const content = interaction.fields.getTextInputValue('textBottle');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
 
         const sender = interaction.member;
 

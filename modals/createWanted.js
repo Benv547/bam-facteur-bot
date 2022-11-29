@@ -21,6 +21,10 @@ module.exports = {
             return await interaction.reply({ content: 'Le message doit commencer par "Je recherche" !\nVotre message : ' + content, ephemeral: true });
         }
 
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
+
         global.semaphore.push(interaction.user.id);
 
         let sender = await userDB.getUser(interaction.member.id);

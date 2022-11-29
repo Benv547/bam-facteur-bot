@@ -20,6 +20,9 @@ module.exports = {
         global.semaphore.push(interaction.user.id);
 
         const content = interaction.fields.getTextInputValue('textBird');
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
 
         await interaction.reply({ content: 'Votre oiseau a été envoyé.', ephemeral: true });
 

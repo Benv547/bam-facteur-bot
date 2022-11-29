@@ -17,6 +17,13 @@ module.exports = {
             await userDB.createUser(interaction.user.id, 0, 0);
         }
 
+        // Get content
+        let content = interaction.fields.getTextInputValue('textMessage');
+
+        if (content.trim() === '') {
+            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+        }
+
         const price = 5;
         if(!await orAction.reduce(interaction.user.id, price)) {
             const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour envoyer un message ! Economisez **' + price + ' pièces d\'or** et revenez me voir !', null, null, null, null);
@@ -50,8 +57,6 @@ module.exports = {
             } catch {}
         }
 
-        // Get content
-        let content = interaction.fields.getTextInputValue('textMessage');
         content = this.transformEmojiToDiscordEmoji(interaction.guild, content);
 
         content = content.replace(/<@&/g, '$%@&#$');
