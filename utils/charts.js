@@ -132,10 +132,10 @@ module.exports = {
         datasetArchived.borderColor = 'rgb(215,66,84)';
         datasetArchived.backgroundColor = 'rgba(215,66,84, .25)';
         datasets.push(datasetArchived);
-        const datasetTerminated = this.setupDataSetFromSQL('count', terminated, 'Terminées', labels);
-        datasetTerminated.borderColor = 'rgb(155,27,27)';
-        datasetTerminated.backgroundColor = 'rgba(155,27,27, .25)';
-        datasets.push(datasetTerminated);
+        //const datasetTerminated = this.setupDataSetFromSQL('count', terminated, 'Terminées', labels);
+        //datasetTerminated.borderColor = 'rgb(155,27,27)';
+        //datasetTerminated.backgroundColor = 'rgba(155,27,27, .25)';
+        //datasets.push(datasetTerminated);
         return await this.createChart(labels, datasets);
     },
     createChartForMessage: async function (data) {
