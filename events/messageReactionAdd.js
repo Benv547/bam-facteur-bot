@@ -11,9 +11,6 @@ module.exports = {
         if (messageReaction.emoji.toString() !== '⚠️') {
             return;
         }
-        if (messageReaction.message.channel.id !== ile) {
-            return;
-        }
 
         await messageReaction.users.remove(member.id);
 
@@ -53,14 +50,20 @@ module.exports = {
             }
         }
 
+        let receiver_id = "";
+        let warningContent = "";
+
         const messageIle = await messageIleDB.getMessage(messageReaction.message.id);
-
-        if (messageIle === null) {
-            return;
+        if (messageIle !== null) {
+            receiver_id = messageIle.id_user;
+            warningContent = messageIle.content;
+        } else {
+            if (messageReaction.message.author.bot) {
+                return;
+            }
+            receiver_id = messageReaction.message.author.id;
+            warningContent = messageReaction.message.content;
         }
-
-        const receiver_id = messageIle.id_user;
-        const warningContent = messageIle.content;
 
         const warnDetail = await sanctionDB.getOldWarn(receiver_id);
         let text = " ";
@@ -100,7 +103,7 @@ module.exports = {
         } catch {}
 
         // Save signalement to DB
-        await signalementDB.insertSignalement(message.id, member.id, receiver_id, content, "ileMessage");
+        await signalementDB.insertSignalement(message.id, member.id, receiver_id, content, "message_ile");
         await signalementDB.insertSignalementIleMessage(message.id, messageReaction.message.id, messageReaction.message.channelId);
 
     }

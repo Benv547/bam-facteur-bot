@@ -50,10 +50,10 @@ module.exports = {
                 try {
                     const member_id = usersToRemove.pop();
                     const member = await guild.members.fetch(member_id);
+                    await userDB.remove_date_treasure(member_id);
                     if (member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member_id);
-                        await userDB.remove_date_treasure(member_id);
                         membersLeaved.push(member.user.username);
                     }
                 }
@@ -62,7 +62,9 @@ module.exports = {
                 }
             }
             let text = `** **\n🚣️ Les illustres **${membersLeaved.join(", ")}** ont été éjecté•e de l'île !`;
-            await channel.send(text);
+            if (membersLeaved.length > 0) {
+                await channel.send(text);
+            }
 
             // if channel members length is > to 5% of the guild members length
             // not count bots and admins
@@ -88,7 +90,9 @@ module.exports = {
                 channelSize++;
             }
             text = `** **\n🏝️Les illustres **${membersArrived.join(", ")}** ont rejoint l'île !`;
-            await channel.send(text);
+            if (membersArrived.length > 0) {
+                await channel.send(text);
+            }
 
             // choose random number between 1 and 100
             const random = Math.floor(Math.random() * 100) + 1;

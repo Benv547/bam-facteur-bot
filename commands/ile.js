@@ -28,7 +28,7 @@ module.exports = {
         const channelVoice = await interaction.guild.channels.fetch(ileVoice);
 
         // add user to channel
-        await channel.permissionOverwrites.edit(interaction.member, {ViewChannel: true, SendMessages: false});
+        await channel.permissionOverwrites.edit(interaction.member, {ViewChannel: true, SendMessages: true});
         await channelVoice.permissionOverwrites.edit(interaction.member, {ViewChannel: true, Connect: true});
         return interaction.reply({content: 'Vous avez rejoint l\'île !', ephemeral: true});
     },
