@@ -98,11 +98,21 @@ module.exports = {
 
             // choose random number between 1 and 100
             const random = Math.floor(Math.random() * 100) + 1;
-            if (random < 10) {
+            if (random < 3) {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                            .setCustomId('treasureCoffre')
+                            .setCustomId('treasure_carnet')
+                            .setLabel('Ouvrir le carnet')
+                            .setStyle(ButtonStyle.Primary),
+                    );
+                const embed = createEmbeds.createFullEmbed('', 'Un **carnet** a été trouvé sur la plage, **ouvrez-le vite** !', null, null, 0x2F3136, null);
+                await channel.send({ content: '', embeds: [embed], components: [row] });
+            } else if (random < 10) {
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('treasure_coffre')
                             .setLabel('Ouvrir le coffre')
                             .setStyle(ButtonStyle.Primary),
                     );
@@ -112,7 +122,7 @@ module.exports = {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                            .setCustomId('treasureValise')
+                            .setCustomId('treasure_valise')
                             .setLabel('Défaire la valise')
                             .setStyle(ButtonStyle.Primary),
                     );
@@ -122,7 +132,7 @@ module.exports = {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
-                            .setCustomId('treasureBotte')
+                            .setCustomId('treasure_botte')
                             .setLabel('Vider la botte')
                             .setStyle(ButtonStyle.Primary),
                     );

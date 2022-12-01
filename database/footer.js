@@ -30,5 +30,13 @@ module.exports = {
         const pool = db.getPool();
         const results = await pool.query('SELECT * FROM "Footer" WHERE "name" ILIKE $1', [`%${name}%`]);
         return results.rows;
+    },
+    getRandomWinnableFooter: async function (drop) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "Footer" WHERE "winnable" = true AND "sharable_percentage" >= $1 ORDER BY RANDOM() LIMIT 1', [drop]);
+        if (results.rows.length === 0) {
+            return null;
+        }
+        return results.rows[0];
     }
 }

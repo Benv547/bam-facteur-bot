@@ -38,5 +38,11 @@ module.exports = {
         const pool = db.getPool();
         const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
         return results.rows;
+    },
+
+    getHeatMapByHoursAndWeekDays: async function (type) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT SUM(score)/COUNT(*) as count, EXTRACT(HOUR FROM date) AS hour, EXTRACT(DOW FROM date) AS weekday FROM "Record" WHERE "type" = $1 GROUP BY hour, weekday ORDER BY hour ASC, weekday ASC', [type]);
+        return results.rows;
     }
 };
