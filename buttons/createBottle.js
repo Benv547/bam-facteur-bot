@@ -1,6 +1,7 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
 const roles = require("../utils/roles");
 const userDB = require("../database/user");
+const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
     name: 'createBottle',
@@ -44,7 +45,9 @@ module.exports = {
             const diff = Math.abs(new Date() - new Date(dateLastBottle));
             const diffMinutes = Math.ceil(diff / (1000 * 60));
             if (diffMinutes < waitMinutes) {
-                return await interaction.reply({ content: `Vous devez attendre ${waitMinutes - diffMinutes} minutes avant de pouvoir créer une nouvelle bouteille.`, ephemeral: true });
+                const timeToWait = waitMinutes - diffMinutes;
+                const embed = createEmbeds.createFullEmbed('', '**Vous pourrez créer une nouvelle bouteille <t:' + (Math.round(new Date().getTime() / 1000) + 60 * timeToWait) + ':R>**', null, null, null, null, false);
+                return await interaction.reply({ embeds: [embed], ephemeral: true });
             }
         }
 

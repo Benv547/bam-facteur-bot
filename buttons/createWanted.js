@@ -1,6 +1,7 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
 const roles = require("../utils/roles");
 const userDB = require("../database/user");
+const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
     name: 'createWanted',
@@ -32,19 +33,21 @@ module.exports = {
 
         // If last bottle date is less than 5minutes
         const dateLastBottle = await userDB.get_date_wanted(interaction.user.id);
-        let waitMinutes = 120;
+        let waitMinutes = 60;
 
         if (await roles.userIsBooster(interaction.member)) {
-            waitMinutes = 30;
+            waitMinutes = 15;
         } else if (await roles.userIsVip(interaction.member)) {
-            waitMinutes = 60;
+            waitMinutes = 30;
         }
 
         if (dateLastBottle) {
             const diff = Math.abs(new Date() - new Date(dateLastBottle));
             const diffMinutes = Math.ceil(diff / (1000 * 60));
             if (diffMinutes < waitMinutes) {
-                return await interaction.reply({ content: `Vous devez attendre ${waitMinutes - diffMinutes} minutes avant de pouvoir créer une nouvelle recherche.`, ephemeral: true });
+                const timeToWait = waitMinutes - diffMinutes;
+                const embed = createEmbeds.createFullEmbed('', '**Vous pourrez créer une nouvelle recherche <t:' + (Math.round(new Date().getTime() / 1000) + 60 * timeToWait) + ':R>**', null, null, null, null, false);
+                return await interaction.reply({ embeds: [embed], ephemeral: true });
             }
         }
 

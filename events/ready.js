@@ -68,7 +68,7 @@ module.exports = {
 
             // if channel members length is > to 5% of the guild members length
             // not count bots and admins
-            let channelSize = channel.members.filter((member) => !member.user.bot && !member.roles.cache.has(adminRole)).size;
+            let channelSize = await userDB.getNumberOfUsersHasTreasureDateNotNull();
 
             let membersArrived = [];
             while (channelSize <= guildSize) {

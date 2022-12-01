@@ -173,6 +173,14 @@ module.exports = {
         }
         return null;
     },
+    getNumberOfUsersHasTreasureDateNotNull: async function () {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) FROM "User" WHERE "date_treasure" IS NOT NULL');
+        if (results.rows.length > 0) {
+            return results.rows[0].count;
+        }
+        return 0;
+    },
     getUsersWhenDateTreasureIsOlderThan20Min: async function () {
         const pool = db.getPool();
         const results = await pool.query('SELECT * FROM "User" WHERE "date_treasure" < NOW() - INTERVAL \'20 minutes\'');
