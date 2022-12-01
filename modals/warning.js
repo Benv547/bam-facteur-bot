@@ -177,7 +177,7 @@ module.exports = {
         const channel = interaction.guild.channels.cache.get(signalement);
         // Get mod role by id
         const mod = interaction.guild.roles.cache.get(modRole);
-        const embed = createEmbeds.createFullEmbed('Nouveau signalement', '**Message :** ' + warningContent + '\n\n**Raison : **' + content + '\n\n**L\'accusé a : **' + resume + '\n**Détail de l\'accusé :** \n' + text +'\n**L\'accusateur a : ' + nbWarnAbusSender +'** warn abusifs\n**Détail de l\'accusateur :**\n' + textAcusateur, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Signalement dans ' + interaction.channel.name, '**Message :** ' + warningContent + '\n\n**Raison : **' + content + '\n\n**L\'accusé a : **' + resume + '\n**Détail de l\'accusé :** \n' + text +'\n**L\'accusateur a : ' + nbWarnAbusSender +'** warn abusifs\n**Détail de l\'accusateur :**\n' + textAcusateur, null, null, 0x2f3136, null);
         // Send message
         const message = await channel.send({ content: mod.toString(), embeds: [embed], components: [row] });
 
