@@ -102,17 +102,17 @@ module.exports = {
     },
     getBottleCountEachDayForOneWeek: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleArchivedCountEachDayForOneWeek: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleTerminatedCountEachDayForOneWeek: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' AND "terminated" = true GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'7 days\' AND "terminated" = true GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -123,17 +123,17 @@ module.exports = {
     },
     getBottleCountEachDayForOneMonth: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleArchivedCountEachDayForOneMonth: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleTerminatedCountEachDayForOneMonth: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' AND "terminated" = true GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bottle" WHERE date > NOW() - INTERVAL \'30 days\' AND "terminated" = true GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -144,17 +144,17 @@ module.exports = {
     },
     getBottleCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY-MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleArchivedCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY-MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleTerminatedCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY-MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "terminated" = true GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "terminated" = true GROUP BY time ORDER BY time ASC');
         return results.rows;
     }
 }

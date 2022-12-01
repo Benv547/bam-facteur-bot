@@ -14,7 +14,7 @@ module.exports = {
     },
     getCountEachDayForOneWeek: async function (type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'dd/MM\') AS time FROM "Record" WHERE date > NOW() - INTERVAL \'7 days\' AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
+        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'MM/dd\') AS time FROM "Record" WHERE date > NOW() - INTERVAL \'7 days\' AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
         return results.rows;
     },
 
@@ -25,7 +25,7 @@ module.exports = {
     },
     getCountEachDayForOneMonth: async function (type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'dd/MM\') AS time FROM "Record" WHERE date > NOW() - INTERVAL \'30 days\' AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
+        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'MM/dd\') AS time FROM "Record" WHERE date > NOW() - INTERVAL \'30 days\' AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
         return results.rows;
     },
 
@@ -36,7 +36,7 @@ module.exports = {
     },
     getCountEachMonthForThisYear: async function (type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'MM/YYYY\') AS time FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
+        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
         return results.rows;
     }
 };

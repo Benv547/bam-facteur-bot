@@ -26,7 +26,7 @@ module.exports = {
     },
     getSanctionCountEachDayForOneWeek: async function (gravity) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Sanctions" WHERE date > NOW() - INTERVAL \'7 days\' AND "gravity" = $1 GROUP BY time ORDER BY time ASC', [gravity]);
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Sanctions" WHERE date > NOW() - INTERVAL \'7 days\' AND "gravity" = $1 GROUP BY time ORDER BY time ASC', [gravity]);
         return results.rows;
     },
 
@@ -37,7 +37,7 @@ module.exports = {
     },
     getSanctionCountEachDayForOneMonth: async function (gravity) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Sanctions" WHERE date > NOW() - INTERVAL \'30 days\' AND "gravity" = $1 GROUP BY time ORDER BY time ASC', [gravity]);
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Sanctions" WHERE date > NOW() - INTERVAL \'30 days\' AND "gravity" = $1 GROUP BY time ORDER BY time ASC', [gravity]);
         return results.rows;
     },
 

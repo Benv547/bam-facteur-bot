@@ -46,7 +46,7 @@ module.exports = {
     },
     getMessageCountEachDayForOneWeek: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Message" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Message" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -57,7 +57,7 @@ module.exports = {
     },
     getMessageCountEachDayForOneMonth: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Message" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Message" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -68,7 +68,7 @@ module.exports = {
     },
     getMessageCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/YYYY\') AS time FROM "Message" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Message" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
         return results.rows;
     }
 };

@@ -75,7 +75,7 @@ module.exports = {
     },
     getBirdCountEachDayForOneWeek: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bird" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bird" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -86,7 +86,7 @@ module.exports = {
     },
     getBirdCountEachDayForOneMonth: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "Bird" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "Bird" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -97,7 +97,7 @@ module.exports = {
     },
     getBirdCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/YYYY\') AS time FROM "Bird" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bird" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -109,7 +109,7 @@ module.exports = {
     },
     getReactionCountEachDayForOneWeek: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "BirdReaction" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "BirdReaction" WHERE date > NOW() - INTERVAL \'7 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -120,7 +120,7 @@ module.exports = {
     },
     getReactionCountEachDayForOneMonth: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'dd/MM\') AS time FROM "BirdReaction" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/dd\') AS time FROM "BirdReaction" WHERE date > NOW() - INTERVAL \'30 days\' GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
 
@@ -131,7 +131,7 @@ module.exports = {
     },
     getReactionCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'MM/YYYY\') AS time FROM "BirdReaction" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "BirdReaction" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
         return results.rows;
     }
 };
