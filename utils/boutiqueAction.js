@@ -76,7 +76,7 @@ module.exports = {
 
             if (item.type === 'sticker') {
                 const sticker = await stickerDB.getSticker(item.id_item);
-                const embed = await createEmbeds.createBottle(textExample, randomText, sticker.id_sticker, "Un•e illustre inconnu•e", randomHexColor, null);
+                const embed = await createEmbeds.createBottle(textExample, randomText, sticker.id_sticker, "Un•e illustre inconnu•e", randomHexColor, 8);
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
