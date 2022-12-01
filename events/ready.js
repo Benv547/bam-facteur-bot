@@ -44,7 +44,8 @@ module.exports = {
                 });
             }
 
-            let guildSize = 40;
+            let maxGuildSize = 20;
+            let maxEnterSize = 5;
             let membersLeaved = [];
             while (usersToRemove.length > 0) {
                 try {
@@ -71,7 +72,7 @@ module.exports = {
             let channelSize = await userDB.getNumberOfUsersHasTreasureDateNotNull();
 
             let membersArrived = [];
-            while (channelSize <= guildSize) {
+            while (channelSize <= maxGuildSize && maxEnterSize > 0) {
                 // choose a non bot member in the guild
                 const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.roles.cache.has(memberRole)).random();
                 // if member is not null
@@ -88,6 +89,7 @@ module.exports = {
                     await userDB.set_date_treasure(member.id, new Date());
                 }
                 channelSize++;
+                maxEnterSize--;
             }
             text = `** **\n🏝️Les illustres **${membersArrived.join(", ")}** ont rejoint l'île !`;
             if (membersArrived.length > 0) {
