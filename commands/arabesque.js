@@ -21,7 +21,13 @@ module.exports = {
                 message = 'Voici vos arabesques :\n';
                 for (const footer of footers) {
                     const footer_item = await footerDB.getFooter(footer.id_footer);
-                    message += '• **' + footer_item.name + '**\n';
+                    let rarity = 'commun';
+                    if (footer_item.sharable_percentage == 0) rarity = 'trophée'; // trophée
+                    else if (footer_item.sharable_percentage <= 0.01) rarity = 'mythique'; // 1%
+                    else if (footer_item.sharable_percentage <= 0.1) rarity = 'légendaire'; // 10%
+                    else if (footer_item.sharable_percentage <= 0.25) rarity = 'épic'; // 25%
+                    else if (footer_item.sharable_percentage <= 0.5) rarity = 'rare'; // 50%
+                    message += '• **' + footer_item.name + '** (*' + rarity + '*)\n';
                 }
                 message += '\n';
                 const current_footer = await userDB.get_id_footer(interaction.user.id);
