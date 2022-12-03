@@ -26,7 +26,7 @@ module.exports = {
             }
             if (await orAction.reduce(interaction.user.id, product.price)) {
                 await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guildId);
-                return await interaction.reply({ content:'Vous avez acheté le sticker **' + sticker.name + '** pour **' + product.price + ' pièces d\'or**.', ephemeral: true });
+                return await interaction.reply({ content:'Vous avez acheté le sticker **' + sticker.name + '** pour **' + product.price + ' <:piece:1045638309235404860>**.', ephemeral: true });
             }
             return await interaction.reply({ content:'Vous n\'avez pas assez d\'or pour acheter ce sticker.', ephemeral: true });
         } else if (categorie == 'arabesque') {
@@ -48,7 +48,7 @@ module.exports = {
             }
             if (await orAction.reduce(interaction.user.id, product.price)) {
                 await footerDB.giveFooterToUser(interaction.user.id, footer.id_footer, interaction.guildId);
-                return await interaction.reply({ content:'Vous avez acheté l\'arabesque **' + footer.name + '** pour **' + product.price + ' pièces d\'or**.', ephemeral: true });
+                return await interaction.reply({ content:'Vous avez acheté l\'arabesque **' + footer.name + '** pour **' + product.price + ' <:piece:1045638309235404860>**.', ephemeral: true });
             }
             return await interaction.reply({ content:'Vous n\'avez pas assez d\'or pour acheter cette arabesque.', ephemeral: true });
         }

@@ -35,12 +35,12 @@ module.exports = {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 10) + 1;
                 await orAction.increment(interaction.user.id, random);
-                gain = random + " pièce(s) d'or";
+                gain = random + " <:piece:1045638309235404860>";
             } else {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 25) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " point(s) d'expérience";
+                gain = random + " <:xp:851123277497237544>";
             }
         }
 
@@ -50,12 +50,12 @@ module.exports = {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 25) + 1;
                 await orAction.increment(interaction.user.id, random);
-                gain = random + " pièce(s) d'or";
+                gain = random + " <:piece:1045638309235404860>";
             } else if (random <= 95) {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 50) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " point(s) d'expérience";
+                gain = random + " <:xp:851123277497237544>";
             } else {
                 const randFloat = Math.random();
                 const footer = await footerDB.getRandomWinnableFooter(randFloat);
@@ -75,12 +75,12 @@ module.exports = {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 75) + 1;
                 await orAction.increment(interaction.user.id, random);
-                gain = random + " pièce(s) d'or";
+                gain = random + " <:piece:1045638309235404860>";
             } else if (random <= 90) {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 100) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " point(s) d'expérience";
+                gain = random + " <:xp:851123277497237544>";
             } else {
                 const randFloat = Math.random();
                 const sticker = await stickerDB.getRandomWinnableSticker(randFloat);

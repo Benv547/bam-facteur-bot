@@ -24,7 +24,7 @@ module.exports = {
         }
 
         if(!await orAction.reduce(interaction.user.id, price)) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature !\nEconomisez **' + price + ' pièces d\'or** et revenez me voir !', null, null, null, null);
+            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature !\nEconomisez **' + price + ' <:piece:1045638309235404860>** et revenez me voir !', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 

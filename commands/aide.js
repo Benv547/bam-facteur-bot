@@ -30,7 +30,7 @@ module.exports = {
                     } else if (await roles.userIsVip(interaction.member)) {
                         priceValue = Math.round(priceValue * 0.8);
                     }
-                    price = '\n\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
+                    price = '\n\n*Cette commande coûte **' + priceValue + ' <:piece:1045638309235404860>**.*';
                 }
 
                 const embed = new EmbedBuilder()
@@ -81,7 +81,7 @@ module.exports = {
                     } else if (await roles.userIsVip(interaction.member)) {
                         priceValue = Math.round(priceValue * 0.8);
                     }
-                    price = '\n*Cette commande coûte **' + priceValue + ' pièces d\'or**.*';
+                    price = '\n*Cette commande coûte **' + priceValue + ' <:piece:1045638309235404860>**.*';
                 }
                 embed.addFields({ name: name, value: command.data.description + price + '\n** **', inline: false });
             }

@@ -33,7 +33,7 @@ module.exports = {
             rankMoney+="ème"
         }
 
-        const embed = createEmbeds.createFullEmbed('Regardez comme vous êtes puissants !', 'Vous êtes **' + rankMoney +'** au classement de l\'or avec un total de **' + money + ' pièces d\'or** ! \n\n Vous êtes **' + rankXp + '** au classement de l\'XP avec un total de **' + xp + ' points d\'expérience** !', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Regardez comme vous êtes puissants !', 'Vous êtes **' + rankMoney +'** au classement de l\'or avec un total de **' + money + ' <:piece:1045638309235404860>** ! \n\n Vous êtes **' + rankXp + '** au classement de l\'XP avec un total de **' + xp + ' points d\'<:xp:851123277497237544>** !', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

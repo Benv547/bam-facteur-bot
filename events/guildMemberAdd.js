@@ -58,7 +58,7 @@ module.exports = {
                             // Send message to the inviter
                             await invite.inviter.send({
                                 content: '',
-                                embeds: [createEmbeds.createFullEmbed('Plus un !', 'Vous avez invité une nouvelle personne sur le serveur.\nVous avez gagné **250** pièces d\'or et de l\'expérience.', null, null, 0x2f3136, null)]
+                                embeds: [createEmbeds.createFullEmbed('Plus un !', 'Vous avez invité une nouvelle personne sur le serveur.\nVous avez gagné **250** <:piece:1045638309235404860> et de l\'<:xp:851123277497237544>.', null, null, 0x2f3136, null)]
                             });
                         } catch {}
                     }

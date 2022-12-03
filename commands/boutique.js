@@ -45,7 +45,7 @@ module.exports = {
                 if (stickers.length > 0) {
                     message += '• **~~' + sticker.name + '~~** - possédé\n';
                 } else {
-                    message += '• **' + sticker.name + '** : ' + item.price + ' pièces d\'or\n';
+                    message += '• **' + sticker.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
                 }
             } else if (categorie === 'arabesque') {
                 const footer = await footerDB.getFooter(item.id_item);
@@ -53,7 +53,7 @@ module.exports = {
                 if (footers.length > 0) {
                     message += '• **~~' + footer.name + '~~** - possédé\n';
                 } else {
-                    message += '• **' + footer.name + '** : ' + item.price + ' pièces d\'or\n';
+                    message += '• **' + footer.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
                 }
             }
         }

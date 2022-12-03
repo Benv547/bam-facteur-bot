@@ -6,7 +6,7 @@ const roles = require("../utils/roles");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('giveor')
-        .setDescription('Permet de donner des pièces d\'or.')
+        .setDescription('Permet de donner des <:piece:1045638309235404860>.')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')
@@ -25,7 +25,7 @@ module.exports = {
 
             // Fetch user
             const user = await interaction.guild.members.fetch(userId);
-            const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu **' + money + ' pièces d\'or** !', null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu **' + money + ' <:piece:1045638309235404860>** !', null, null, 0x2f3136, null);
 
             // Send direct message to user
             try {

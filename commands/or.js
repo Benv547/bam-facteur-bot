@@ -18,7 +18,7 @@ module.exports = {
             money = 0;
         }
 
-        const embed = createEmbeds.createFullEmbed('Quelle bourse bien remplie !', 'Votre solde est de **' + money + ' pièces d\'or** !', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Quelle bourse bien remplie !', 'Votre solde est de **' + money + ' <:piece:1045638309235404860>** !', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

@@ -14,7 +14,7 @@ module.exports = {
         if (user === null || user.xp < levels[4].xp) {
             // Fetch role
             const role = await interaction.guild.roles.fetch(levels[4].role);
-            return interaction.reply({content: 'Vous n\'avez pas assez d\'expérience pour rejoindre une île.\nRevenez me voir quand vous aurez atteint le **' + role.name + '**.', ephemeral: true});
+            return interaction.reply({content: 'Vous n\'avez pas assez d\'<:xp:851123277497237544> pour rejoindre une île.\nRevenez me voir quand vous aurez atteint le **' + role.name + '**.', ephemeral: true});
         }
 
         // fetch channel

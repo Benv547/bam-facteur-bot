@@ -6,7 +6,7 @@ const roles = require("../utils/roles");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('givexp')
-        .setDescription('Permet de donner de l\'expérience à un membre.')
+        .setDescription('Permet de donner de l\'<:xp:851123277497237544> à un membre.')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')

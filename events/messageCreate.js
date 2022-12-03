@@ -24,7 +24,7 @@ module.exports = {
                 if (user) {
                     await orAction.increment(user.id, OR_VOTE);
                     await xpAction.increment(message.guild, user.id, XP_VOTE);
-                    const embed = createEmbeds.createFullEmbed(`Merci pour votre vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' pièce(s) d\'or** et de l\'expérience.', null, null, null, null);
+                    const embed = createEmbeds.createFullEmbed(`Merci pour votre vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' <:piece:1045638309235404860>** et de l\'<:xp:851123277497237544>.', null, null, null, null);
                     return await message.channel.send({ content: '', embeds: [embed], ephemeral: true });
                 }
             }
@@ -38,7 +38,7 @@ module.exports = {
                     if (content.includes('Bump effectué !')) {
                         await orAction.increment(user.id, OR_BUMP);
                         await xpAction.increment(message.guild, user.id, XP_BUMP);
-                        const embed = createEmbeds.createFullEmbed(`Merci pour votre bump !`, user.toString()  + ', vous avez reçu **' + OR_BUMP + ' pièce(s) d\'or** et de l\'expérience.', null, null, null, null);
+                        const embed = createEmbeds.createFullEmbed(`Merci pour votre bump !`, user.toString()  + ', vous avez reçu **' + OR_BUMP + ' <:piece:1045638309235404860>** et de l\'<:xp:851123277497237544>.', null, null, null, null);
                         await message.channel.send({content: "", embeds: [embed]});
                     }
                 }

@@ -112,7 +112,7 @@ module.exports = {
                 const total = await userDB.getTotalOfMoneyAndXp();
                 if (total) {
                     textMoneyAndXp += `\n\n**${total.money}** pièces d'or sont en actuellement circulation sur le serveur.`;
-                    textMoneyAndXp += `\n**${total.xp}** points d'expérience sont en actuellement circulation sur le serveur.`;
+                    textMoneyAndXp += `\n**${total.xp}** points d'<:xp:851123277497237544> sont en actuellement circulation sur le serveur.`;
                 }
 
                 switch (periode) {
