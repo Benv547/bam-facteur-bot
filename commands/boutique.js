@@ -5,6 +5,7 @@ const footerDB = require("../database/footer");
 const boutiqueDB = require("../database/boutique");
 const boutiqueAction = require("../utils/boutiqueAction");
 const createEmbeds = require("../utils/createEmbeds");
+const roles = require("../utils/roles");
 
 module.exports = {
     public: true,
@@ -35,6 +36,17 @@ module.exports = {
 
         if (items === null || items.length == 0) {
             return await interaction.reply({ content: 'Cette catégorie n\'existe pas ou est vide.', ephemeral: true });
+        }
+
+        if (await roles.userIsBooster(interaction.member)) {
+            for (let i = 0; i < items.length; i++) {
+                items[i].price = Math.round(items[i].price * 0.5);
+            }
+        }
+        else if (await roles.userIsVip(interaction.member)) {
+            for (let i = 0; i < items.length; i++) {
+                items[i].price = Math.round(items[i].price * 0.75);
+            }
         }
 
         let message = '';

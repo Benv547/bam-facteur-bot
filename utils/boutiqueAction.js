@@ -4,6 +4,7 @@ const orAction = require("./orAction");
 const createEmbeds = require("./createEmbeds");
 const footerDB = require("../database/footer");
 const {ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const roles = require("./roles");
 
 module.exports = {
     buyItem: async function (interaction, categorie, item) {
@@ -24,6 +25,14 @@ module.exports = {
             if (product === null) {
                 return await interaction.reply({ content:'Ce sticker n\'est pas en vente.', ephemeral: true });
             }
+
+            if (await roles.userIsBooster(interaction.member)) {
+                product.price = Math.round(product.price * 0.5);
+            }
+            else if (await roles.userIsVip(interaction.member)) {
+                product.price = Math.round(product.price * 0.75);
+            }
+
             if (await orAction.reduce(interaction.user.id, product.price)) {
                 await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guildId);
                 return await interaction.reply({ content:'Vous avez acheté le sticker **' + sticker.name + '** pour **' + product.price + ' <:piece:1045638309235404860>**.', ephemeral: true });
@@ -46,6 +55,14 @@ module.exports = {
             if (product === null) {
                 return await interaction.reply({ content:'Cette arabesque n\'est pas en vente.', ephemeral: true });
             }
+
+            if (await roles.userIsBooster(interaction.member)) {
+                product.price = Math.round(product.price * 0.5);
+            }
+            else if (await roles.userIsVip(interaction.member)) {
+                product.price = Math.round(product.price * 0.75);
+            }
+
             if (await orAction.reduce(interaction.user.id, product.price)) {
                 await footerDB.giveFooterToUser(interaction.user.id, footer.id_footer, interaction.guildId);
                 return await interaction.reply({ content:'Vous avez acheté l\'arabesque **' + footer.name + '** pour **' + product.price + ' <:piece:1045638309235404860>**.', ephemeral: true });
@@ -100,5 +117,7 @@ module.exports = {
                 await interaction.channel.send({ content: "** **", embeds: [embed], components: [row] });
             }
         }
+
+        return await interaction.channel.send({ content: '** **\n\n\n__Rappel :__\n- Les **boosters** ont **50% de réduction** sur toute la boutique.\n- Les **V.I.P.** ont **25% de réduction** sur toute la boutique.\n(*Le prix affiché est le prix public.*)' });
     }
 }

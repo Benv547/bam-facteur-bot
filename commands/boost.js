@@ -10,7 +10,7 @@ module.exports = {
 
         const text = '\n\nVoici les avantages que tu as :' +
             '\n- Faire des **chateaux de sable** sur les plages de Bouteille à la mer !' +
-            '\n- Avoir des **réductions plus importantes** sur tes achats !' +
+            '\n- Avoir des **réductions de 50%** sur tes achats !' +
             '\n- Un **temps encore plus réduit** sur l\'envoi de tes bouteilles !';
 
         const textBooster = 'Tu es **déjà BOOSTER**, super !' + text;
