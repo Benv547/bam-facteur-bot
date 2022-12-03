@@ -83,23 +83,6 @@ module.exports = {
         return day + '/' + month + '/' + year;
     },
 
-    createChartForAll: async function (dataBottle, dataMessage, dataUser) {
-        let datasets = [];
-        const labels = this.setupLabelsFromSQL('time', [dataBottle, dataMessage, dataUser]);
-        const datasetBottle = this.setupDataSetFromSQL('count', dataBottle, 'Bouteilles', labels);
-        datasetBottle.borderColor = 'rgb(218,12,193)';
-        datasetBottle.backgroundColor = 'rgba(218,12,193, .25)';
-        datasets.push(datasetBottle);
-        const datasetMessage = this.setupDataSetFromSQL('count', dataMessage, 'Messages', labels);
-        datasetMessage.borderColor = 'rgb(132,0,255)';
-        datasetMessage.backgroundColor = 'rgba(132,0,255, .25)';
-        datasets.push(datasetMessage);
-        const datasetUser = this.setupDataSetFromSQL('count', dataUser, 'Utilisateurs', labels);
-        datasetUser.borderColor = 'rgb(0,178,255)';
-        datasetUser.backgroundColor = 'rgba(0,178,255, .25)';
-        datasets.push(datasetUser);
-        return await this.createChart(labels, datasets);
-    },
     createChartForSanction: async function (dataBan, dataMute, dataWarn, dataWarnAbus) {
         let datasets = [];
         const labels = this.setupLabelsFromSQL('time', [dataBan, dataMute, dataWarn, dataWarnAbus]);

@@ -26,7 +26,6 @@ module.exports = {
                     { name: 'Oiseaux', value: 'bird' },
                     { name: 'Recherches', value: 'wanted' },
                     { name: 'Evénements', value: 'event' },
-                    { name: 'Tout', value: 'all' },
                 ))
         .addStringOption(option =>
             option.setName('periode')
@@ -301,52 +300,15 @@ module.exports = {
                         chart = await charts.createChartForEvent(statsEventOneYear);
                         break;
                 }
-            case 'all':
-                switch (periode) {
-                    case 'sevenDays':
-                        periodeName = sevenDays;
-                        const totalMessageSevenDays = await messageDB.getMessageCountForOneWeek();
-                        const totalBottleSevenDays = await bottleDB.getBottleCountForOneWeek();
-                        const totalUserSevenDays = await recordDB.getCountForOneWeek("user");
-                        text = `\n\n**${totalMessageSevenDays}** messages ont été envoyés sur le serveur durant cette période.`;
-                        text += `\n**${totalBottleSevenDays}** bouteilles ont été envoyées sur le serveur durant cette période.`;
-                        text += `\n**${totalUserSevenDays}** utilisateurs ont été sur le serveur durant cette période.`;
-                        const statsMessage = await messageDB.getMessageCountEachDayForOneWeek();
-                        const statsBottle = await bottleDB.getBottleCountEachDayForOneWeek();
-                        const statsUser = await recordDB.getCountEachDayForOneWeek("user");
-                        chart = await charts.createChartForAll(statsBottle, statsMessage, statsUser);
-                        break;
-                    case 'thirtyDays':
-                        periodeName = thirtyDays;
-                        const totalMessageThirtyDays = await messageDB.getMessageCountForOneMonth();
-                        const totalBottleThirtyDays = await bottleDB.getBottleCountForOneMonth();
-                        const totalUserThirtyDays = await recordDB.getCountForOneMonth("user");
-                        text = `\n\n**${totalMessageThirtyDays}** messages ont été envoyés sur le serveur durant cette période.`;
-                        text += `\n**${totalBottleThirtyDays}** bouteilles ont été envoyées sur le serveur durant cette période.`;
-                        text += `\n**${totalUserThirtyDays}** utilisateurs ont été sur le serveur durant cette période.`;
-                        const statsMessageThirtyDays = await messageDB.getMessageCountEachDayForOneMonth();
-                        const statsBottleThirtyDays = await bottleDB.getBottleCountEachDayForOneMonth();
-                        const statsUserThirtyDays = await recordDB.getCountEachDayForOneMonth("user");
-                        chart = await charts.createChartForAll(statsBottleThirtyDays, statsMessageThirtyDays, statsUserThirtyDays);
-                        break;
-                    case 'oneYear':
-                        periodeName = oneYear;
-                        const totalMessageOneYear = await messageDB.getMessageCountForThisYear();
-                        const totalBottleOneYear = await bottleDB.getBottleCountForThisYear();
-                        const totalUserOneYear = await recordDB.getCountForThisYear("user");
-                        text = `\n\n**${totalMessageOneYear}** messages ont été envoyés sur le serveur durant cette période.`;
-                        text += `\n**${totalBottleOneYear}** bouteilles ont été envoyées sur le serveur durant cette période.`;
-                        text += `\n**${totalUserOneYear}** utilisateurs ont été sur le serveur durant cette période.`;
-                        const statsMessageOneYear = await messageDB.getMessageCountEachMonthForThisYear();
-                        const statsBottleOneYear = await bottleDB.getBottleCountEachMonthForThisYear();
-                        const statsUserOneYear = await recordDB.getCountEachMonthForThisYear("user");
-                        chart = await charts.createChartForAll(statsBottleOneYear, statsMessageOneYear, statsUserOneYear);
-                        break;
-                }
                 break;
         }
 
-        const embed = createEmbeds.createFullEmbed('Statistiques', 'Voici les statistiques du serveur pour la période : **' + periodeName + '**' + text, null, chart, null, undefined);
-        return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        try {
+            const embed = createEmbeds.createFullEmbed('Statistiques', 'Voici les statistiques du serveur pour la période : **' + periodeName + '**' + text, null, chart, null, undefined);
+            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        } catch (error) {
+            const embed = createEmbeds.createErrorEmbed('Erreur', 'Impossible de créer le graphique.');
+            return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
+        }
     },
 };

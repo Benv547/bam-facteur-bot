@@ -53,8 +53,8 @@ module.exports = {
 
         content = this.transformEmojiToDiscordEmoji(interaction.guild, content);
 
-        content = content.replace(/<@&/g, '$%@&#$');
-        content = content.replace(/<@/g, '$%@&#$');
+        // content = content.replace(/<@&/g, '$%@&#$');
+        // content = content.replace(/<@/g, '$%@&#$');
         content = content.replace('@everyone', '$%@&#$');
         content = content.replace('@here', '$%@&#$');
 

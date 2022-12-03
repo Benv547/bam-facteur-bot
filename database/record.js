@@ -36,7 +36,7 @@ module.exports = {
     },
     getCountEachMonthForThisYear: async function (type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT SUM(score) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
+        const results = await pool.query('SELECT AVG(score) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
         return results.rows;
     },
 
