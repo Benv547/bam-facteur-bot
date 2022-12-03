@@ -164,6 +164,15 @@ module.exports = {
         datasets.push(datasetBoost);
         return await this.createChart(labels, datasets);
     },
+    createChartForEvent: async function (data) {
+        let datasets = [];
+        const labels = this.setupLabelsFromSQL('time', [data]);
+        const dataset = this.setupDataSetFromSQL('count', data, 'Événements', labels);
+        dataset.borderColor = 'rgb(0,255,0)';
+        dataset.backgroundColor = 'rgba(0,255,0, .25)';
+        datasets.push(dataset);
+        return await this.createChart(labels, datasets);
+    },
     createChartForBird: async function (bird, reaction) {
         let datasets = [];
         const labels = this.setupLabelsFromSQL('time', [bird, reaction]);

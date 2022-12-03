@@ -40,9 +40,9 @@ module.exports = {
         return results.rows;
     },
 
-    getHeatMapByHoursAndWeekDays: async function (type) {
+    getHeatMapByHoursAndWeekDays: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT SUM(score)/COUNT(*) as count, EXTRACT(HOUR FROM date) AS hour, EXTRACT(DOW FROM date) AS weekday FROM "Record" WHERE "type" = $1 GROUP BY hour, weekday ORDER BY hour ASC, weekday ASC', [type]);
+        const results = await pool.query('SELECT SUM(score)/COUNT(*) as count, EXTRACT(HOUR FROM date) AS hour, EXTRACT(DOW FROM date) AS weekday FROM "Record" WHERE "type" = "event" GROUP BY hour, weekday ORDER BY hour ASC, weekday ASC');
         return results.rows;
     }
 };

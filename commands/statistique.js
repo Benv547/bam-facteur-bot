@@ -25,6 +25,7 @@ module.exports = {
                     { name: 'Sanctions', value: 'sanction' },
                     { name: 'Oiseaux', value: 'bird' },
                     { name: 'Recherches', value: 'wanted' },
+                    { name: 'Evénements', value: 'event' },
                     { name: 'Tout', value: 'all' },
                 ))
         .addStringOption(option =>
@@ -276,6 +277,30 @@ module.exports = {
                         break;
                 }
                 break;
+            case 'event':
+                switch (periode) {
+                    case 'sevenDays':
+                        periodeName = sevenDays;
+                        const totalEventSevenDays = await recordDB.getCountForOneWeek("event");
+                        text = `\n\n**${totalEventSevenDays}** événements ont été organisés sur le serveur durant cette période.`;
+                        const statsEventSevenDays = await recordDB.getCountEachDayForOneWeek("event");
+                        chart = await charts.createChartForEvent(statsEventSevenDays);
+                        break;
+                    case 'thirtyDays':
+                        periodeName = thirtyDays;
+                        const totalEventThirtyDays = await recordDB.getCountForOneMonth("event");
+                        text = `\n\n**${totalEventThirtyDays}** événements ont été organisés sur le serveur durant cette période.`;
+                        const statsEventThirtyDays = await recordDB.getCountEachDayForOneMonth("event");
+                        chart = await charts.createChartForEvent(statsEventThirtyDays);
+                        break;
+                    case 'oneYear':
+                        periodeName = oneYear;
+                        const totalEventOneYear = await recordDB.getCountForThisYear("event");
+                        text = `\n\n**${totalEventOneYear}** événements ont été organisés sur le serveur durant cette période.`;
+                        const statsEventOneYear = await recordDB.getCountEachMonthForThisYear("event");
+                        chart = await charts.createChartForEvent(statsEventOneYear);
+                        break;
+                }
             case 'all':
                 switch (periode) {
                     case 'sevenDays':
