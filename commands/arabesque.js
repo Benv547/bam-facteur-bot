@@ -3,6 +3,8 @@ const footerDB = require("../database/footer");
 const userDB = require("../database/user");
 const createEmbeds = require("../utils/createEmbeds");
 
+const DEFAULT = 8;
+
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
@@ -43,6 +45,13 @@ module.exports = {
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
             let footer_name = interaction.options.getString('nom');
+
+            if (footer_name.toLocaleLowerCase().includes('défaut')) {
+                const footer = await footerDB.getFooter(DEFAULT);
+                await userDB.update_id_footer(interaction.user.id, DEFAULT);
+                const embed = createEmbeds.createFullEmbed('Arabesque changée', 'Votre arabesque a bien été changée !', null, footer[0].url, null, null);
+                return interaction.reply({content: '', embeds: [embed], ephemeral: true});
+            }
 
             const footer = await footerDB.getFooterFromUserWithName(interaction.user.id, footer_name);
             if (footer.length === 0) {

@@ -3,6 +3,8 @@ const stickerDB = require("../database/sticker");
 const userDB = require("../database/user");
 const createEmbeds = require("../utils/createEmbeds");
 
+const DEFAULT = 21;
+
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
@@ -43,6 +45,13 @@ module.exports = {
             return interaction.reply({content: '', embeds: [embed], ephemeral: true});
         } else {
             let sticker_name = interaction.options.getString('nom');
+
+            if (sticker_name.toLocaleLowerCase().includes('défaut')) {
+                const sticker = await stickerDB.getSticker(DEFAULT);
+                await userDB.update_id_sticker(interaction.user.id, DEFAULT);
+                const embed = createEmbeds.createFullEmbed('Sticker changé', 'Votre sticker a bien été changé !', null, sticker[0].url, null, null);
+                return interaction.reply({content: '', embeds: [embed], ephemeral: true});
+            }
 
             const sticker = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker_name);
             if (sticker.length === 0) {
