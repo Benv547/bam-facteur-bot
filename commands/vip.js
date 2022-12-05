@@ -9,9 +9,10 @@ module.exports = {
     async execute(interaction) {
 
         const text = '\n\nVoici les avantages que tu as :' +
-            '\n- Faire du **surf** sur les vagues de Bouteille à la mer !' +
             '\n- Avoir des **réductions de 25%** sur tes achats !' +
-            '\n- Un **temps réduit** sur l\'envoi de tes bouteilles !';
+            '\n- Pouvoir **changer de pseudonyme** sur le serveur !' +
+            '\n- Un **temps réduit** sur l\'envoi de tes bouteilles !' +
+            '\n- Faire du **surf** sur les vagues de Bouteille à la mer !';
 
         const textVIP = 'Tu es **déjà VIP**, super !' + text;
         const textNotVIP = 'Les VIP.s sont **les chouchous** de Bouteille à la mer !' +
