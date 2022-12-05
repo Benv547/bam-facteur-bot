@@ -17,8 +17,8 @@ module.exports = {
         }
 
         const content = interaction.fields.getTextInputValue('textWanted');
-        if (!content.toLowerCase().startsWith('je recherche')) {
-            return await interaction.reply({ content: 'Le message doit commencer par "Je recherche" !\nVotre message : ' + content, ephemeral: true });
+        if (!content.toLowerCase().includes('je recherche')) {
+            return await interaction.reply({ content: 'Le message doit contenir "je recherche" !\nVotre message : ' + content, ephemeral: true });
         }
 
         if (content.trim() === '') {
