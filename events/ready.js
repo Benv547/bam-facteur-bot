@@ -50,8 +50,8 @@ module.exports = {
             while (usersToRemove.length > 0) {
                 try {
                     const member_id = usersToRemove.pop();
-                    const member = await guild.members.fetch(member_id);
                     await userDB.remove_date_treasure(member_id);
+                    const member = await guild.members.fetch(member_id);
                     if (member !== null) {
                         // remove permission to see the channel
                         await channel.permissionOverwrites.delete(member_id);

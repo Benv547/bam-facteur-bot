@@ -49,7 +49,7 @@ module.exports = {
             if (footer_name.toLocaleLowerCase().includes('défaut')) {
                 const footer = await footerDB.getFooter(DEFAULT);
                 await userDB.update_id_footer(interaction.user.id, DEFAULT);
-                const embed = createEmbeds.createFullEmbed('Arabesque changée', 'Votre arabesque a bien été changée !', null, footer[0].url, null, null);
+                const embed = createEmbeds.createFullEmbed('Arabesque changée', 'Votre arabesque a bien été changée !', null, footer.url, null, null);
                 return interaction.reply({content: '', embeds: [embed], ephemeral: true});
             }
 

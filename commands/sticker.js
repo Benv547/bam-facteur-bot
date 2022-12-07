@@ -61,7 +61,7 @@ module.exports = {
             } else {
                 await userDB.update_id_sticker(interaction.user.id, sticker[0].id_sticker);
 
-                const embed = createEmbeds.createFullEmbed('Sticker changé', 'Votre sticker a bien été changé !', null, sticker[0].url, null, null);
+                const embed = createEmbeds.createFullEmbed('Sticker changé', 'Votre sticker a bien été changé !', null, sticker.url, null, null);
                 return interaction.reply({content: '', embeds: [embed], ephemeral: true});
             }
         }
