@@ -58,9 +58,7 @@ module.exports = {
                         membersLeaved.push(member.user.username);
                     }
                 }
-                catch (e) {
-                    console.log(e);
-                }
+                catch {}
             }
             let text = `** **\n🚣️ Les illustres **${membersLeaved.join(", ")}** ont été éjecté•e de l'île !`;
             if (membersLeaved.length > 0) {
