@@ -10,7 +10,7 @@ const userDB = require("../database/user");
 const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel} = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole} = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -206,7 +206,7 @@ module.exports = {
                         const sender_id = await bottleDB.getReceiver(channel.id);
                         // TODO: get original message
                         const original_message = await messageDB.getFirstMessage(channel.id);
-                        if (nb < 7) {
+                        if (nb < 15) {
                             // TODO: recreate a new bottle with the same content
                             await bottle.create(guild, sender_id, original_message, nb + 1);
                         }
@@ -214,6 +214,11 @@ module.exports = {
                             try {
                                 await bottle.flow(guild, sender_id, original_message);
                             } catch {}
+                        }
+                        await userDB.incr_afk_number(interaction.member.id);
+                        if (await userDB.get_afk_number(interaction.member.id) >= 10) {
+                            const user = await guild.members.fetch(interaction.member.id);
+                            await user.roles.add(afkRole);
                         }
                         await messageDB.deleteAllMessagesOfBottle(channel.id);
                         await bottleDB.deleteBottle(channel.id);

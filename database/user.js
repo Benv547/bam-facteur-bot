@@ -125,6 +125,23 @@ module.exports = {
         return null;
     },
 
+    incr_afk_number: async function (id_user) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "afk_number" = "afk_number" + 1 WHERE "id_user" = $1', [id_user]);
+    },
+    reset_afk_number: async function (id_user) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "afk_number" = 0 WHERE "id_user" = $1', [id_user]);
+    },
+    get_afk_number: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "afk_number" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].afk_number;
+        }
+        return null;
+    },
+
     set_date_bottle: async function (id_user, date) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "date_bottle" = $1 WHERE "id_user" = $2', [date, id_user]);
