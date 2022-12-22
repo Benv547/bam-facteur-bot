@@ -203,7 +203,9 @@ module.exports = {
 
                         const nb = await bottleDB.get_sea(channel.id);
                         // TODO: get author
-                        const sender_id = await bottleDB.getReceiver(channel.id);
+                        const b = await bottleDB.getBottle(channel.id);
+                        const sender_id = b.id_user_author;
+                        const receiver_id = b.id_user_recipient;
                         // TODO: get original message
                         const original_message = await messageDB.getFirstMessage(channel.id);
                         if (nb < 15) {
@@ -215,10 +217,11 @@ module.exports = {
                                 await bottle.flow(guild, sender_id, original_message);
                             } catch {}
                         }
-                        await userDB.incr_afk_number(interaction.member.id);
-                        if (await userDB.get_afk_number(interaction.member.id) >= 10) {
-                            const user = await guild.members.fetch(interaction.member.id);
+                        await userDB.incr_afk_number(receiver_id);
+                        if (await userDB.get_afk_number(receiver_id) >= 10) {
+                            const user = await guild.members.fetch(receiver_id);
                             await user.roles.add(afkRole);
+                            await user.send({ content: 'Vous avez été mis en AFK car vous n\'avez pas répondu à 10 bouteilles.\nVous pouvez vous enlever de ce rôle en envoyant la commande `/afk`.' });
                         }
                         await messageDB.deleteAllMessagesOfBottle(channel.id);
                         await bottleDB.deleteBottle(channel.id);
