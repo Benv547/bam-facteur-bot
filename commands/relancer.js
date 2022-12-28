@@ -7,7 +7,7 @@ module.exports = {
         .setName('relancer')
         .setDescription('Relancez une bouteille archivée !')
         .addStringOption(option =>
-            option.setName('name')
+            option.setName('nom')
                 .setDescription('Le nom de la bouteille')
                 .setRequired(true)),
     async execute(interaction) {

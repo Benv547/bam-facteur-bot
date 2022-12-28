@@ -12,7 +12,7 @@ module.exports = {
         .setDescription('Choisissez l\'avatar de vos bouteilles !')
         .addStringOption(option =>
             option.setName('code')
-                .setDescription('The code of the avatar')),
+                .setDescription('Le code de l\'avatar')),
     async execute(interaction) {
 
         let price = this.price;

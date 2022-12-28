@@ -90,7 +90,7 @@ module.exports = {
 
         const mod = interaction.guild.roles.cache.get(modRole);
 
-        const embed = createEmbeds.createFullEmbed("Un•e illuste inconnu•e", content, null, null, 0x0000FF, null);
+        const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x0000FF, null);
         // Send the message to the channel
         await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
 

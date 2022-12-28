@@ -8,7 +8,7 @@ module.exports = {
     public: true,
     data: new SlashCommandBuilder()
         .setName('voir')
-        .setDescription('Voir les boutiques du bot !')
+        .setDescription('Voir un item !')
         .addStringOption(option =>
             option.setName('catégorie')
                 .setDescription('La catégorie de boutique')
@@ -28,7 +28,7 @@ module.exports = {
         if (categorie == 'sticker') {
             const stickers = await stickerDB.getStickerWithName(item);
             if (stickers === null || stickers.length == 0) {
-                return await interaction.reply('Aucun sticker ne correspond à ce nom.');
+                return await interaction.reply({content: 'Aucun sticker ne correspond à ce nom.', ephemeral: true});
             }
             if (stickers.length === 1) {
                 const sticker = stickers[0];

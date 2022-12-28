@@ -41,7 +41,7 @@ module.exports = {
         // Fetch channel from guild
         const channelGuild = await guild.channels.fetch(channelId);
 
-        const embedMod = createEmbeds.createFullEmbed("Un•e illuste inconnu•e", content, null, null, 0x0000FF, null);
+        const embedMod = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x0000FF, null);
         await channelGuild.send({ content: '', embeds: [embedMod], components: [rowMod] });
 
         // Create a button to reply to the ticket
