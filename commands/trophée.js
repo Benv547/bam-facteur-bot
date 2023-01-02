@@ -17,7 +17,8 @@ module.exports = {
             let message = '';
             let status = '';
             let rarity = '';
-            const percentage = await achievementDB.getPercentageAchievementForAllUsers(achievement.id_achievement);
+            let percentage = await achievementDB.getPercentageAchievementForAllUsers(achievement.id_achievement);
+            percentage = percentage / 100;
             let a;
             if (achievements && achievements.length > 0) {
                 a = achievements.find(a => a.id_achievement === achievement.id_achievement);
