@@ -31,6 +31,6 @@ module.exports = {
         }
 
         await interaction.channel.setName('🏝│' + newName);
-        return interaction.reply({content: 'L\'île a été renommée en ' + newName + ' par ' + interaction.user + '.'});
+        return interaction.reply({content: 'L\'île a été renommée en ' + newName + ' par <@' + interaction.user + '>.'});
     },
 };
