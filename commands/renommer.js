@@ -25,7 +25,12 @@ module.exports = {
         }
 
         const newName = interaction.options.getString('nom');
-        await interaction.channel.setName(newName);
+
+        if (!newName.contains('île') && !newName.contains('ile')) {
+            return interaction.reply({content: 'Le nom de l\'île doit contenir le mot "île" ou "ile".', ephemeral: true});
+        }
+
+        await interaction.channel.setName('🏝│' + newName);
         return interaction.reply({content: 'Vous avez renommé l\'île en **' + newName + '** !', ephemeral: true});
     },
 };
