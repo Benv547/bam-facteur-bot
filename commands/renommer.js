@@ -26,7 +26,7 @@ module.exports = {
 
         const newName = interaction.options.getString('nom');
 
-        if (!newName.contains('île') && !newName.contains('ile')) {
+        if (!newName.includes('île') && !newName.includes('ile')) {
             return interaction.reply({content: 'Le nom de l\'île doit contenir le mot "île" ou "ile".', ephemeral: true});
         }
 
