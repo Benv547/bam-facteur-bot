@@ -47,6 +47,12 @@ module.exports = {
                     .setCustomId('sanction_ban')
                     .setLabel('⛔️ Bannir')
                     .setStyle(ButtonStyle.Danger),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('deleteSanction')
+                    .setLabel('❌ (Signalement buggé)')
+                    .setStyle(ButtonStyle.Danger),
             );
 
 
