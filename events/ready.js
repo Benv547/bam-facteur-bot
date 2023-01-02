@@ -10,7 +10,7 @@ const userDB = require("../database/user");
 const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole} = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -461,6 +461,10 @@ module.exports = {
                     }
                 }
 
+                const ileChannel = await client.channels.fetch(ile);
+                if (ileChannel.name !== '🏝│île_facteur') {
+                    await ileChannel.setName('🏝│île_facteur');
+                }
 
                 await user_ileDB.deleteAllUser();
                 await message_ileDB.deleteMessageFromPastDay();
