@@ -11,6 +11,8 @@ module.exports = {
     async execute(interaction) {
         // Get the user's currency
 
+        let title = 'Quelle bourse bien remplie !';
+
         let money = await orAction.get(interaction.user.id);
         if (money == null) {
             // Add the user to the database
@@ -18,7 +20,16 @@ module.exports = {
             money = 0;
         }
 
-        const embed = createEmbeds.createFullEmbed('Quelle bourse bien remplie !', 'Votre solde est de **' + money + ' <:piece:1045638309235404860>** !', null, null, 0x2f3136, null);
+        if (money == 0) {
+            title = 'Quelle bourse bien vide ...';
+        }
+
+        let textHelp = '';
+        if (money < 200) {
+            textHelp = '\n\nBesoin de savoir comment gagner de l\'or ? Consultez le salon <#864884869376507912> !';
+        }
+
+        const embed = createEmbeds.createFullEmbed(title, 'Votre solde est de **' + money + ' <:piece:1045638309235404860>** !' + textHelp, null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

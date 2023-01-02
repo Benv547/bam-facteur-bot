@@ -11,31 +11,35 @@ module.exports = {
         const achievements = await achievementDB.getAllAchievementsFromUser(interaction.user.id);
         const allAchievements = await achievementDB.getAllAchievements();
 
-        const embed = createEmbeds.createFullEmbed("Vos trophées", '', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Vos trophées (' + achievements.length + '/' + allAchievements.length + ')', '', null, null, 0x2f3136, null);
         let fields = [];
-        allAchievements.forEach(achievement => {
+        for (const achievement of allAchievements) {
             let message = '';
             let status = '';
             let rarity = '';
+            const percentage = await achievementDB.getPercentageAchievementForAllUsers(achievement.id_achievement);
             let a;
             if (achievements && achievements.length > 0) {
                 a = achievements.find(a => a.id_achievement === achievement.id_achievement);
             }
             if (a) {
                 const date = new Date(a.date);
-                message = '• **' + achievement.name + '**';
-                status = '🏆 (' + date.toLocaleDateString('fr-FR') + ')\n';
+                message = '** **\n• **' + achievement.name + '**';
+                status = achievement.description;
+                status += '\n\n🏆 (' + date.toLocaleDateString('fr-FR') + ')\n';
             } else {
-                message = '• ?????????';
+                message = '** **\n• ?????????';
                 status = '(non obtenu)\n';
             }
-            status += '[**' + achievement.rarity + '**]' + '\n** **';
+            status += '[**' + achievement.rarity + '**]';
+            status += '\nDébloqué par ' + percentage + '%\n';
+            status += '\n** **';
             fields.push({
                 name: message,
                 value: status,
                 inline: true
             });
-        });
+        }
         embed.addFields(fields);
         return interaction.reply({content: '', embeds: [embed], ephemeral: true});
     },

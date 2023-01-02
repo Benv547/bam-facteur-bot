@@ -21,7 +21,14 @@ module.exports = {
         }
         return results.rows;
     },
-
+    getPercentageAchievementForAllUsers: async function (id_achievement) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT COUNT(*) * 100/(SELECT COUNT(*) FROM "User") AS count FROM "User_Achievement" WHERE "id_achievement" = $1', [id_achievement]);
+        if (results.rows.length === 0) {
+            return null;
+        }
+        return results.rows[0].count;
+    },
 
     // SQL queries for the achievements
     // List all users who have sent more than "value" bottle and don't have the achievement

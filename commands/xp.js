@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
 const xpAction = require('../utils/xpAction.js');
 const userDB = require("../database/user");
+const { levels } = require('../xp.json');
 
 module.exports = {
     public: true,
@@ -17,13 +18,21 @@ module.exports = {
             xp = 0;
         }
 
+        // find the current role level of the user
+        let role = null;
+        for (const level of levels) {
+            if (xp >= level.xp) {
+                role = level.role;
+            }
+        }
+
         const nextXp = await xpAction.getNextLevel(interaction.user.id);
         const difference = nextXp - xp;
         if (difference < 0) {
             const embed = createEmbeds.createFullEmbed('Un niveau impressionnant !', "Vous êtes au niveau maximum avec **" + xp + " XP** !", null, null, 0x2f3136, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
         }
-        const embed = createEmbeds.createFullEmbed('Un niveau impressionnant !', 'Votre <:xp:851123277497237544> est de **' + xp + ' XP** !\nVous avez besoin de **' + difference + ' XP** pour monter d\'un niveau.', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Un niveau impressionnant !', 'Vous êtes **' + role + ' et vous avez **' + xp + '** <:xp:851123277497237544> !\nVous avez besoin de **' + difference + '** <:xp:851123277497237544> pour monter d\'un niveau.', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };
