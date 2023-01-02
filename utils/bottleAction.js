@@ -1,5 +1,5 @@
 const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newBottleCategory, newWantedCategory, conversations, newBirdCategory} = require("../config.json");
+const {newBottleCategory, newWantedCategory, conversations, newBirdCategory, afkRole} = require("../config.json");
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
@@ -58,7 +58,7 @@ module.exports = {
         // TODO: choose random member who are not a bot
 
         // Fetch all members
-        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender);
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender && !m.roles.cache.has(afkRole));
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
@@ -381,7 +381,7 @@ module.exports = {
         try {
             await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
             for (let i = 0; i < 5; i++) {
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender).random();
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender && !member.roles.cache.has(afkRole)).random();
                 await channel.permissionOverwrites.edit(member.id, {ViewChannel: true, SendMessages: false});
             }
         } catch (error) {

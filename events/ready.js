@@ -72,7 +72,7 @@ module.exports = {
             let membersArrived = [];
             while (channelSize <= maxGuildSize && maxEnterSize > 0) {
                 // choose a non bot member in the guild
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.roles.cache.has(memberRole)).random();
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.roles.cache.has(memberRole) && !member.roles.cache.has(afkRole) && member.roles.cache.size > 2).random();
                 // if member is not null
                 if (member !== null) {
                     // add permission to see the channel but not send messages
@@ -218,7 +218,7 @@ module.exports = {
                             } catch {}
                         }
                         await userDB.incr_afk_number(receiver_id);
-                        if (await userDB.get_afk_number(receiver_id) >= 10) {
+                        if (await userDB.get_afk_number(receiver_id) >= 5) {
                             const user = await guild.members.fetch(receiver_id);
                             await user.roles.add(afkRole);
                             await user.send({ content: 'Vous avez été mis en AFK car vous n\'avez pas répondu à 10 bouteilles.\nVous pouvez vous enlever de ce rôle en envoyant la commande `/afk`.' });
