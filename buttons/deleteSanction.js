@@ -7,7 +7,7 @@ module.exports = {
         // Delete channel
         try {
             await signalementDB.deleteSignalement(interaction.messageId);
-            await interaction.channel.delete();
+            await interaction.message.delete();
         } catch (e) {
             console.error(e);
             return await interaction.reply({ content: 'Une erreur est survenue lors de la suppression du signalement.', ephemeral: true });

@@ -47,12 +47,6 @@ module.exports = {
                     .setCustomId('sanction_ban')
                     .setLabel('⛔️ Bannir')
                     .setStyle(ButtonStyle.Danger),
-            )
-            .addComponents(
-                new ButtonBuilder()
-                    .setCustomId('deleteSanction')
-                    .setLabel('❌ (Signalement buggé)')
-                    .setStyle(ButtonStyle.Danger),
             );
 
 
@@ -133,6 +127,14 @@ module.exports = {
             warningContent = messageIle.content;
         }
 
+        if (warningType !== 'bottle') {
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId('deleteSanction')
+                    .setLabel('❌ (Signalement buggé)')
+                    .setStyle(ButtonStyle.Danger),
+            )
+        }
 
         if (warningContent.length > 1500) {
             warningContent = warningContent.substring(0, 1500) + "...";
