@@ -34,6 +34,9 @@ DROP TABLE IF EXISTS "WantedResponse" CASCADE;
 DROP TABLE IF EXISTS "BirdReaction" CASCADE;
 DROP TABLE IF EXISTS "SignalementBottle" CASCADE;
 DROP TABLE IF EXISTS "Product" CASCADE;
+DROP TABLE IF EXISTS "Footer" CASCADE;
+DROP TABLE IF EXISTS "User_Footer" CASCADE;
+
 
 CREATE TABLE "Product" (
     "id_product" SERIAL NOT NULL,
@@ -67,7 +70,7 @@ CREATE TABLE "User" (
   "date_bird" timestamp,
   "date_wanted" timestamp,
   "date_treasure" timestamp,
-  "afk_number" int NOT NULL default 0,
+  "afk_number" int NOT NULL default 0
 );
 
 CREATE TABLE "Sticky" (

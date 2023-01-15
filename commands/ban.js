@@ -19,7 +19,7 @@ module.exports = {
                 .setDescription('The reason of the ban')
                 .setRequired(true)),
     async execute(interaction) {
-        if (await roles.userIsMod(interaction.member)) {
+        if (await roles.userIsMod(interaction.member)&&(await roles.userIsApprenti(interaction.member))==false) {
             // Get the user and the reason
             let userId = await userDB.getUser(interaction.options.getString('userid'));
             let user;
