@@ -9,7 +9,7 @@ const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
-const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
@@ -58,7 +58,7 @@ module.exports = {
                         membersLeaved.push(member.user.username);
                     }
                 }
-                catch {}
+                catch { }
             }
             let text = `** **\n🚣️ Les illustres **${membersLeaved.join(", ")}** ont été éjecté•e de l'île !`;
             if (membersLeaved.length > 0) {
@@ -76,7 +76,7 @@ module.exports = {
                 // if member is not null
                 if (member !== null) {
                     // add permission to see the channel but not send messages
-                    await channel.permissionOverwrites.edit(member, {ViewChannel: true, SendMessages: false});
+                    await channel.permissionOverwrites.edit(member, { ViewChannel: true, SendMessages: false });
 
                     // if member is online or idle
                     if (member.presence != null && member.presence.status === "online") {
@@ -156,7 +156,7 @@ module.exports = {
                         const lastReply = await channel.messages.fetch(stickies[i].id_lastReply);
 
                         // Get last message of the channel
-                        const lastMessageOfChannel = await channel.messages.fetch({limit: 1});
+                        const lastMessageOfChannel = await channel.messages.fetch({ limit: 1 });
                         // if the last message of the channel is the last message of the sticky
                         if (lastReply === null || lastMessageOfChannel.first().id !== lastReply.id) {
                             // if the last message as be posted more than 5 minutes ago from now
@@ -215,264 +215,267 @@ module.exports = {
                         else {
                             try {
                                 await bottle.flow(guild, sender_id, original_message);
-                            } catch {}
+                            } catch { }
                         }
                         await userDB.incr_afk_number(receiver_id);
                         if (await userDB.get_afk_number(receiver_id) >= 5) {
                             const user = await guild.members.fetch(receiver_id);
                             await user.roles.add(afkRole);
-                            await user.send({ content: 'Vous avez été mis en AFK car vous n\'avez pas répondu à 10 bouteilles.\nVous pouvez vous enlever de ce rôle en envoyant la commande `/afk`.' });
-                        }
+                            // Create Embed AFK
+                            const embedAFK = createEmbeds.createFullEmbed("Tu nous manques..", 'Tu as été mis en mode AFK sur le serveur [Bouteille à la mer](https://discord.gg/bouteille) car tu as râté un tas de bouteilles !\nReviens nous voir, nous serons ravis de te retrouver.. *Tu peux enlever ton mode AFK en executant la commande `/afk`.*', null, null, null, null);
+                            // Send Embed AFK
+                            await user.send({ content: '', embeds: [embedAFK] });
+                    }
                         await messageDB.deleteAllMessagesOfBottle(channel.id);
-                        await bottleDB.deleteBottle(channel.id);
-                        await channel.delete();
-                    } catch (error) {
-                        console.log(error);
-                        await bottleDB.setBottleArchived(bottles[i].id_channel);
-                        await bottleDB.setBottleTerminated(bottles[i].id_channel);
-                        continue;
-                    }
+                    await bottleDB.deleteBottle(channel.id);
+                    await channel.delete();
+                } catch (error) {
+                    console.log(error);
+                    await bottleDB.setBottleArchived(bottles[i].id_channel);
+                    await bottleDB.setBottleTerminated(bottles[i].id_channel);
+                    continue;
                 }
             }
+        }
 
-            const wanteds = await wantedDB.getWantedFromThreeHoursAndNotArchived();
-            if (wanteds !== null) {
-                for (let i = 0; i < wanteds.length; i++) {
+        const wanteds = await wantedDB.getWantedFromThreeHoursAndNotArchived();
+        if (wanteds !== null) {
+            for (let i = 0; i < wanteds.length; i++) {
+                try {
+                    const guild = await client.guilds.fetch(wanteds[i].id_guild);
+                    const channel = await guild.channels.fetch(wanteds[i].id_channel);
+                    await channel.delete();
+
+                    const wChannel = await guild.channels.fetch(wantedChannel);
+                    const message = await wChannel.messages.fetch(wanteds[i].id_message);
+                    await message.delete();
+
                     try {
-                        const guild = await client.guilds.fetch(wanteds[i].id_guild);
-                        const channel = await guild.channels.fetch(wanteds[i].id_channel);
-                        await channel.delete();
+                        const sender = await guild.members.fetch(wanteds[i].id_user);
+                        //Crée l'embed
+                        const embedFlow = createEmbeds.createFullEmbed("Votre recherche a été supprimée", 'Vous n\'avez pas répondu à l\'une de vos réponses de votre avis de recherche dans les **48h** après sa publication et votre avis de recherche a été supprimé.', null, null, null, null);
+                        //Envoie l'embed crée à l'utilisateur
+                        await sender.send({ content: '', embeds: [embedFlow] });
+                    } catch { }
 
-                        const wChannel = await guild.channels.fetch(wantedChannel);
-                        const message = await wChannel.messages.fetch(wanteds[i].id_message);
-                        await message.delete();
-
-                        try {
-                            const sender = await guild.members.fetch(wanteds[i].id_user);
-                            //Crée l'embed
-                            const embedFlow = createEmbeds.createFullEmbed("Votre recherche a été supprimée", 'Vous n\'avez pas répondu à l\'une de vos réponses de votre avis de recherche dans les **48h** après sa publication et votre avis de recherche a été supprimé.', null, null, null, null);
-                            //Envoie l'embed crée à l'utilisateur
-                            await sender.send({content: '', embeds: [embedFlow]});
-                        } catch {}
-
-                        await wantedDB.setArchived(wanteds[i].id_channel);
-                    } catch (error) {
-                        console.log(error);
-                        await wantedDB.setArchived(wanteds[i].id_channel);
-                        continue;
-                    }
+                    await wantedDB.setArchived(wanteds[i].id_channel);
+                } catch (error) {
+                    console.log(error);
+                    await wantedDB.setArchived(wanteds[i].id_channel);
+                    continue;
                 }
             }
+        }
 
 
-            const birds = await birdDB.getAllBirdAfterOneHour();
-            if (birds !== null) {
-                for (let i = 0; i < birds.length; i++) {
+        const birds = await birdDB.getAllBirdAfterOneHour();
+        if (birds !== null) {
+            for (let i = 0; i < birds.length; i++) {
+                try {
+                    const guild = await client.guilds.fetch(birds[i].id_guild);
+                    const channel = await guild.channels.fetch(birds[i].id_channel);
+                    await channel.delete();
+
+                    if (birds[i].sea < 10) {
+                        await bottle.createBird(guild, birds[i].id_user, birds[i].content, birds[i].sea + 1, birds[i].id_bird);
+                    } else {
+                        await bottle.flowBird(guild, birds[i].id_channel);
+                    }
+                } catch (error) {
+                    console.log(error);
+                    await birdDB.setArchived(birds[i].id_bird);
+                    continue;
+                }
+            }
+        }
+
+        const guild = await client.guilds.fetch(guildId);
+        const places = await bottle.getNumberOfSpacesInNewBottles(guild);
+
+        if (places > 0) {
+            console.log(new Date().toLocaleString() + " - Unarchive " + places + " new bottles...");
+            const bottlesArchived = await bottleDB.getAllBottleHasOnlyOneMessageAndArchivedRandomized(places);
+            if (bottlesArchived !== null) {
+                for (let i = 0; i < bottlesArchived.length; i++) {
                     try {
-                        const guild = await client.guilds.fetch(birds[i].id_guild);
-                        const channel = await guild.channels.fetch(birds[i].id_channel);
-                        await channel.delete();
-
-                        if (birds[i].sea < 10) {
-                            await bottle.createBird(guild, birds[i].id_user, birds[i].content, birds[i].sea + 1, birds[i].id_bird);
+                        const channeId = bottlesArchived[i].id_channel;
+                        const nb = await bottleDB.get_sea(channeId);
+                        const sender_id = await bottleDB.getReceiver(channeId);
+                        // TODO: get original message
+                        const original_message = await messageDB.getFirstMessage(channeId);
+                        if (nb < 7) {
+                            // TODO: recreate a new bottle with the same content
+                            await bottle.create(guild, sender_id, original_message, nb + 1);
                         } else {
-                            await bottle.flowBird(guild, birds[i].id_channel);
+                            await bottle.flow(guild, sender_id, original_message);
                         }
+                        await bottleDB.deleteBottle(channeId);
                     } catch (error) {
                         console.log(error);
-                        await birdDB.setArchived(birds[i].id_bird);
+                        await bottleDB.deleteBottle(bottlesArchived[i].id_channel);
                         continue;
                     }
                 }
             }
+        }
 
-            const guild = await client.guilds.fetch(guildId);
-            const places = await bottle.getNumberOfSpacesInNewBottles(guild);
-
-            if (places > 0) {
-                console.log(new Date().toLocaleString() + " - Unarchive " + places + " new bottles...");
-                const bottlesArchived = await bottleDB.getAllBottleHasOnlyOneMessageAndArchivedRandomized(places);
-                if (bottlesArchived !== null) {
-                    for (let i = 0; i < bottlesArchived.length; i++) {
-                        try {
-                            const channeId = bottlesArchived[i].id_channel;
-                            const nb = await bottleDB.get_sea(channeId);
-                            const sender_id = await bottleDB.getReceiver(channeId);
-                            // TODO: get original message
-                            const original_message = await messageDB.getFirstMessage(channeId);
-                            if (nb < 7) {
-                                // TODO: recreate a new bottle with the same content
-                                await bottle.create(guild, sender_id, original_message, nb + 1);
-                            } else {
-                                await bottle.flow(guild, sender_id, original_message);
-                            }
-                            await bottleDB.deleteBottle(channeId);
-                        } catch (error) {
-                            console.log(error);
-                            await bottleDB.deleteBottle(bottlesArchived[i].id_channel);
-                            continue;
-                        }
-                    }
-                }
-            }
-
-            setTimeout(checkBottle, 1000 * 60 * 60 * 1);
-        };
-        checkBottle();
+        setTimeout(checkBottle, 1000 * 60 * 60 * 1);
+    };
+    checkBottle();
 
 
 
 
         checkAchievement = async () => {
-            console.log(new Date().toLocaleString() + " - Checking achievements...");
+        console.log(new Date().toLocaleString() + " - Checking achievements...");
 
-            const achievements = await achievementDB.getAllAchievements();
+        const achievements = await achievementDB.getAllAchievements();
 
-            if (achievements !== null) {
-                for (let i = 0; i < achievements.length; i++) {
-                    try {
-                        let value;
-                        let id_users;
-                        switch (achievements[i].type) {
-                            case 'bottleSend':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXBottlesSent(achievements[i].id_achievement, value);
-                                break;
-                            case 'bottleReceive':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXBottlesReceived(achievements[i].id_achievement, value);
-                                break;
-                            case 'messageSend':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXMessagesSent(achievements[i].id_achievement, value);
-                                break;
-                            case 'messageLength':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXMessageLength(achievements[i].id_achievement, value);
-                                break;
-                            case 'messageContains':
-                                value = achievements[i].value;
-                                id_users = await achievementDB.achievementXMessageContains(achievements[i].id_achievement, value);
-                                break;
-                            case 'userInvited':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXUsersInvited(achievements[i].id_achievement, value);
-                                break;
-                            case 'userMoneySpent':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXMoneySpent(achievements[i].id_achievement, value);
-                                break;
-                            case 'userMoneyEarned':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXMoney(achievements[i].id_achievement, value);
-                                break;
-                            case 'userNbTreasures':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXNbTreasures(achievements[i].id_achievement, value);
-                                break;
-                            case 'suggestionSent':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXSuggestionsSent(achievements[i].id_achievement, value);
-                                break;
-                            case 'opinionSent':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXOpinionsSent(achievements[i].id_achievement, value);
-                                break;
-                            case 'vipUserInvited':
-                                value = parseInt(achievements[i].value);
-                                id_users = await achievementDB.achievementXVIPUsersInvited(achievements[i].id_achievement, value);
-                                break;
-                        }
-                        const sticker = await stickerDB.getSticker(achievements[i].id_sticker);
-                        if (id_users !== null) {
-                            for (let j = 0; j < id_users.length; j++) {
-                                const user = await client.users.fetch(id_users[j].id_user);
-                                let textSticker = '';
-                                if (sticker !== null) {
-                                    await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
-                                    textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
-                                }
-                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, sticker.id_sticker.url, null, null);
-                                try {
-                                    await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
-                                    await user.send({content: '', embeds: [embed]});
-                                } catch {
-                                }
+        if (achievements !== null) {
+            for (let i = 0; i < achievements.length; i++) {
+                try {
+                    let value;
+                    let id_users;
+                    switch (achievements[i].type) {
+                        case 'bottleSend':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXBottlesSent(achievements[i].id_achievement, value);
+                            break;
+                        case 'bottleReceive':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXBottlesReceived(achievements[i].id_achievement, value);
+                            break;
+                        case 'messageSend':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXMessagesSent(achievements[i].id_achievement, value);
+                            break;
+                        case 'messageLength':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXMessageLength(achievements[i].id_achievement, value);
+                            break;
+                        case 'messageContains':
+                            value = achievements[i].value;
+                            id_users = await achievementDB.achievementXMessageContains(achievements[i].id_achievement, value);
+                            break;
+                        case 'userInvited':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXUsersInvited(achievements[i].id_achievement, value);
+                            break;
+                        case 'userMoneySpent':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXMoneySpent(achievements[i].id_achievement, value);
+                            break;
+                        case 'userMoneyEarned':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXMoney(achievements[i].id_achievement, value);
+                            break;
+                        case 'userNbTreasures':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXNbTreasures(achievements[i].id_achievement, value);
+                            break;
+                        case 'suggestionSent':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXSuggestionsSent(achievements[i].id_achievement, value);
+                            break;
+                        case 'opinionSent':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXOpinionsSent(achievements[i].id_achievement, value);
+                            break;
+                        case 'vipUserInvited':
+                            value = parseInt(achievements[i].value);
+                            id_users = await achievementDB.achievementXVIPUsersInvited(achievements[i].id_achievement, value);
+                            break;
+                    }
+                    const sticker = await stickerDB.getSticker(achievements[i].id_sticker);
+                    if (id_users !== null) {
+                        for (let j = 0; j < id_users.length; j++) {
+                            const user = await client.users.fetch(id_users[j].id_user);
+                            let textSticker = '';
+                            if (sticker !== null) {
+                                await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
+                                textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
+                            }
+                            const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, sticker.id_sticker.url, null, null);
+                            try {
+                                await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
+                                await user.send({ content: '', embeds: [embed] });
+                            } catch {
                             }
                         }
                     }
-                    catch (error) {
-                        console.log(error);
-                    }
+                }
+                catch (error) {
+                    console.log(error);
                 }
             }
-            setTimeout(checkAchievement, 1000 * 60 * 30);
-        };
-        checkAchievement();
+        }
+        setTimeout(checkAchievement, 1000 * 60 * 30);
+    };
+    checkAchievement();
 
 
 
         checkAnniversaire = async () => {
-            const now = new Date();
-            if (now.getHours() == 0) {
-                console.log(new Date().toLocaleString() + " - Checking anniversaires...");
-                // Fetch guild
-                const guild = await client.guilds.fetch(guildId);
+        const now = new Date();
+        if (now.getHours() == 0) {
+            console.log(new Date().toLocaleString() + " - Checking anniversaires...");
+            // Fetch guild
+            const guild = await client.guilds.fetch(guildId);
 
-                // Fetch members length
-                let members = await guild.members.fetch();
-                const membersLength = members.size;
-                await recordDB.insertRecord(membersLength, 'user');
+            // Fetch members length
+            let members = await guild.members.fetch();
+            const membersLength = members.size;
+            await recordDB.insertRecord(membersLength, 'user');
 
-                // Fetch members with the VIP role
-                let membersWithVipRole = await guild.roles.fetch(vipRole);
-                const membersWithVipRoleLength = membersWithVipRole.members.size;
-                await recordDB.insertRecord(membersWithVipRoleLength, 'vip');
+            // Fetch members with the VIP role
+            let membersWithVipRole = await guild.roles.fetch(vipRole);
+            const membersWithVipRoleLength = membersWithVipRole.members.size;
+            await recordDB.insertRecord(membersWithVipRoleLength, 'vip');
 
-                // Fetch members with the Booster role
-                let membersWithBoosterRole = await guild.roles.fetch(boostRole);
-                const membersWithBoosterRoleLength = membersWithBoosterRole.members.size;
-                await recordDB.insertRecord(membersWithBoosterRoleLength, 'boost');
+            // Fetch members with the Booster role
+            let membersWithBoosterRole = await guild.roles.fetch(boostRole);
+            const membersWithBoosterRoleLength = membersWithBoosterRole.members.size;
+            await recordDB.insertRecord(membersWithBoosterRoleLength, 'boost');
 
-                // Remove all anniversaire roles
-                members = members.filter((member) => member.roles.cache.has(anniversaireRole));
-                for (const member of members.values()) {
-                    await member.roles.remove(anniversaireRole);
-                }
-
-                const monthDate = now.getMonth() + 1;
-                const dayDate = now.getDate();
-                const users = await userDB.getAnniversaire(monthDate, dayDate);
-
-                if (users !== null) {
-                    for (let i = 0; i < users.length; i++) {
-                        const OR_ANNIV = 150
-                        const memberId = users[i].id_user;
-                        const member = await guild.members.fetch(memberId);
-
-                        await member.roles.add(anniversaireRole);
-                        await orAction.increment(memberId, OR_ANNIV); // give or to the user
-
-                        const embedAnniv = createEmbeds.createFullEmbed("🎂 Joyeux anniversaire !", `C'est aujourd'hui ton anniversaire ! Tient, voilà ${OR_ANNIV} pièces d'or pour fêter ça. \nProfite et passe du bon temps sur Bouteille à la mer ! 😉`, null, null, 0x6BB3F2, null);
-                        // Send an MP message to the sender
-                        try {
-                            await member.send({ content: '', embeds: [embedAnniv] });
-                        } catch {}
-                    }
-                }
-
-                const ileChannel = await client.channels.fetch(ile);
-                if (ileChannel.name !== '🏝│île_facteur') {
-                    await ileChannel.setName('🏝│île_facteur');
-                }
-
-                await user_ileDB.deleteAllUser();
-                await message_ileDB.deleteMessageFromPastDay();
+            // Remove all anniversaire roles
+            members = members.filter((member) => member.roles.cache.has(anniversaireRole));
+            for (const member of members.values()) {
+                await member.roles.remove(anniversaireRole);
             }
 
+            const monthDate = now.getMonth() + 1;
+            const dayDate = now.getDate();
+            const users = await userDB.getAnniversaire(monthDate, dayDate);
 
-            setTimeout(checkAnniversaire, 1000 * 60 * 60 * 1);
-        };
-        checkAnniversaire();
-    },
+            if (users !== null) {
+                for (let i = 0; i < users.length; i++) {
+                    const OR_ANNIV = 150
+                    const memberId = users[i].id_user;
+                    const member = await guild.members.fetch(memberId);
+
+                    await member.roles.add(anniversaireRole);
+                    await orAction.increment(memberId, OR_ANNIV); // give or to the user
+
+                    const embedAnniv = createEmbeds.createFullEmbed("🎂 Joyeux anniversaire !", `C'est aujourd'hui ton anniversaire ! Tient, voilà ${OR_ANNIV} pièces d'or pour fêter ça. \nProfite et passe du bon temps sur Bouteille à la mer ! 😉`, null, null, 0x6BB3F2, null);
+                    // Send an MP message to the sender
+                    try {
+                        await member.send({ content: '', embeds: [embedAnniv] });
+                    } catch { }
+                }
+            }
+
+            const ileChannel = await client.channels.fetch(ile);
+            if (ileChannel.name !== '🏝│île_facteur') {
+                await ileChannel.setName('🏝│île_facteur');
+            }
+
+            await user_ileDB.deleteAllUser();
+            await message_ileDB.deleteMessageFromPastDay();
+        }
+
+
+        setTimeout(checkAnniversaire, 1000 * 60 * 60 * 1);
+    };
+    checkAnniversaire();
+},
 };
