@@ -37,7 +37,7 @@ module.exports = {
             const nbBan = await sanctionDB.countDetail(userId.id_user, "ban");
 
             let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, ⛔️ **" + nbBan + "**";
-            const embed = createEmbeds.createFullEmbed(`Voici les infractions de l\'utilisateur :` , resume, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/apple/325/fax-machine_1f4e0.png', null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed(`Voici les infractions de l\'utilisateur :` , resume, null, null, 0x2f3136, null);
             
            
             return await interaction.reply({ content: "", embeds: [embed], ephemeral: true });
