@@ -1,5 +1,5 @@
-const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newBottleCategory, newWantedCategory, conversations, newBirdCategory, afkRole} = require("../config.json");
+const { ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, userMention } = require("discord.js");
+const { newBottleCategory, newWantedCategory, conversations, newBirdCategory, afkRole, sanction } = require("../config.json");
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
@@ -8,11 +8,26 @@ const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
 const xpAction = require("./xpAction");
 const birdDB = require("../database/bird");
+const sanctionDB = require("../database/sanctions");
+const orAction = require("./orAction");
 
 module.exports = {
     name: 'bottleAction',
     create: async function (guild, id_user_sender, content, nb_sea) {
         // TODO: check if message is OK (moderation, sad text, injuries, ...)
+
+        if (content.indexOf("discord.gg") > -1) {
+            await sanctionDB.saveSanction(id_user_sender, null, "warn", "AutoMod : Pub");
+
+            const channel = await guild.channels.fetch(sanction);
+            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('warn', 'L\'utilisateur ' + userMention(id_user_sender) + ' a été warn par l\'**AutoMod** pour cause de **Publicité**', null, null, 0x2f3136, null)] });
+
+            const embed = createEmbeds.createFullEmbed('Vous avez été averti•e', 'Une de vos actions a été jugée comme inappropriée par l\'AutoMod pour la raison suivante : **Publicité**', null, null, 0x2f3136, null);
+
+            const user = await guild.members.fetch(id_user_sender);
+            user.send({ content: "", embeds: [embed] });
+            return
+        }
 
         if (nb_sea === 0) {
             await userDB.set_date_bottle(id_user_sender, new Date());
@@ -35,7 +50,7 @@ module.exports = {
             name: channel_name,
             type: ChannelType.GuildText
         })
-        await channel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
+        await channel.permissionOverwrites.edit(everyoneRole.id, { ViewChannel: false, SendMessages: false });
 
         // TODO: move channel to "nouvelles bouteilles"
         const category = (await guild.channels.fetch()).find(c => c.id == newBottleCategory);
@@ -67,10 +82,10 @@ module.exports = {
 
         // TODO: add member to channel
         // edits overwrites to disallow everyone to view the channel
-        await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
+        await channel.permissionOverwrites.edit(guild.id, { ViewChannel: false, SendMessages: false });
 
         // edits overwrites to allow a user to view the channel
-        await channel.permissionOverwrites.edit(randMember.id, {ViewChannel: true, SendMessages: false});
+        await channel.permissionOverwrites.edit(randMember.id, { ViewChannel: true, SendMessages: false });
 
         // TODO: create bottle message ...
         const sticker = await stickerDB.getSticker(sender.id_sticker);
@@ -84,9 +99,9 @@ module.exports = {
                         await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
                         const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille " + channel_name + " a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
                         try {
-                            await randMember.send({content: "", embeds: [embed]});
-                        } catch {}
-                    } catch {}
+                            await randMember.send({ content: "", embeds: [embed] });
+                        } catch { }
+                    } catch { }
                 }
             }
         }
@@ -193,7 +208,7 @@ module.exports = {
         }
 
         // edits overwrites to allow a user to view the channel
-        await channel.permissionOverwrites.create(id_user_sender, {ViewChannel: false, SendMessages: false});
+        await channel.permissionOverwrites.create(id_user_sender, { ViewChannel: false, SendMessages: false });
 
         // Delete temp message
         await messageTemp.delete();
@@ -204,7 +219,7 @@ module.exports = {
         // await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
 
         // The receiver can see channel
-        await channel.permissionOverwrites.create(receiver_id, {ViewChannel: true, SendMessages: false});
+        await channel.permissionOverwrites.create(receiver_id, { ViewChannel: true, SendMessages: false });
 
         // Switch receiver and sender in DB
         await bottleDB.switchSenderReceiver(channel.id);
@@ -263,7 +278,7 @@ module.exports = {
             name: bottle.name,
             type: ChannelType.GuildText
         })
-        await newChannel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
+        await newChannel.permissionOverwrites.edit(everyoneRole.id, { ViewChannel: false, SendMessages: false });
 
         // Get all old messages
         const messages = await messageDB.getMessagesOfBottle(id_bottle);
@@ -323,7 +338,7 @@ module.exports = {
             name: channel_name,
             type: ChannelType.GuildText
         })
-        await channel.permissionOverwrites.edit(everyoneRole.id, {ViewChannel: false, SendMessages: false});
+        await channel.permissionOverwrites.edit(everyoneRole.id, { ViewChannel: false, SendMessages: false });
 
         // TODO: move channel to "nouvelles bouteilles"
         const category = (await guild.channels.fetch()).find(c => c.id == newBirdCategory);
@@ -379,10 +394,10 @@ module.exports = {
             );
 
         try {
-            await channel.permissionOverwrites.edit(guild.id, {ViewChannel: false, SendMessages: false});
+            await channel.permissionOverwrites.edit(guild.id, { ViewChannel: false, SendMessages: false });
             for (let i = 0; i < 5; i++) {
                 const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender && !member.roles.cache.has(afkRole)).random();
-                await channel.permissionOverwrites.edit(member.id, {ViewChannel: true, SendMessages: false});
+                await channel.permissionOverwrites.edit(member.id, { ViewChannel: true, SendMessages: false });
             }
         } catch (error) {
             console.error(error);
@@ -424,6 +439,11 @@ module.exports = {
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] });
         await birdDB.setArchived(bird.id_bird);
+
+        const randomOr = Math.floor(Math.random() * 100) + 1;
+        if (randomOr <= 20) {
+            await orAction.increment(guild, bird.id_user, 15);
+        }
 
         await xpAction.increment(guild, bird.id_user, 50);
     },

@@ -17,15 +17,17 @@ module.exports = {
             return interaction.reply({content: 'Vous n\'avez pas assez d\'<:xp:851123277497237544> pour rejoindre une île.\nRevenez me voir quand vous aurez atteint le **' + role.name + '**.', ephemeral: true});
         }
 
-        // fetch channel
+        // fetch channels
         const channel = await interaction.guild.channels.fetch(ile);
+        const channelVoice = await interaction.guild.channels.fetch(ileVoice);
+
 
         // check if user is already in the channel
         if (channel.members.has(interaction.user.id)) {
-            return interaction.reply({content: 'Vous êtes déjà sur l\'île.', ephemeral: true});
+            await channel.permissionOverwrites.edit(interaction.member, {ViewChannel: false, SendMessages: false});
+            await channelVoice.permissionOverwrites.edit(interaction.member, {ViewChannel: false, Connect: false});
+            return interaction.reply({content: 'Vous avez quitté l\'île !', ephemeral: true});
         }
-
-        const channelVoice = await interaction.guild.channels.fetch(ileVoice);
 
         // add user to channel
         await channel.permissionOverwrites.edit(interaction.member, {ViewChannel: true, SendMessages: true});

@@ -112,6 +112,7 @@ module.exports = {
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return await boutiqueAction.diplayShop(interaction);
             }
+            return interaction.reply({ content:'Commande non trouvée.', ephemeral: true});
         }
         return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
     },
