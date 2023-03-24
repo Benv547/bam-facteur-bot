@@ -21,6 +21,10 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('DELETE FROM "Bottle" WHERE "id_bottle" = $1', [id_bottle]);
     },
+    deleteBottleWithChannel: async function (id_channel) {
+        const pool = db.getPool();
+        return await pool.query('DELETE FROM "Bottle" WHERE "id_channel" = $1', [id_channel]);
+    },
     incr_sea: async function (id_bottle) {
         const pool = db.getPool();
         return await pool.query('UPDATE "Bottle" SET "nb_sea" = "nb_sea" + 1 WHERE "id_bottle" = $1', [id_bottle]);
@@ -71,6 +75,14 @@ module.exports = {
             return results.rows[0];
         }
         return null;
+    },
+    getBottleWithId: async function (id_channel) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_channel" = $1', [id_channel]);
+        if (results.rows.length > 0) {
+            return (true);
+        }
+        return (false);
     },
     getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchived: async function () {
         const pool = db.getPool();
