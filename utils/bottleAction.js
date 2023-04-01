@@ -151,10 +151,19 @@ module.exports = {
 
         // TODO: get receiver from DB
         const receiver_id = await bottleDB.getReceiver(channel.id);
-        const receiver = await guild.members.fetch(receiver_id);
+        let receiver;
 
-        if (receiver === null) {
-            // TODO : delete bottle
+        try {
+            receiver = await guild.members.fetch(receiver_id);
+        } catch (error) {
+            // Send message into channel
+            const embed = createEmbeds.createFullEmbed("Erreur", "Le destinataire de cette bouteille n'est plus sur le serveur. La bouteille va être supprimée.", null, null, 0x2f3136, null);
+            await channel.send({ content: "", embeds: [embed] });
+            // Delete channel in 5min
+            setTimeout(async () => {
+                await bottleDB.deleteBottle(channel.id);
+                await channel.delete();
+            }, 300000);
             return;
         }
 
