@@ -449,16 +449,17 @@ module.exports = {
 
             if (users !== null) {
                 for (let i = 0; i < users.length; i++) {
-                    const OR_ANNIV = 150
-                    const memberId = users[i].id_user;
-                    const member = await guild.members.fetch(memberId);
-
-                    await member.roles.add(anniversaireRole);
-                    await orAction.increment(memberId, OR_ANNIV); // give or to the user
-
-                    const embedAnniv = createEmbeds.createFullEmbed("🎂 Joyeux anniversaire !", `C'est aujourd'hui ton anniversaire ! Tient, voilà ${OR_ANNIV} pièces d'or pour fêter ça. \nProfite et passe du bon temps sur Bouteille à la mer ! 😉`, null, null, 0x6BB3F2, null);
-                    // Send an MP message to the sender
                     try {
+                        const OR_ANNIV = 150
+                        const memberId = users[i].id_user;
+                        const member = await guild.members.fetch(memberId);
+
+                        await member.roles.add(anniversaireRole);
+                        await orAction.increment(memberId, OR_ANNIV); // give or to the user
+
+                        const embedAnniv = createEmbeds.createFullEmbed("🎂 Joyeux anniversaire !", `C'est aujourd'hui ton anniversaire ! Tient, voilà ${OR_ANNIV} pièces d'or pour fêter ça. \nProfite et passe du bon temps sur Bouteille à la mer ! 😉`, null, null, 0x6BB3F2, null);
+                        // Send an MP message to the sender
+
                         await member.send({ content: '', embeds: [embedAnniv] });
                     } catch { }
                 }
