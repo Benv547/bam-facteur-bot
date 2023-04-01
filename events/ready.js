@@ -192,7 +192,7 @@ module.exports = {
         checkSticky();
 
         checkBottle = async () => {
-            console.log(new Date().toLocaleString() + " - Checking bottles...");
+            //console.log(new Date().toLocaleString() + " - Checking bottles...");
 
             const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchived();
             if (bottles !== null) {
@@ -319,6 +319,7 @@ module.exports = {
             }
         }
 
+        global.semaphore = [];
         setTimeout(checkBottle, 1000 * 60 * 60 * 1);
     };
     checkBottle();
@@ -327,7 +328,7 @@ module.exports = {
 
 
         checkAchievement = async () => {
-        console.log(new Date().toLocaleString() + " - Checking achievements...");
+        // console.log(new Date().toLocaleString() + " - Checking achievements...");
 
         const achievements = await achievementDB.getAllAchievements();
 
@@ -418,7 +419,7 @@ module.exports = {
         checkAnniversaire = async () => {
         const now = new Date();
         if (now.getHours() == 0) {
-            console.log(new Date().toLocaleString() + " - Checking anniversaires...");
+            //console.log(new Date().toLocaleString() + " - Checking anniversaires...");
             // Fetch guild
             const guild = await client.guilds.fetch(guildId);
 
