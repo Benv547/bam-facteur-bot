@@ -29,20 +29,5 @@ module.exports = {
                 }
             }
         }
-
-        if (message.interaction) {
-            if (message.embeds.length > 0) {
-                const content = message.embeds[0].description;
-                if (content) {
-                    const user = message.interaction.user;
-                    if (content.includes('Bump effectué !')) {
-                        await orAction.increment(user.id, OR_BUMP);
-                        await xpAction.increment(message.guild, user.id, XP_BUMP);
-                        const embed = createEmbeds.createFullEmbed(`Merci pour votre bump !`, user.toString()  + ', vous avez reçu **' + OR_BUMP + ' <:piece:1045638309235404860>** et de l\'<:xp:851123277497237544>.', null, null, null, null);
-                        await message.channel.send({content: "", embeds: [embed]});
-                    }
-                }
-            }
-        }
     },
 };
