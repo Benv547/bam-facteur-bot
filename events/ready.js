@@ -194,7 +194,7 @@ module.exports = {
         checkBottle = async () => {
             //console.log(new Date().toLocaleString() + " - Checking bottles...");
 
-            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchived();
+            const bottles = await bottleDB.getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchivedAndNotTerminated();
             if (bottles !== null) {
                 for (let i = 0; i < bottles.length; i++) {
                     try {
@@ -294,7 +294,7 @@ module.exports = {
 
         if (places > 0) {
             console.log(new Date().toLocaleString() + " - Unarchive " + places + " new bottles...");
-            const bottlesArchived = await bottleDB.getAllBottleHasOnlyOneMessageAndArchivedRandomized(places);
+            const bottlesArchived = await bottleDB.getAllBottleHasOnlyOneMessageAndArchivedAndNotTerminatedRandomized(places);
             if (bottlesArchived !== null) {
                 for (let i = 0; i < bottlesArchived.length; i++) {
                     try {
