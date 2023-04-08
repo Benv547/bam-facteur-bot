@@ -12,25 +12,11 @@ module.exports = {
                 .setRequired(true)),
     async execute(interaction) {
         let bottle;
-        const bottles = await bottleDB.getBottleForUserWithName(interaction.user.id, interaction.options.getString('name'));
+        const bottles = await bottleDB.getBottleForUserWithName(interaction.user.id, interaction.options.getString('nom'));
         if (bottles.length === 0) {
-            try {
-                bottle = await bottleDB.getBottle(interaction.options.getString('name'));
-            }
-            catch (e) {
-                return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
-            }
-
-            if (bottle === null) {
-                return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
-            }
-
-            if (bottle.id_user_sender !== interaction.user.id && bottle.id_user_receiver !== interaction.user.id) {
-                return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
-            }
+            return interaction.reply({content: 'Cette bouteille n\'existe pas.', ephemeral: true});
         } else if (bottles.length > 1) {
-            return interaction.reply({content: 'Plusieurs bouteilles ont ce nom, veuillez préciser.',
-            });
+            return interaction.reply({content: 'Plusieurs bouteilles contiennent ce nom, veuillez préciser.', ephemeral: true});
         } else {
             bottle = bottles[0];
         }
