@@ -72,14 +72,14 @@ module.exports = {
         }
         return null;
     },
-    getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchived: async function () {
+    getAllBottleHasOnlyOneMessageFromThreeHoursAndNotArchivedAndNotTerminated: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "date" < NOW() - INTERVAL \'6 hours\' AND "archived" = false');
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "date" < NOW() - INTERVAL \'6 hours\' AND "archived" = false AND "terminated" = false');
         return results.rows;
     },
-    getAllBottleHasOnlyOneMessageAndArchivedRandomized: async function (limit) {
+    getAllBottleHasOnlyOneMessageAndArchivedAndNotTerminatedRandomized: async function (limit) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "archived" = true ORDER BY RANDOM() LIMIT $1', [limit]);
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_bottle" IN (SELECT "id_bottle" FROM "Message" GROUP BY "id_bottle" HAVING COUNT(*) = 1) AND "archived" = true AND "terminated" = false ORDER BY RANDOM() LIMIT $1', [limit]);
         return results.rows;
     },
     update_id_bottle_and_id_channel: async function (id_bottle, new_id_channel) {
