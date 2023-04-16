@@ -17,18 +17,9 @@ module.exports = {
         if (await roles.userIsMod(interaction.member)) {
 
             let userId = await userDB.getUser(interaction.options.getString('userid'));
-            let user;
-            try {
-                user = await interaction.guild.members.fetch(interaction.options.getString('userid'));
-            }
-            catch {
-                return interaction.reply({ content: 'Cet utilisateur n\'est pas sur le serveur ou n\'existe pas.', ephemeral: true });
-            }
 
             if (userId === null) {
-                // Add the user to the database
-                await userDB.createUser(interaction.options.getString('userid'), 0, 0);
-                userId = await userDB.getUser(interaction.options.getString('userid'))
+                return interaction.reply({ content: 'Cet utilisateur n\'est pas dans la base de donées.', ephemeral: true });
             }
 
             const nbWarnAbus = await sanctionDB.countDetail(userId.id_user, "abusif");
