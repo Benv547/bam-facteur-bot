@@ -13,6 +13,7 @@ module.exports = {
     async execute(interaction) {
         if (await roles.userIsAdmin(interaction.member)) {
             // Save to database
+            await stickyDB.deleteSticky(interaction.channelId);
             await stickyDB.insertSticky(interaction.guildId, interaction.channelId, interaction.options.getString('original'));
             return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
         }
