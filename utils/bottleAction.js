@@ -29,6 +29,11 @@ module.exports = {
             return
         }
 
+        const senderMember = await guild.members.fetch(id_user_sender);
+        if (senderMember === null) {
+            return;
+        }
+
         if (nb_sea === 0) {
             await userDB.set_date_bottle(id_user_sender, new Date());
         }
@@ -163,7 +168,7 @@ module.exports = {
             setTimeout(async () => {
                 await bottleDB.deleteBottle(channel.id);
                 await channel.delete();
-            }, 300000);
+            }, 120000);
             return;
         }
 
