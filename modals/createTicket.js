@@ -64,6 +64,8 @@ module.exports = {
             name: 'ticket-n' + (n),
             type: ChannelType.GuildText
         });
+        const mod = interaction.guild.roles.cache.get(modRole);
+        await channel.permissionOverwrites.edit(mod.id, { ViewChannel: false, SendMessages: false });
 
         // Change category of the channel
         const category = interaction.guild.channels.cache.find(c => c.id == ticket);
@@ -87,8 +89,6 @@ module.exports = {
                     .setLabel('Fermer le ticket')
                     .setStyle(ButtonStyle.Danger),
             );
-
-        const mod = interaction.guild.roles.cache.get(modRole);
 
         const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x0000FF, null);
         // Send the message to the channel
