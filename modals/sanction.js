@@ -55,6 +55,9 @@ module.exports = {
             }
         } else if (sanctionType === 'warn' || sanctionType === 'abusif') {
             title = 'Vous avez été averti•e';
+            if (sanctionType === 'abusif') {
+                description = 'Votre signalement a bien été pris en compte par ' + mod.toString() + ' cependant le message ne déroge pas aux règles du serveur. Votre signalement a donc été refusé pour la raison suivante : **' + raison + '**';
+            }
         } else if (sanctionType === 'mute') {
             const timeout = parseInt(interaction.fields.getTextInputValue('timeout'));
             title = 'Vous avez été mute pour ' + timeout + ' minutes';
