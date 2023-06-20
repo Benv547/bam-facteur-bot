@@ -22,7 +22,7 @@ module.exports = {
                     .setStyle(ButtonStyle.Primary),
             );
 
-        const embedMod = createEmbeds.createFullEmbed(interaction.user.username, content, null, null, 0x00FF00, null);
+        const embedMod = createEmbeds.createFullEmbed(interaction.user.username.charAt(0).toUpperCase() + interaction.user.username.substring(1), content, null, null, 0x00FF00, null);
         await interaction.channel.send({ content: '', embeds: [embedMod], components: [rowMod] });
 
         // Create a button to reply to the ticket
