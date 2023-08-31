@@ -9,7 +9,7 @@ module.exports = {
             // Fetch channel from database
             const channelId = await ticketDB.get_id_channel(interaction.user.id);
             if (channelId == null) {
-                return await interaction.reply({ content: 'Votre ticket est introuvable ou a déjà été fermé. Merci d\'en créer un nouveau.', ephemeral: true });
+                return await interaction.reply({ content: 'Your ticket cannot be found or has already been closed. Please create a new one.', ephemeral: true });
                 return;
             }
 
@@ -29,9 +29,9 @@ module.exports = {
                 await channelGuild.delete();
             } catch (e) {
                 console.error(e);
-                return await interaction.reply({ content: 'Une erreur est survenue lors de la suppression du ticket.', ephemeral: true });
+                return await interaction.reply({ content: 'An error occurred while deleting the ticket.', ephemeral: true });
             }
-            return await interaction.reply({ content: 'Le ticket a été supprimé.', ephemeral: true });
+            return await interaction.reply({ content: 'The ticket has been deleted.', ephemeral: true });
         } else {
             // Fetch user from database
             try {
@@ -39,7 +39,7 @@ module.exports = {
                 // Fetch user from guild
                 const userGuild = await interaction.guild.members.fetch(user);
                 // Send an MP message to the sender
-                await userGuild.send({ content: 'Votre ticket a été fermé.' });
+                await userGuild.send({ content: 'Your ticket has been closed.' });
             } catch {}
 
             // Delete channel
@@ -49,9 +49,9 @@ module.exports = {
                 await interaction.channel.delete();
             } catch (e) {
                 console.error(e);
-                return await interaction.reply({ content: 'Une erreur est survenue lors de la suppression du ticket.', ephemeral: true });
+                return await interaction.reply({ content: 'An error occurred while deleting the ticket.', ephemeral: true });
             }
-            return await interaction.reply({ content: 'Le ticket a été supprimé.', ephemeral: true });
+            return await interaction.reply({ content: 'The ticket has been deleted.', ephemeral: true });
         }
     },
 };

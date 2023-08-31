@@ -16,7 +16,7 @@ module.exports = {
         // Get the vote
         const vote = await voteDB.getVote(interaction.message.id, interaction.user.id);
         if (vote !== null) {
-            await interaction.reply({ content: 'Vous avez déjà voté pour cette suggestion.', ephemeral: true });
+            await interaction.reply({ content: 'You have already voted for this suggestion.', ephemeral: true });
             return;
         }
 
@@ -37,7 +37,7 @@ module.exports = {
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
                     .setCustomId('replySuggestion')
-                    .setLabel('Répondre')
+                    .setLabel('Reply')
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('warning_suggestion')
@@ -49,6 +49,6 @@ module.exports = {
         await interaction.message.edit({ content: interaction.message.content, embeds: interaction.message.embeds, components: [row] });
 
         // Reply to the user
-        await interaction.reply({ content: 'Vous avez voté pour cette suggestion.', ephemeral: true });
+        await interaction.reply({ content: 'You voted for this suggestion.', ephemeral: true });
     },
 };

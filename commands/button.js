@@ -47,8 +47,8 @@ module.exports = {
                     .setStyle(interaction.options.getString('style')),
             );
             await message.edit({components: [rowMessage]});
-            return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+            return await interaction.reply({ content:'Done.', ephemeral: true});
         }
-        return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
+        return interaction.reply({ content:'You don\'t have the right to do that.', ephemeral: true});
     },
 };

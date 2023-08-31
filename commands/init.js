@@ -6,7 +6,7 @@ const boutiqueAction = require("../utils/boutiqueAction");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('init')
-        .setDescription('Initialise les messages du serveur.')
+        .setDescription('Initialize the server messages.')
         .addStringOption(option =>
             option.setName('type')
                 .setDescription('The type of the init')
@@ -18,56 +18,56 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createTicket')
-                            .setLabel('Créer un ticket')
+                            .setLabel('Create a ticket')
                             .setStyle(ButtonStyle.Primary),
                     );
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'bottle') {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createBottle')
-                            .setLabel('Créer une bouteille')
+                            .setLabel('Create a bottle')
                             .setStyle(ButtonStyle.Primary),
                     );
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'bird') {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createBird')
-                            .setLabel('Créer un oiseau')
+                            .setLabel('Create a bird')
                             .setStyle(ButtonStyle.Primary),
                     );
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'wanted') {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createWanted')
-                            .setLabel('Créer un avis de recherche')
+                            .setLabel('Create a wanted notice')
                             .setStyle(ButtonStyle.Primary),
                     );
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'opinion') {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createOpinion')
-                            .setLabel('Je donne mon avis')
+                            .setLabel('I give my feedback')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('**Votre avis compte !**',
-                    'Vous aimez (ou pas) le serveur ? **Laissez-nous votre avis !**\n' +
+                const embed = createEmbeds.createFullEmbed('**Your opinion is important!**',
+                    'Do you like (or not) the server? **Leave us your feedback!\n' +
                     '\n' +
-                    'Attention, les suggestions doivent aller dans <#1030839758361993246>.',
+                    'Please note, suggestions must go in <#1030839758361993246>.',
                     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/blue-heart_1f499.png',
                     null, 0x2f3136, null, false);
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             } else if (interaction.options.getString('type') === 'suggestion') {
                 const row = new ActionRowBuilder()
@@ -78,42 +78,41 @@ module.exports = {
                             .setStyle(ButtonStyle.Primary),
                     );
                 const embed = createEmbeds.createFullEmbed('**Suggestions**',
-                    'Pour faire avancer le serveur, n\'hésitez pas à nous transmettre vos suggestions.\n' +
-                    'Vous pouvez aussi réagir pour les suggestions que vous trouvez intéressantes ou non.',
+                    'To make the server progress, don\'t hesitate to send us your suggestions.\n' +
+                    'You can also react to suggestions which you find interesting or not.',
                     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/light-bulb_1f4a1.png',
                     null, 0x2f3136, null, false);
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             } else if (interaction.options.getString('type') === 'help') {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createHelp')
-                            .setLabel('J\'ai besoin d\'aide')
+                            .setLabel('I need help')
                             .setStyle(ButtonStyle.Primary),
                     );
                 const embed = createEmbeds.createFullEmbed('',
-                    ':warning: **Vous avez une question ?** La communauté y répond !\n' +
-                    'Écrit ta question en cliquant en dessous et répond en ouvrant le fil de discussion.',
+                    ':warning: **You have a question?** the community answers it!\n' +
+                    'Write your question by clicking below and answer by opening the thread.',
                     null, null, 0x2f3136, null, false);
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
             } else if (interaction.options.getString('type') === 'ile') {
                 const row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('createIleMessage')
-                            .setLabel('Nouveau message')
+                            .setLabel('New message')
                             .setStyle(ButtonStyle.Secondary),
                     );
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'shop') {
-                await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+                await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return await boutiqueAction.diplayShop(interaction);
             }
-            return interaction.reply({ content:'Commande non trouvée.', ephemeral: true});
         }
-        return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
+        return interaction.reply({ content:'You don\'t have the right to do that.', ephemeral: true});
     },
 };

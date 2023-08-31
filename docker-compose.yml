@@ -1,20 +1,20 @@
 version: "3.3"
 services:
 
- facteur:
+ facteuren:
   build: .
   networks:
    - isolated_nw2
   restart: on-failure
   volumes:
    - /tmp
-  container_name: facteur
+  container_name: facteuren
   depends_on:
-   - pgdb
- pgdb:
+   - pgdben
+ pgdben:
   image: postgres:15.0
   ports:
-   - 5432:5432
+   - 5433:5432
   networks:
    - isolated_nw2
   volumes:
@@ -23,7 +23,7 @@ services:
    POSTGRES_DB: bouteille
    POSTGRES_USER: postgres
    POSTGRES_PASSWORD: superFacteurBouteille2052
-  container_name: postgres
+  container_name: postgresen
 
 networks:
  isolated_nw2:

@@ -1,8 +1,8 @@
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
-const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newBirdCategory} = require("../config.json");
+const { ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { newBirdCategory } = require("../config.json");
 const birdDB = require("../database/bird");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
@@ -14,7 +14,7 @@ module.exports = {
     async execute(interaction) {
 
         if (global.semaphore.includes(interaction.user.id)) {
-            return await interaction.reply({ content: 'Vous avez déjà un oiseau en cours de création !', ephemeral: true });
+            return await interaction.reply({ content: 'You already have a bird being created!', ephemeral: true });
         }
 
         try {
@@ -22,10 +22,10 @@ module.exports = {
 
             const content = interaction.fields.getTextInputValue('textBird');
             if (content.trim() === '') {
-                return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+                return await interaction.reply({ content: "The message cannot be empty.", ephemeral: true });
             }
 
-            await interaction.reply({ content: 'Votre oiseau a été envoyé.', ephemeral: true });
+            await interaction.reply({ content: 'Your bird has been sent. (', ephemeral: true });
 
             try {
                 await bottle.createBird(interaction.guild, interaction.member.id, content, 0);

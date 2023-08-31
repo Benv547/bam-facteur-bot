@@ -5,21 +5,21 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('vip')
-        .setDescription('Informations sur les avantages des VIP.s !'),
+        .setDescription('Informations about the benefits of VIP\'s!'),
     async execute(interaction) {
 
-        const text = '\n\nVoici les avantages que tu as :' +
-            '\n- Avoir des **réductions de 25%** sur tes achats !' +
-            '\n- Pouvoir **changer de pseudonyme** sur le serveur !' +
-            '\n- Un **temps réduit** sur l\'envoi de tes bouteilles !' +
-            '\n- Faire du **surf** sur les vagues de Bouteille à la mer !';
+        const text = '\n\nThese are the benefits you get:' +
+            '\n- Get **25% off** your purchases!' +
+            '\n- Be able to **change your nickname** on the server!' +
+            '\n- An **even shorter** time to send your bottles!' +
+            '\n- **Surfing** on the waves of Bottle in the sea!';
 
-        const textVIP = 'Tu es **déjà VIP**, super !' + text;
-        const textNotVIP = 'Les VIP.s sont **les chouchous** de Bouteille à la mer !' +
-            '\nLe V.I.P. peut t\'être offert de **plusieurs manières** :\n- Inviter **5** de tes amis, *quelle célébrité* !\n- **Gagner** à un évènement ou une animation, *trop fort* !' + text;
+        const textVIP = 'You are **already VIP**, awesome!' + text;
+        const textNotVIP = 'VIP\'s are **the darlings** of Bottle in the sea!' +
+            '\nThe V.I.P. can be obtained in **several ways:**\n- Invite **5** of your friends, *huge celebrity*!\n- **Win** to an event or an animation, *too strong*!' + text;
 
-        const embedVipAlready = createEmbeds.createFullEmbed('Very Illustre Personne !', textVIP, null, null, null);
-        const embedNotVip = createEmbeds.createFullEmbed('Very Illustre Personne !', textNotVIP, null, null, null);
+        const embedVipAlready = createEmbeds.createFullEmbed('Very Illustrious Person!', textVIP, null, null, null);
+        const embedNotVip = createEmbeds.createFullEmbed('Very Illustrious Person!', textNotVIP, null, null, null);
 
 
         if (await roles.userIsVip(interaction.member)) {

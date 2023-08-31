@@ -8,17 +8,17 @@ module.exports = {
     async execute(interaction) {
 
         if (global.semaphore.includes(interaction.user.id)) {
-            return await interaction.reply({ content: 'Vous avez déjà une recherche en cours de création !', ephemeral: true });
+            return await interaction.reply({ content: 'You already have a watend being created!', ephemeral: true });
         }
 
         const modal = new ModalBuilder()
             .setCustomId('createWanted')
-            .setTitle('Ma recherche');
+            .setTitle('My wanted notice');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textWanted')
-            .setLabel("Quelle est votre recherche ?")
+            .setLabel("What do you want to write in your wanted notice?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMinLength(10)
@@ -46,7 +46,7 @@ module.exports = {
             const diffMinutes = Math.ceil(diff / (1000 * 60));
             if (diffMinutes < waitMinutes) {
                 const timeToWait = waitMinutes - diffMinutes;
-                const embed = createEmbeds.createFullEmbed('', '**Vous pourrez créer une nouvelle recherche <t:' + (Math.round(new Date().getTime() / 1000) + 60 * timeToWait) + ':R>**', null, null, null, null, false);
+                const embed = createEmbeds.createFullEmbed('', '**You can create a new wanted notice in <t:' + (Math.round(new Date().getTime() / 1000) + 60 * timeToWait) + ':R>**', null, null, null, null, false);
                 return await interaction.reply({ embeds: [embed], ephemeral: true });
             }
         }

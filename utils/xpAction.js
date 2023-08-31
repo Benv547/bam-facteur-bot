@@ -21,7 +21,7 @@ module.exports = {
                     await member.roles.add(level.role);
                     // Fetch role from guild and send message.
                     const role = await guild.roles.fetch(level.role);
-                    const embed = createEmbeds.createFullEmbed('Vous avez atteint un nouveau niveau !', 'Vous êtes maintenant **' + role.name + '** !', null, null, 0x2f3136, null);
+                    const embed = createEmbeds.createFullEmbed('You\'ve reached a new level!', 'You are now **' + role.name + '**!', null, null, 0x2f3136, null);
                     try {
                         await member.send({ content: "", embeds: [embed] });
                     } catch {}

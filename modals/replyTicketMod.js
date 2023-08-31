@@ -10,7 +10,7 @@ module.exports = {
 
         const content = interaction.fields.getTextInputValue('textTicket');
         if (content.trim() === '') {
-            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+            return await interaction.reply({content: "The message cannot be empty.", ephemeral: true});
         }
 
         // Create a button to reply to the ticket
@@ -18,11 +18,11 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyTicketMod')
-                    .setLabel('Répondre')
+                    .setLabel('Reply')
                     .setStyle(ButtonStyle.Primary),
             );
 
-        const embedMod = createEmbeds.createFullEmbed(interaction.user.username.charAt(0).toUpperCase() + interaction.user.username.substring(1), content, null, null, 0x00FF00, null);
+        const embedMod = createEmbeds.createFullEmbed(interaction.user.username, content, null, null, 0x00FF00, null);
         await interaction.channel.send({ content: '', embeds: [embedMod], components: [rowMod] });
 
         // Create a button to reply to the ticket
@@ -30,13 +30,13 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyTicketUser')
-                    .setLabel('Répondre')
+                    .setLabel('Reply')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteTicket')
-                    .setLabel('Fermer le ticket')
+                    .setLabel('Close the ticket')
                     .setStyle(ButtonStyle.Danger),
             );
 
@@ -45,18 +45,18 @@ module.exports = {
         const user = await ticketDB.get_id_user(interaction.channel.id);
 
         if (user == null) {
-            return await interaction.reply({ content: 'Le ticket est introuvable ou a déjà été fermé..', ephemeral: true });
+            return await interaction.reply({ content: 'The ticket cannot be found or has already been closed..', ephemeral: true });
         }
 
         // Fetch user from guild
         try {
             const userGuild = await interaction.guild.members.fetch(user);
-            const embedUser = createEmbeds.createFullEmbed("Modérateur", content, null, null, 0x00FF00, null);
-            await userGuild.send({ content: 'Réponse du ticket', embeds: [embedUser], components: [rowUser] });
+            const embedUser = createEmbeds.createFullEmbed("Moderator", content, null, null, 0x00FF00, null);
+            await userGuild.send({ content: 'Ticket answer', embeds: [embedUser], components: [rowUser] });
         } catch (e) {
-            return await interaction.reply({ content: 'La personne a quitté le serveur ou il est impossible de lui répondre pour le moment.', ephemeral: true });
+            return await interaction.reply({ content: 'The person has left the server or cannot be answered at this time.', ephemeral: true });
         }
         // Send an MP message to the sender
-        await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
+        await interaction.reply({ content: 'Your answer has been sent.', ephemeral: true });
     },
 };

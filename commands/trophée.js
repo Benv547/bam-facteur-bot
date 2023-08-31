@@ -5,13 +5,13 @@ const createEmbeds = require("../utils/createEmbeds");
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('trophée')
-        .setDescription('Admirez vos trophées !'),
+        .setName('trophy')
+        .setDescription('Enjoy your trophies!'),
     async execute(interaction) {
         const achievements = await achievementDB.getAllAchievementsFromUser(interaction.user.id);
         const allAchievements = await achievementDB.getAllAchievements();
 
-        const embed = createEmbeds.createFullEmbed('Vos trophées (' + achievements.length + '/' + allAchievements.length + ')', '', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Your trophies (' + achievements.length + '/' + allAchievements.length + ')', '', null, null, 0x2f3136, null);
         let fields = [];
         for (const achievement of allAchievements) {
             let message = '';
@@ -30,10 +30,10 @@ module.exports = {
                 status += '\n\n🏆 (' + date.toLocaleDateString('fr-FR') + ')\n';
             } else {
                 message = '** **\n• ?????????';
-                status = '(non obtenu)\n';
+                status = '(not obtained)\n';
             }
             status += '[**' + achievement.rarity + '**]';
-            status += '\nDébloqué par ' + percentage + '%\n';
+            status += '\nUnlocked by ' + percentage + '%\n';
             status += '\n** **';
             fields.push({
                 name: message,

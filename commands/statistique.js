@@ -12,38 +12,38 @@ const createEmbeds = require('../utils/createEmbeds');
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('statistique')
-        .setDescription('Affiche les statistiques du serveur !')
+        .setName('statistics')
+        .setDescription('Display the server statistics!')
         .addStringOption(option =>
             option.setName('type')
-                .setDescription("Le type d'information à afficher")
+                .setDescription("The type of information to display")
                 .setRequired(true)
                 .setChoices(
                     { name: 'Messages', value: 'message' },
-                    { name: 'Bouteilles', value: 'bottle' },
-                    { name: 'Utilisateurs', value: 'user' },
+                    { name: 'Bottles', value: 'bottle' },
+                    { name: 'Users', value: 'user' },
                     { name: 'Sanctions', value: 'sanction' },
-                    { name: 'Oiseaux', value: 'bird' },
-                    { name: 'Recherches', value: 'wanted' },
-                    { name: 'Evénements', value: 'event' },
+                    { name: 'Birds', value: 'bird' },
+                    { name: 'Wanted notices', value: 'wanted notices' },
+                    { name: 'Events', value: 'event' },
                 ))
         .addStringOption(option =>
-            option.setName('periode')
-                .setDescription("La période de temps")
+            option.setName('period')
+                .setDescription("The time period")
                 .setRequired(true)
                 .setChoices(
-                    { name: '7 jours', value: 'sevenDays' },
-                    { name: '30 jours', value: 'thirtyDays' },
-                    { name: '1 an', value: 'oneYear' },
+                    { name: '7 days', value: 'sevenDays' },
+                    { name: '30 days', value: 'thirtyDays' },
+                    { name: '1 year', value: 'oneYear' },
                 )),
     async execute(interaction) {
         const type = interaction.options.get('type').value;
-        const periode = interaction.options.get('periode').value;
+        const periode = interaction.options.get('period').value;
 
         let periodeName = '';
-        const sevenDays = '7 derniers jours';
-        const thirtyDays = '30 derniers jours';
-        const oneYear = 'cette année';
+        const sevenDays = 'Last 7 days';
+        const thirtyDays = 'Lay 30 days';
+        const oneYear = 'this year';
 
         let chart = null;
         let text = '';
@@ -54,21 +54,21 @@ module.exports = {
                     case 'sevenDays':
                         periodeName = sevenDays;
                         const totalMessageSevenDays = await messageDB.getMessageCountForOneWeek();
-                        text = `\n\n**${totalMessageSevenDays}** messages ont été envoyés sur le serveur durant cette période.`;
+                        text = `\n\n**${totalMessageSevenDays}** messages were sent to the server during this period.`;
                         const statsMessage = await messageDB.getMessageCountEachDayForOneWeek();
                         chart = await charts.createChartForMessage(statsMessage);
                         break;
                     case 'thirtyDays':
                         periodeName = thirtyDays;
                         const totalMessageThirtyDays = await messageDB.getMessageCountForOneMonth();
-                        text = `\n\n**${totalMessageThirtyDays}** messages ont été envoyés sur le serveur durant cette période.`;
+                        text = `\n\n**${totalMessageThirtyDays}** messages were sent to the server during this period.`;
                         const statsMessageThirtyDays = await messageDB.getMessageCountEachDayForOneMonth();
                         chart = await charts.createChartForMessage(statsMessageThirtyDays);
                         break;
                     case 'oneYear':
                         periodeName = oneYear;
                         const totalMessageOneYear = await messageDB.getMessageCountEachMonthForThisYear();
-                        text = `\n\n**${totalMessageOneYear}** messages ont été envoyés sur le serveur durant cette période.`;
+                        text = `\n\n**${totalMessageOneYear}** messages were sent to the server during this period.`;
                         const statsMessageOneYear = await messageDB.getMessageCountEachMonthForThisYear();
                         chart = await charts.createChartForMessage(statsMessageOneYear);
                         break;
@@ -79,7 +79,7 @@ module.exports = {
                     case 'sevenDays':
                         periodeName = sevenDays;
                         const totalBottleSevenDays = await bottleDB.getBottleCountForOneWeek();
-                        text = `\n\n**${totalBottleSevenDays}** bouteilles ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBottleSevenDays}** bottles were sent to the server during this period.`;
                         const statsBottle = await bottleDB.getBottleCountEachDayForOneWeek();
                         const statsBottleArchived = await bottleDB.getBottleArchivedCountEachDayForOneWeek();
                         const statsBottleTerminated = await bottleDB.getBottleTerminatedCountEachDayForOneWeek();
@@ -88,7 +88,7 @@ module.exports = {
                     case 'thirtyDays':
                         periodeName = thirtyDays;
                         const totalBottleThirtyDays = await bottleDB.getBottleCountForOneMonth();
-                        text = `\n\n**${totalBottleThirtyDays}** bouteilles ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBottleThirtyDays}** bottles were sent to the server during this period.`;
                         const statsBottleThirtyDays = await bottleDB.getBottleCountEachDayForOneMonth();
                         const statsBottleArchivedThirtyDays = await bottleDB.getBottleArchivedCountEachDayForOneMonth();
                         const statsBottleTerminatedThirtyDays = await bottleDB.getBottleTerminatedCountEachDayForOneMonth();
@@ -97,7 +97,7 @@ module.exports = {
                     case 'oneYear':
                         periodeName = oneYear;
                         const totalBottleOneYear = await bottleDB.getBottleCountForThisYear();
-                        text = `\n\n**${totalBottleOneYear}** bouteilles ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBottleOneYear}** bottles were sent to the server during this period.`;
                         const statsBottleOneYear = await bottleDB.getBottleCountEachMonthForThisYear();
                         const statsBottleArchivedOneYear = await bottleDB.getBottleArchivedCountEachMonthForThisYear();
                         const statsBottleTerminatedOneYear = await bottleDB.getBottleTerminatedCountEachMonthForThisYear();
@@ -110,8 +110,8 @@ module.exports = {
                 let textMoneyAndXp = '';
                 const total = await userDB.getTotalOfMoneyAndXp();
                 if (total) {
-                    textMoneyAndXp += `\n\n**${total.money}** pièces d'or sont en actuellement circulation sur le serveur.`;
-                    textMoneyAndXp += `\n**${total.xp}** points d'<:xp:851123277497237544> sont en actuellement circulation sur le serveur.`;
+                    textMoneyAndXp += `\n\n**${total.money}** gold coins are currently in circulation on the server.`;
+                    textMoneyAndXp += `\n**${total.xp}** <:xp:1058066266797113455> points are currently in circulation on the server.`;
                 }
 
                 switch (periode) {
@@ -120,9 +120,9 @@ module.exports = {
                         const totalUserSevenDays = await recordDB.getCountForOneWeek("user");
                         const totalVIPUserSevenDays = await recordDB.getCountForOneWeek("vip");
                         const totalBoostUserSevenDays = await recordDB.getCountForOneWeek("boost");
-                        text = `\n\n**${totalUserSevenDays}** utilisateurs ont été sur le serveur durant cette période.`;
-                        text += `\n**${totalVIPUserSevenDays}** utilisateurs ont été VIP durant cette période.`;
-                        text += `\n**${totalBoostUserSevenDays}** utilisateurs ont boosté le serveur durant cette période.` + textMoneyAndXp;
+                        text = `\n\n**${totalUserSevenDays}** users were on the server during this period.`;
+                        text += `\n**${totalVIPUserSevenDays}** users VIP were on the server during this period.`;
+                        text += `\n**${totalBoostUserSevenDays}** users have boosted the server during this period.` + textMoneyAndXp;
                         const statsUser = await recordDB.getCountEachDayForOneWeek("user");
                         const statsVIPUser = await recordDB.getCountEachDayForOneWeek("vip");
                         const statsBoostUser = await recordDB.getCountEachDayForOneWeek("boost");
@@ -133,9 +133,9 @@ module.exports = {
                         const totalUserThirtyDays = await recordDB.getCountForOneMonth("user");
                         const totalVIPUserThirtyDays = await recordDB.getCountForOneMonth("vip");
                         const totalBoostUserThirtyDays = await recordDB.getCountForOneMonth("boost");
-                        text = `\n\n**${totalUserThirtyDays}** utilisateurs ont été sur le serveur durant cette période.`;
-                        text += `\n**${totalVIPUserThirtyDays}** utilisateurs ont été VIP sur le serveur durant cette période.`;
-                        text += `\n**${totalBoostUserThirtyDays}** utilisateurs ont boosté le serveur durant cette période.` + textMoneyAndXp;
+                        text = `\n\n**${totalUserThirtyDays}** users were on the server during this period.`;
+                        text += `\n**${totalVIPUserThirtyDays}** users VIP were on the server during this period.`;
+                        text += `\n**${totalBoostUserThirtyDays}** users have boosted the server during this period.` + textMoneyAndXp;
                         const statsUserThirtyDays = await recordDB.getCountEachDayForOneMonth("user");
                         const statsVIPUserThirtyDays = await recordDB.getCountEachDayForOneMonth("vip");
                         const statsBoostUserThirtyDays = await recordDB.getCountEachDayForOneMonth("boost");
@@ -146,9 +146,9 @@ module.exports = {
                         const totalUserOneYear = await recordDB.getCountForThisYear("user");
                         const totalVIPUserOneYear = await recordDB.getCountForThisYear("vip");
                         const totalBoostUserOneYear = await recordDB.getCountForThisYear("boost");
-                        text = `\n\n**${totalUserOneYear}** utilisateurs ont été sur le serveur durant cette période.`;
-                        text += `\n**${totalVIPUserOneYear}** utilisateurs VIP ont été sur le serveur durant cette période.`;
-                        text += `\n**${totalBoostUserOneYear}** utilisateurs BOOST ont été sur le serveur durant cette période.` + textMoneyAndXp;
+                        text = `\n\n**${totalUserOneYear}** users were on the server during this period.`;
+                        text += `\n**${totalVIPUserOneYear}** users VIP were on the server during this period.`;
+                        text += `\n**${totalBoostUserOneYear}** users have boosted the server during this period.` + textMoneyAndXp;
                         const statsUserOneYear = await recordDB.getCountEachMonthForThisYear("user");
                         const statsVIPUserOneYear = await recordDB.getCountEachMonthForThisYear("vip");
                         const statsBoostUserOneYear = await recordDB.getCountEachMonthForThisYear("boost");
@@ -162,8 +162,8 @@ module.exports = {
                         periodeName = sevenDays;
                         const totalBirdSevenDays = await birdDB.getBirdCountForOneWeek();
                         const totalReactionSevenDays = await birdDB.getReactionCountForOneWeek();
-                        text = `\n\n**${totalBirdSevenDays}** oiseaux ont été envoyés sur le serveur durant cette période.`;
-                        text += `\n**${totalReactionSevenDays}** réactions ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBirdSevenDays}** birds were sent to the server during this period.`;
+                        text += `\n**${totalReactionSevenDays}** reactions were sent to the server during this period.`;
                         const statsBird = await birdDB.getBirdCountEachDayForOneWeek();
                         const statsReaction = await birdDB.getReactionCountEachDayForOneWeek();
                         chart = await charts.createChartForBird(statsBird, statsReaction);
@@ -172,8 +172,8 @@ module.exports = {
                         periodeName = thirtyDays;
                         const totalBirdThirtyDays = await birdDB.getBirdCountForOneMonth();
                         const totalReactionThirtyDays = await birdDB.getReactionCountForOneMonth();
-                        text = `\n\n**${totalBirdThirtyDays}** oiseaux ont été envoyés sur le serveur durant cette période.`;
-                        text += `\n**${totalReactionThirtyDays}** réactions ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBirdThirtyDays}** birds were sent to the server during this period.`;
+                        text += `\n**${totalReactionThirtyDays}** reactions were sent to the server during this period.`;
                         const statsBirdThirtyDays = await birdDB.getBirdCountEachDayForOneMonth();
                         const statsReactionThirtyDays = await birdDB.getReactionCountEachDayForOneMonth();
                         chart = await charts.createChartForBird(statsBirdThirtyDays, statsReactionThirtyDays);
@@ -182,8 +182,8 @@ module.exports = {
                         periodeName = oneYear;
                         const totalBirdOneYear = await birdDB.getBirdCountForThisYear();
                         const totalReactionOneYear = await birdDB.getReactionCountForThisYear();
-                        text = `\n\n**${totalBirdOneYear}** oiseaux ont été envoyés sur le serveur durant cette période.`;
-                        text += `\n**${totalReactionOneYear}** réactions ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBirdOneYear}** birds were sent to the server during this period.`;
+                        text += `\n**${totalReactionOneYear}** reactions were sent to the server during this period.`;
                         const statsBirdOneYear = await birdDB.getBirdCountEachMonthForThisYear();
                         const statsReactionOneYear = await birdDB.getReactionCountEachMonthForThisYear();
                         chart = await charts.createChartForBird(statsBirdOneYear, statsReactionOneYear);
@@ -196,8 +196,8 @@ module.exports = {
                         periodeName = sevenDays;
                         const totalWantedSevenDays = await wantedDB.getWantedCountForOneWeek();
                         const totalRepliesSevenDays = await wantedDB.getRepliesCountForOneWeek();
-                        text = `\n\n**${totalWantedSevenDays}** recherches ont été envoyées sur le serveur durant cette période.`;
-                        text += `\n**${totalRepliesSevenDays}** réponses ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalWantedSevenDays}** wanted notices were sent to the server during this period.`;
+                        text += `\n**${totalRepliesSevenDays}** responses were sent to the server during this period.`;
                         const statsWanted = await wantedDB.getWantedCountEachDayForOneWeek();
                         const statsReplies = await wantedDB.getRepliesCountEachDayForOneWeek();
                         chart = await charts.createChartForWanted(statsWanted, statsReplies);
@@ -206,8 +206,8 @@ module.exports = {
                         periodeName = thirtyDays;
                         const totalWantedThirtyDays = await wantedDB.getWantedCountForOneMonth();
                         const totalRepliesThirtyDays = await wantedDB.getRepliesCountForOneMonth();
-                        text = `\n\n**${totalWantedThirtyDays}** recherches ont été envoyées sur le serveur durant cette période.`;
-                        text += `\n**${totalRepliesThirtyDays}** réponses ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalWantedThirtyDays}** wanted notices were sent to the server during this period.`;
+                        text += `\n**${totalRepliesThirtyDays}** responses were sent to the server during this period.`;
                         const statsWantedThirtyDays = await wantedDB.getWantedCountEachDayForOneMonth();
                         const statsRepliesThirtyDays = await wantedDB.getRepliesCountEachDayForOneMonth();
                         chart = await charts.createChartForWanted(statsWantedThirtyDays, statsRepliesThirtyDays);
@@ -216,8 +216,8 @@ module.exports = {
                         periodeName = oneYear;
                         const totalWantedOneYear = await wantedDB.getWantedCountForThisYear();
                         const totalRepliesOneYear = await wantedDB.getRepliesCountForThisYear();
-                        text = `\n\n**${totalWantedOneYear}** recherches ont été envoyées sur le serveur durant cette période.`;
-                        text += `\n**${totalRepliesOneYear}** réponses ont été envoyées sur le serveur durant cette période.`;
+                        text = `\n\n**${totalWantedOneYear}** wanted notices were sent to the server during this period.`;
+                        text += `\n**${totalRepliesOneYear}** responses were sent to the server during this period.`;
                         const statsWantedOneYear = await wantedDB.getWantedCountEachMonthForThisYear();
                         const statsRepliesOneYear = await wantedDB.getRepliesCountEachMonthForThisYear();
                         chart = await charts.createChartForWanted(statsWantedOneYear, statsRepliesOneYear);
@@ -232,10 +232,10 @@ module.exports = {
                         const totalMuteSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("mute");
                         const totalWarnSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("warn");
                         const totalWarnabusifSanctionSevenDays = await sanctionDB.getSanctionCountForOneWeek("abusif");
-                        text = `\n\n**${totalBanSanctionSevenDays}** bannissement ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalMuteSanctionSevenDays}** mutes ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalWarnSanctionSevenDays}** warns ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalWarnabusifSanctionSevenDays}** warns abusifs ont été appliqués sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBanSanctionSevenDays}** banishments were applied on the server during this period.`;
+                        text += `\n**${totalMuteSanctionSevenDays}** mutes were applied on the server during this period.`;
+                        text += `\n**${totalWarnSanctionSevenDays}** warns were applied on the server during this period.`;
+                        text += `\n**${totalWarnabusifSanctionSevenDays}** abusive warns were applied on the server during this period.`;
                         const statsBanSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("ban");
                         const statsMuteSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("mute");
                         const statsWarnSanctionSevenDays = await sanctionDB.getSanctionCountEachDayForOneWeek("warn");
@@ -248,10 +248,10 @@ module.exports = {
                         const totalMuteSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("mute");
                         const totalWarnSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("warn");
                         const totalWarnabusifSanctionThirtyDays = await sanctionDB.getSanctionCountForOneMonth("abusif");
-                        text = `\n\n**${totalBanSanctionThirtyDays}** bannissement ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalMuteSanctionThirtyDays}** mutes ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalWarnSanctionThirtyDays}** warns ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalWarnabusifSanctionThirtyDays}** warns abusifs ont été appliqués sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBanSanctionThirtyDays}** banishments were applied on the server during this period.`;
+                        text += `\n**${totalMuteSanctionThirtyDays}** mutes were applied on the server during this period.`;
+                        text += `\n**${totalWarnSanctionThirtyDays}** warns were applied on the server during this period.`;
+                        text += `\n**${totalWarnabusifSanctionThirtyDays}** abusive warns abusifs were applied on the server during this period.`;
                         const statsBanSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("ban");
                         const statsMuteSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("mute");
                         const statsWarnSanctionThirtyDays = await sanctionDB.getSanctionCountEachDayForOneMonth("warn");
@@ -264,10 +264,10 @@ module.exports = {
                         const totalMuteSanctionOneYear = await sanctionDB.getSanctionCountForThisYear("Mute");
                         const totalWarnSanctionOneYear = await sanctionDB.getSanctionCountForThisYear("Warn");
                         const totalWarnabusifSanctionOneYear = await sanctionDB.getSanctionCountForThisYear("Warn abusif");
-                        text = `\n\n**${totalBanSanctionOneYear}** bannissement ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalMuteSanctionOneYear}** mutes ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalWarnSanctionOneYear}** warns ont été appliqués sur le serveur durant cette période.`;
-                        text += `\n**${totalWarnabusifSanctionOneYear}** warns abusifs ont été appliqués sur le serveur durant cette période.`;
+                        text = `\n\n**${totalBanSanctionOneYear}** banishments were applied on the server during this period.`;
+                        text += `\n**${totalMuteSanctionOneYear}** mutes were applied on the server during this period.`;
+                        text += `\n**${totalWarnSanctionOneYear}** warns were applied on the server during this period.`;
+                        text += `\n**${totalWarnabusifSanctionOneYear}** abusive warns abusifs were applied on the server during this period.`;
                         const statsBanSanctionOneYear = await sanctionDB.getSanctionCountEachMonthForThisYear("Ban");
                         const statsMuteSanctionOneYear = await sanctionDB.getSanctionCountEachMonthForThisYear("Mute");
                         const statsWarnSanctionOneYear = await sanctionDB.getSanctionCountEachMonthForThisYear("Warn");
@@ -281,21 +281,21 @@ module.exports = {
                     case 'sevenDays':
                         periodeName = sevenDays;
                         const totalEventSevenDays = await recordDB.getCountForOneWeek("event");
-                        text = `\n\n**${totalEventSevenDays}** événements ont été organisés sur le serveur durant cette période.`;
+                        text = `\n\n**${totalEventSevenDays}** events were organized on the server during this period.`;
                         const statsEventSevenDays = await recordDB.getCountEachDayForOneWeek("event");
                         chart = await charts.createChartForEvent(statsEventSevenDays);
                         break;
                     case 'thirtyDays':
                         periodeName = thirtyDays;
                         const totalEventThirtyDays = await recordDB.getCountForOneMonth("event");
-                        text = `\n\n**${totalEventThirtyDays}** événements ont été organisés sur le serveur durant cette période.`;
+                        text = `\n\n**${totalEventThirtyDays}** events were organized on the server during this period.`;
                         const statsEventThirtyDays = await recordDB.getCountEachDayForOneMonth("event");
                         chart = await charts.createChartForEvent(statsEventThirtyDays);
                         break;
                     case 'oneYear':
                         periodeName = oneYear;
                         const totalEventOneYear = await recordDB.getCountForThisYear("event");
-                        text = `\n\n**${totalEventOneYear}** événements ont été organisés sur le serveur durant cette période.`;
+                        text = `\n\n**${totalEventOneYear}** events were organized on the server during this period.`;
                         const statsEventOneYear = await recordDB.getCountEachMonthForThisYear("event");
                         chart = await charts.createChartForEvent(statsEventOneYear);
                         break;
@@ -304,10 +304,10 @@ module.exports = {
         }
 
         try {
-            const embed = createEmbeds.createFullEmbed('Statistiques', 'Voici les statistiques du serveur pour la période : **' + periodeName + '**' + text, null, chart, null, undefined);
+            const embed = createEmbeds.createFullEmbed('Statistics', 'This is the server statistics for the period: **' + periodeName + '**' + text, null, chart, null, undefined);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         } catch (error) {
-            const embed = createEmbeds.createErrorEmbed('Erreur', 'Impossible de créer le graphique.');
+            const embed = createEmbeds.createErrorEmbed('Error', 'Unable to create the chart.');
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
     },

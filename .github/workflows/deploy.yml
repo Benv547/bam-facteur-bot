@@ -4,7 +4,7 @@ name: Build and Deploy
 # events but only for the main branch
 on:
   push:
-    branches: [main]
+    branches: [english]
   workflow_dispatch:
     inputs:
       logLevel:
@@ -31,8 +31,9 @@ jobs:
           # SSH port
           port: ${{ secrets.VPS_SSH_PORT }}
           script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git pull origin main
+            cd ${{ secrets.PROJECT_EN_PATH }}
+            git checkout english
+            git pull origin english
             make down
             make build
             echo "Deleting old image(s)..."

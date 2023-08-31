@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('replyHelp')
-            .setTitle('Pouvez-vous aider cette personne ?');
+            .setTitle('Can you help this person?');
 
         // Add components to modal
         const input = new TextInputBuilder()
             .setCustomId('textHelp')
-            .setLabel("Quelle est votre réponse ?")
+            .setLabel("What's your reply?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);

@@ -7,18 +7,18 @@ module.exports = {
 
         const modal = new ModalBuilder()
             .setCustomId('deleteBottle')
-            .setTitle('Êtes-vous sûr ?');
+            .setTitle('Are you sure?');
 
         // Add components to modal
         const deleteInput = new TextInputBuilder()
             .setCustomId('textSuppression')
-            .setLabel("⚠️ Ecrivez 'supprimer' pour confirmer :")
+            .setLabel("⚠️ Write 'delete' to confirm:")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Short);
 
         const raisonInput = new TextInputBuilder()
             .setCustomId('textRaison')
-            .setLabel("Quelle est la raison ?")
+            .setLabel("What's the reason?")
             .setRequired(false)
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph);

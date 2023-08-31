@@ -8,7 +8,7 @@ module.exports = {
     public: true,
     data: new SlashCommandBuilder()
         .setName('xp')
-        .setDescription('Consultez votre niveau !'),
+        .setDescription('Check your level!'),
     async execute(interaction) {
         // Get the user's currency
         let xp = await xpAction.get(interaction.user.id);
@@ -29,10 +29,10 @@ module.exports = {
         const nextXp = await xpAction.getNextLevel(interaction.user.id);
         const difference = nextXp - xp;
         if (difference < 0) {
-            const embed = createEmbeds.createFullEmbed('Un niveau impressionnant !', "Vous êtes au niveau maximum avec **" + xp + " XP** !", null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed('An impressive level!', "You are at max level with **" + xp + " XP**!", null, null, 0x2f3136, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
         }
-        const embed = createEmbeds.createFullEmbed('Un niveau impressionnant !', 'Vous êtes **<@&' + role + '>** et vous avez **' + xp + '** <:xp:851123277497237544> !\nVous avez besoin de **' + difference + '** <:xp:851123277497237544> pour monter d\'un niveau.', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('An impressive level!', 'You are **<@&' + role + '>** and have **' + xp + '** <:xp:851123277497237544> !\nYou need **' + difference + '** <:xp:1058066266797113455> to level up.', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

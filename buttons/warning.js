@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId(interaction.customId)
-            .setTitle('🚨⚠️ Raison du signalement ⚠️🚨');
+            .setTitle('🚨⚠️ Reason for reporting ⚠️🚨');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textWarning')
-            .setLabel("Pourquoi avez-vous signalé le message ?")
+            .setLabel("Why did you report the message?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);
