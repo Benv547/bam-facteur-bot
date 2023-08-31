@@ -10,11 +10,11 @@ const roles = require("../utils/roles");
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('boutique')
-        .setDescription('Voir les boutiques du bot !')
+        .setName('shop')
+        .setDescription('See the bot shops!')
         .addStringOption(option =>
-            option.setName('catégorie')
-                .setDescription('La catégorie de boutique')
+            option.setName('category')
+                .setDescription('The category of shop')
                 .setRequired(true)
                 .setChoices(
                     { name: 'Sticker', value: 'sticker' },
@@ -22,10 +22,10 @@ module.exports = {
                 ))
         .addStringOption(option =>
             option.setName('item')
-                .setDescription('L\'item à acheter')),
+                .setDescription('The item to purchase')),
     async execute(interaction) {
 
-        const categorie = interaction.options.get('catégorie').value;
+        const categorie = interaction.options.get('category').value;
         const item = interaction.options.get('item')?.value;
 
         if (item) {
@@ -35,7 +35,7 @@ module.exports = {
         const items = await boutiqueDB.getProductByTypeOnBoutique(categorie);
 
         if (items === null || items.length == 0) {
-            return await interaction.reply({ content: 'Cette catégorie n\'existe pas ou est vide.', ephemeral: true });
+            return await interaction.reply({ content: 'This category does not exist or is empty.', ephemeral: true });
         }
 
         if (await roles.userIsBooster(interaction.member)) {
@@ -55,22 +55,22 @@ module.exports = {
                 const sticker = await stickerDB.getSticker(item.id_item);
                 const stickers = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker.name);
                 if (stickers.length > 0) {
-                    message += '• **~~' + sticker.name + '~~** - possédé\n';
+                    message += '• **~~' + sticker.name + '~~** - owned\n';
                 } else {
-                    message += '• **' + sticker.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
+                    message += '• **' + sticker.name + '**: ' + item.price + ' <:gold:1058066245154525265>\n';
                 }
             } else if (categorie === 'arabesque') {
                 const footer = await footerDB.getFooter(item.id_item);
                 const footers = await footerDB.getFooterFromUserWithName(interaction.user.id, footer.name);
                 if (footers.length > 0) {
-                    message += '• **~~' + footer.name + '~~** - possédé\n';
+                    message += '• **~~' + footer.name + '~~** - owned\n';
                 } else {
-                    message += '• **' + footer.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
+                    message += '• **' + footer.name + '**: ' + item.price + ' <:gold:1058066245154525265>\n';
                 }
             }
         }
 
-        const embed = createEmbeds.createFullEmbed('Boutique de Bouteille à la mer', '**Voici les items de la catégorie "__' + categorie.toUpperCase() + '__" :**\n\n' + message, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/shopping-cart_1f6d2.png', null, 0x2f3136, 'Pour acheter un item, faites /boutique [catégorie] <item> ou /voir [catégorie] [item] pour le voir.', false);
+        const embed = createEmbeds.createFullEmbed('Bottle in the Sea Shop', '**These are the items in the category __' + categorie.toUpperCase() + '__":**\n\n' + message, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/shopping-cart_1f6d2.png', null, 0x2f3136, 'To purchase an item, do /shop [category] <item> or /see [category] [item] to view it.', false);
 
         // Send embed
         return await interaction.reply({ embeds: [embed], ephemeral: true });

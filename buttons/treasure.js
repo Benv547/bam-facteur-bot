@@ -35,12 +35,12 @@ module.exports = {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 10) + 1;
                 await orAction.increment(interaction.user.id, random);
-                gain = random + " <:piece:1045638309235404860>";
+                gain = random + " <:gold:1058066245154525265>";
             } else {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 25) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " <:xp:851123277497237544>";
+                gain = random + " <:xp:1058066266797113455>";
             }
         }
 
@@ -50,12 +50,12 @@ module.exports = {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 25) + 1;
                 await orAction.increment(interaction.user.id, random);
-                gain = random + " <:piece:1045638309235404860>";
+                gain = random + " <:gold:1058066245154525265>";
             } else if (random <= 95) {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 50) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " <:xp:851123277497237544>";
+                gain = random + " <:xp:1058066266797113455>";
             } else {
                 const randFloat = Math.random();
                 const footer = await footerDB.getRandomWinnableFooter(randFloat);
@@ -64,7 +64,7 @@ module.exports = {
                         await footerDB.giveFooterToUser(interaction.user.id, footer.id_footer, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'l\'arabesque ' + footer.name;
+                    gain = 'the arabesque ' + footer.name;
                 }
             }
         }
@@ -75,12 +75,12 @@ module.exports = {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 75) + 1;
                 await orAction.increment(interaction.user.id, random);
-                gain = random + " <:piece:1045638309235404860>";
+                gain = random + " <:gold:1058066245154525265>";
             } else if (random <= 90) {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 100) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " <:xp:851123277497237544>";
+                gain = random + " <:xp:1058066266797113455>";
             } else {
                 const randFloat = Math.random();
                 const sticker = await stickerDB.getRandomWinnableSticker(randFloat);
@@ -89,7 +89,7 @@ module.exports = {
                         await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'le sticker ' + sticker.name;
+                    gain = 'the sticker ' + sticker.name;
                 }
             }
         }
@@ -104,7 +104,7 @@ module.exports = {
                         await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'le sticker ' + sticker.name;
+                    gain = 'the sticker ' + sticker.name;
                 }
             } else {
                 const randFloat = Math.random();
@@ -114,21 +114,21 @@ module.exports = {
                         await footerDB.giveFooterToUser(interaction.user.id, footer.id_footer, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'l\'arabesque ' + footer.name;
+                    gain = 'the arabesque ' + footer.name;
                 }
             }
         }
 
 
 
-        const embed = createEmbeds.createFullEmbed('Bravo !', 'Vous avez reçu **' + gain + '**', null, null, null, null);
+        const embed = createEmbeds.createFullEmbed('Congratulations!', 'You\'ve received **' + gain + '**', null, null, null, null);
         try {
             await userDB.incr_nb_treasures(interaction.user.id);
             await interaction.user.send({ content: "", embeds: [embed], ephemeral: true });
         } catch {
         }
 
-        const embedPublic = createEmbeds.createFullEmbed('','Un•e illustre inconnu•e a reçu **' + gain + '**', null, null, null, null);
+        const embedPublic = createEmbeds.createFullEmbed('','An illustrious stranger has received **' + gain + '**', null, null, null, null);
         // fetch interaction message
         const message = await interaction.channel.messages.fetch(interaction.message.id);
         // update message

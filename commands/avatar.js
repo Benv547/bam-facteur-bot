@@ -9,10 +9,10 @@ module.exports = {
     price: 250,
     data: new SlashCommandBuilder()
         .setName('avatar')
-        .setDescription('Choisissez l\'avatar de vos bouteilles !')
+        .setDescription('Choose the avatar of your bottles!')
         .addStringOption(option =>
             option.setName('code')
-                .setDescription('Le code de l\'avatar')),
+                .setDescription('The code of the avatar')),
     async execute(interaction) {
 
         let price = this.price;
@@ -23,7 +23,7 @@ module.exports = {
         }
 
         if(!await orAction.reduce(interaction.user.id, price )) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer d\'avatar !\nEconomisez **' + price + ' <:piece:1045638309235404860>** et revenez me voir !', null, null, null, null);
+            const embed = createEmbeds.createFullEmbed('Something is missing..', 'You don\'t have enough money to change your avatar!\nSave **' + price + ' <:gold:1058066245154525265>** and come back!', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 
@@ -35,7 +35,7 @@ module.exports = {
         }
 
         const url = 'https://avatars.dicebear.com/api/adventurer-neutral/' + code + '.png'
-        const embed = createEmbeds.createFullEmbed('Encore un super avatar !', 'Voici votre avatar pour vos prochaines bouteilles !', null, url, null, 'Code de l\'avatar : ' + code);
+        const embed = createEmbeds.createFullEmbed('Another awesome avatar!', 'This is your avatar for your next bottles!', null, url, null, 'Code of the avatar: ' + code);
 
         // Check if the user exists in the database
         const userId = await userDB.getUser(interaction.user.id);

@@ -9,7 +9,7 @@ const userDB = require("../database/user")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ban')
-        .setDescription('Permet de ban un membre sans signalement')
+        .setDescription('Ban a member without reporting them')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')
@@ -29,7 +29,7 @@ module.exports = {
                 user = await interaction.guild.members.fetch(interaction.options.getString('userid'));
             }
             catch {
-                return interaction.reply({ content: 'Cet utilisateur n\'est pas sur le serveur ou n\'existe pas.', ephemeral: true });
+                return interaction.reply({ content: 'This user is not on the server or does not exist.', ephemeral: true });
             }
 
             if (userId === null) {
@@ -39,11 +39,11 @@ module.exports = {
             }
             const reason = interaction.options.getString('reason');
 
-            const embed = createEmbeds.createFullEmbed('Vous avez été banni•e', 'Une de vos actions a été jugée comme inappropriée par ' + userMention(interaction.user.id) + ' pour la raison suivante : **' + reason + '**', null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed('You\'ve been banned', 'One of your actions has been deemed inappropriate by ' + userMention(interaction.user.id) + ' for the following reason: **' + reason + '**', null, null, 0x2f3136, null);
             await sanctionDB.saveSanction(userId.id_user, interaction.user.id, "ban", reason);
 
             const channel = await interaction.guild.channels.fetch(sanction);
-            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('ban', 'L\'utilisateur ' + userMention(userId.id_user) + ' a été ban par ' + userMention(interaction.user.id) + ' pour la raison suivante : **' + reason + '**', null, null, 0x2f3136, null)] });
+            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed('ban', 'The user ' + userMention(userId.id_user) + ' has been banned by ' + userMention(interaction.user.id) + 'for the following reason: **' + reason + '**', null, null, 0x2f3136, null)] });
 
             // Send direct message to user
             try {
@@ -51,10 +51,10 @@ module.exports = {
             } catch {
             }
             await user.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: reason });
-            return await interaction.reply({ content: 'L\'utilisateur ' + userMention(userId.id_user) + 'à bien été banni', ephemeral: true });
+            return await interaction.reply({ content: 'The user ' + userMention(userId.id_user) + 'has been banned', ephemeral: true });
 
         }
-        return interaction.reply({ content: 'Vous n\'avez pas le droit de faire cela.', ephemeral: true });
+        return interaction.reply({ content: 'You don\'t have the right to do that.', ephemeral: true });
     },
 };
 

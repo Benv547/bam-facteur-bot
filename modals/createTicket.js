@@ -18,13 +18,13 @@ module.exports = {
 
         const content = interaction.fields.getTextInputValue('textTicket');
         if (content.trim() === '') {
-            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+            return await interaction.reply({content: "The message cannot be empty.", ephemeral: true});
         }
 
         // Check if user is already in a ticket
         const userTicket = await ticketDB.get_id_channel(interaction.user.id);
         if (userTicket) {
-            await interaction.reply({ content: '⚠️ Vous avez déjà un ticket en cours.', ephemeral: true });
+            await interaction.reply({ content: '⚠️ You already have a ticket in progress.', ephemeral: true });
             return;
         }
 
@@ -36,25 +36,25 @@ module.exports = {
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('replyTicketUser')
-                        .setLabel('Répondre')
+                        .setLabel('Reply')
                         .setStyle(ButtonStyle.Primary),
                 )
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('deleteTicket')
-                        .setLabel('Fermer le ticket')
+                        .setLabel('Close the ticket')
                         .setStyle(ButtonStyle.Danger),
                 );
 
             // Create embed for the user
-            const embedUser = createEmbeds.createFullEmbed("Vous", content, null, null, 0x0000FF, null);
+            const embedUser = createEmbeds.createFullEmbed("You", content, null, null, 0x0000FF, null);
             // Send an MP message to the sender
-            await sender.send({ content: 'Votre ticket', embeds: [embedUser], components: [rowUser] });
+            await sender.send({ content: 'Your ticket', embeds: [embedUser], components: [rowUser] });
         } catch (e) {
-            return await interaction.reply({ content: '⚠️ Votre ticket n\'a pas été créé. **Merci d\'autoriser le bot à vous envoyer des MP**.', ephemeral: true });
+            return await interaction.reply({ content: '⚠️ Your ticket has not been created. **Thank you for allowing the bot to send you PMs**.', ephemeral: true });
         }
 
-        await interaction.reply({ content: 'Votre ticket a été envoyé.', ephemeral: true });
+        await interaction.reply({ content: 'Your ticket has been submitted.', ephemeral: true });
 
         const count = await ticketDB.get_number_of_tickets();
 
@@ -76,21 +76,20 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyTicketMod')
-                    .setLabel('Répondre')
+                    .setLabel('Reply')
                     .setStyle(ButtonStyle.Primary),
             ).addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_ticket')
-                    .setLabel('Signaler le ticket')
+                    .setLabel('Report the ticket')
                     .setStyle(ButtonStyle.Secondary),
             ).addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteTicket')
-                    .setLabel('Fermer le ticket')
+                    .setLabel('Close the ticket')
                     .setStyle(ButtonStyle.Danger),
             );
-
-        const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x0000FF, null);
+        const embed = createEmbeds.createFullEmbed("An illustrious stranger", content, null, null, 0x0000FF, null);
         // Send the message to the channel
         await channel.send({ content: mod.toString(), embeds: [embed], components: [rowMod] });
 

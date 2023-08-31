@@ -7,7 +7,7 @@ const userDB = require("../database/user");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('givesticker')
-        .setDescription('Permet de donner un sticker.')
+        .setDescription('Give a sticker.')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')
@@ -24,9 +24,9 @@ module.exports = {
             // Set the user's currency
             const sticker = await stickerDB.getStickerWithName(stickername);
             if (sticker == null || sticker == undefined || sticker.length == 0) {
-                return interaction.reply({ content:'Ce sticker n\'existe pas.', ephemeral: true});
+                return interaction.reply({ content:'This sticker does not exist.', ephemeral: true});
             } else if (sticker.length > 1) {
-                return interaction.reply({ content:'Plusieurs stickers ont ce même nom, affinez votre recherche.', ephemeral: true});
+                return interaction.reply({ content:'Several stickers have the same name, refine your search.', ephemeral: true});
             }
 
             const checkUserID = await userDB.getUser(userId);
@@ -39,7 +39,7 @@ module.exports = {
 
             // Fetch user
             const user = await interaction.guild.members.fetch(userId);
-            const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu le sticker **' + sticker[0].name + '** !', null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed('What luck!', 'You\'ve received the sticker **' + sticker[0].name + '**!', null, null, 0x2f3136, null);
 
             // Send direct message to user
             try {

@@ -27,25 +27,25 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_abusif')
-                    .setLabel('😡 Abusif')
+                    .setLabel('😡 Abusive')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_warn')
-                    .setLabel('⚠️ Avertir')
+                    .setLabel('⚠️ Warn')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_mute')
-                    .setLabel('🚫 Exclure')
+                    .setLabel('🚫 Mute')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_ban')
-                    .setLabel('⛔️ Bannir')
+                    .setLabel('⛔️ Ban')
                     .setStyle(ButtonStyle.Danger),
             );
 
@@ -58,7 +58,7 @@ module.exports = {
         if (warningType === 'bottle') {
             // Check if message is already in database
             if (await signalementDB.getSignalementBottleByChannel(interaction.channelId) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             warningContent = await messageDB.getContentOfMessage(interaction.message.id);
             const bottle = await bottleDB.getBottle(interaction.channel.id);
@@ -66,7 +66,7 @@ module.exports = {
             row.addComponents(
                     new ButtonBuilder()
                         .setCustomId('historyWarning')
-                        .setLabel('✉ Historique')
+                        .setLabel('✉ History')
                         .setStyle(ButtonStyle.Secondary),
                 );
 
@@ -77,7 +77,7 @@ module.exports = {
             await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
         } else if (warningType === 'wanted') {
             if (await signalementDB.getSignalementWantedByMessage(interaction.message.id) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             const wanted = await wantedDB.get_wanted_by_id(interaction.message.id);
             receiver_id = wanted.id_user;
@@ -85,7 +85,7 @@ module.exports = {
             toDeleteChannelId = wanted.id_channel;
         } else if (warningType === 'wantedReply') {
             if (await signalementDB.getSignalementWantedByMessage(interaction.message.id) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             const wanted = await wantedDB.get_wanted_response(interaction.message.id);
             receiver_id = wanted.id_user;
@@ -93,34 +93,34 @@ module.exports = {
             toDeleteChannelId = interaction.channelId;
         } else if (warningType === 'ticket') {
             if (await signalementDB.getSignalementTicketByChannel(interaction.channelId) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported..", ephemeral: true });
             }
             receiver_id = await ticketDB.get_id_user(interaction.channel.id);
             warningContent = "...";
         } else if (warningType === 'suggestion') {
             if (await signalementDB.getSignalementSuggestionByMessage(interaction.message.id) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             const suggestion = await suggestionDB.getSuggestion(interaction.message.id);
             receiver_id = suggestion.id_user;
             warningContent = suggestion.content;
         } else if (warningType === 'help') {
             if (await signalementDB.getSignalementHelpByMessage(interaction.message.id) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             const help = await helpDB.getHelp(interaction.message.id);
             receiver_id = help.id_user;
             warningContent = help.content;
         } else if (warningType === 'bird') {
             if (await signalementDB.getSignalementBirdByChannel(interaction.channelId) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             const bird = await birdDB.getBird(interaction.channel.id);
             receiver_id = bird.id_user;
             warningContent = bird.content;
         } else if (warningType === 'ileMessage') {
             if (await signalementDB.getSignalementIleMessageByMessage(interaction.message.id) !== null) {
-                return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
+                return await interaction.reply({ content: "This message has already been reported.", ephemeral: true });
             }
             const messageIle = await messageIleDB.getMessage(interaction.message.id);
             receiver_id = messageIle.id_user;
@@ -135,8 +135,8 @@ module.exports = {
                     .setStyle(ButtonStyle.Danger),
             )
         }
-
-        if (warningContent.length > 1500) {
+        
+                if (warningContent.length > 1500) {
             warningContent = warningContent.substring(0, 1500) + "...";
         }
 
@@ -185,12 +185,12 @@ module.exports = {
         const channel = interaction.guild.channels.cache.get(signalement);
         // Get mod role by id
         const mod = interaction.guild.roles.cache.get(modRole);
-        const embed = createEmbeds.createFullEmbed('Signalement dans ' + interaction.channel.name, '**Message :** ' + warningContent + '\n\n**Raison : **' + content + '\n\n**L\'accusé a : **' + resume + '\n**Détail de l\'accusé :** \n' + text +'\n**L\'accusateur a : ' + nbWarnAbusSender +'** warn abusifs\n**Détail de l\'accusateur :**\n' + textAcusateur, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Report in ' + interaction.channel.name, '**Message:** ' + warningContent + '\n\n**Reason: **' + content + '\n\n**The accused has:**' + resume + '\n**Detail of the accused:** \n' + text +'\n**The accuser has:' + nbWarnAbusSender +'** abusive warn\n**Detail of the accuser:**\n' + textAcusateur, null, null, 0x2f3136, null);
         // Send message
         const message = await channel.send({ content: mod.toString(), embeds: [embed], components: [row] });
 
 
-        await interaction.reply({ content: 'Votre signalement a été envoyé.', ephemeral: true });
+        await interaction.reply({ content: 'Your report has been sent.', ephemeral: true });
 
 
         // Save signalement to DB

@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('replySuggestion')
-            .setTitle('Avez-vous quelque chose à ajouter ?');
+            .setTitle('Do you have anything else to say?');
 
         // Add components to modal
         const input = new TextInputBuilder()
             .setCustomId('textSuggestion')
-            .setLabel("Quelle est votre réponse ?")
+            .setLabel("What's your answer?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);

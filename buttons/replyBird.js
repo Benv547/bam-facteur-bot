@@ -13,15 +13,15 @@ module.exports = {
 
             const bird = await birdDB.getBird(interaction.channelId);
             if (bird == null) {
-                return await interaction.reply({ content: 'Ce message n\'est plus disponible.', ephemeral: true });
+                return await interaction.reply({ content: 'This bird is no longer available.', ephemeral: true });
             }
             const old = await birdDB.getReactionByUser(bird.id_bird, interaction.member.id);
             if (old) {
-                return await interaction.reply({ content: 'Vous avez déjà réagi à ce message.', ephemeral: true });
+                return await interaction.reply({ content: 'You have already reacted to this bird.', ephemeral: true });
             }
             await birdDB.insertBirdReaction(bird.id_bird, interaction.member.id, emojiId);
             await xpAction.increment(interaction.guild, interaction.member.id, 15);
-            return await interaction.reply({ content: 'Votre réaction a été prise en compte.', ephemeral: true });
+            return await interaction.reply({ content: 'Your reaction has been acted upon.', ephemeral: true });
         }
     }
 };

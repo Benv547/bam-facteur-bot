@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('replyBottle')
-            .setTitle('Ma réponse');
+            .setTitle('My reply');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textBottle')
-            .setLabel("Quel est votre message ?")
+            .setLabel("What's your message?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(2000);

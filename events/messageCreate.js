@@ -13,10 +13,10 @@ module.exports = {
         // if message is a webhook message, return
         if (message.webhookId) {
             const content = message.content;
-            let regex = /Le joueur \*\*(.*)\*\* vient de voter pour le serveur./g;
+            let regex = /The player \*\*(.*)\*\* just voted for the server./g;
             let match = regex.exec(content);
             if (!match) {
-                regex = /(.*) vient de voter pour le serveur !/g;
+                regex = /(.*) just voted for the server!/g;
                 match = regex.exec(content);
             }
             if (match) {
@@ -24,7 +24,7 @@ module.exports = {
                 if (user) {
                     await orAction.increment(user.id, OR_VOTE);
                     await xpAction.increment(message.guild, user.id, XP_VOTE);
-                    const embed = createEmbeds.createFullEmbed(`Merci pour votre vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' <:piece:1045638309235404860>** et de l\'<:xp:851123277497237544>.', null, null, null, null);
+                    const embed = createEmbeds.createFullEmbed(`Thank you for your vote!`, user.toString()  + ', you have received **' + OR_VOTE + ' <:gold:1058066245154525265>** and some <:xp:1058066266797113455>.', null, null, null, null);
                     return await message.channel.send({ content: '', embeds: [embed], ephemeral: true });
                 }
             }

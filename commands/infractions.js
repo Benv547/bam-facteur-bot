@@ -8,10 +8,10 @@ const userDB = require("../database/user")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('infractions')
-        .setDescription('Voir les infractions d\'un membre')
+        .setDescription('See member infractions')
         .addStringOption(option =>
             option.setName('userid')
-                .setDescription('L\'id du membre')
+                .setDescription('The member id')
                 .setRequired(true)),
     async execute(interaction) {
         if (await roles.userIsMod(interaction.member)) {
@@ -19,7 +19,7 @@ module.exports = {
             let userId = await userDB.getUser(interaction.options.getString('userid'));
 
             if (userId === null) {
-                return interaction.reply({ content: 'Cet utilisateur n\'est pas dans la base de donées.', ephemeral: true });
+                return interaction.reply({ content: 'This user is not in the database.', ephemeral: true });
             }
 
             const nbWarnAbus = await sanctionDB.countDetail(userId.id_user, "abusif");
@@ -28,12 +28,12 @@ module.exports = {
             const nbBan = await sanctionDB.countDetail(userId.id_user, "ban");
 
             let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, ⛔️ **" + nbBan + "**";
-            const embed = createEmbeds.createFullEmbed(`Voici les infractions de l\'utilisateur :` , resume, null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed(`The user offences are as follows:` , resume, null, null, 0x2f3136, null);
             
            
             return await interaction.reply({ content: "", embeds: [embed], ephemeral: true });
 
         }
-        return interaction.reply({ content: 'Vous n\'avez pas le droit de faire cela.', ephemeral: true });
+        return interaction.reply({ content: 'You don\'t have the right to do that.', ephemeral: true });
     },
 };

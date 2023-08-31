@@ -5,29 +5,29 @@ const userDB = require('../database/user');
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('anniversaire')
-        .setDescription('Fêtons ton anniversaire !')
+        .setName('birthday')
+        .setDescription('Celebrate your birthday!')
         .addStringOption(option =>
             option.setName('jour')
-                .setDescription('Le jour de ton anniversaire')
+                .setDescription('The day of your birthday')
                 .setRequired(true))
         .addStringOption(option =>
             option.setName('mois')
-                .setDescription("Le mois de ton anniversaire")
+                .setDescription("The month of your birthday")
                 .setRequired(true)
                 .setChoices(
-                    { name: 'Janvier', value: 'janvier' },
-                    { name: 'Février', value: 'fevrier' },
-                    { name: 'Mars', value: 'mars' },
-                    { name: 'Avril', value: 'avril' },
-                    { name: 'Mai', value: 'mai' },
-                    { name: 'Juin', value: 'juin' },
-                    { name: 'Juillet', value: 'juillet' },
-                    { name: 'Aout', value: 'aout' },
-                    { name: 'Septembre', value: 'septembre' },
-                    { name: 'Octobre', value: 'octobre' },
-                    { name: 'Novembre', value: 'novembre' },
-                    { name: 'Décembre', value: 'decembre' },
+                    { name: 'January', value: 'january' },
+                    { name: 'February', value: 'february' },
+                    { name: 'March', value: 'march' },
+                    { name: 'April', value: 'april' },
+                    { name: 'May', value: 'may' },
+                    { name: 'June', value: 'june' },
+                    { name: 'July', value: 'july' },
+                    { name: 'August', value: 'august' },
+                    { name: 'September', value: 'september' },
+                    { name: 'October', value: 'october' },
+                    { name: 'November', value: 'november' },
+                    { name: 'December', value: 'december' },
                 )),
 
     async execute(interaction) {
@@ -37,36 +37,36 @@ module.exports = {
             await userDB.createUser(interaction.user.id, 0, 0);
         } else {
             if (user['anniversaireJour'] !== null) {
-                return await interaction.reply({ content: 'Votre anniversaire est déjà enregistré.', ephemeral: true });
+                return await interaction.reply({ content: 'Your birthday is already registered.', ephemeral: true });
             }
         }
-        const jourValue = parseInt(interaction.options.get('jour').value);
+        const jourValue = parseInt(interaction.options.get('day').value);
         if (jourValue > 31 || jourValue < 1) {
-            return await interaction.reply({ content: 'Veuillez insérer un jour valide.', ephemeral: true });
+            return await interaction.reply({ content: 'Please enter a valid day.', ephemeral: true });
         }
 
         const mois = {
-            janvier: 1,
-            fevrier: 2,
-            mars: 3,
-            avril: 4,
-            mai: 5,
-            juin: 6,
-            juillet: 7,
-            aout: 8,
-            septembre: 9,
-            octobre: 10,
-            novembre: 11,
-            decembre: 12
+            january: 1,
+            february: 2,
+            march: 3,
+            april: 4,
+            may: 5,
+            june: 6,
+            july: 7,
+            august: 8,
+            september: 9,
+            october: 10,
+            november: 11,
+            december: 12
         }
         // Si un jour on veux afficher la date d'anniversaire en timestamp continuer cette ligne de code + l'intégrer au message en-dessous : const dateanniversaire = interaction.options.getString('date')
-        const embed = createEmbeds.createFullEmbed('🎂 Encore un super anniversaire', `Ton anniversaire a bien été enregistré pour le ${jourValue} ${interaction.options.get('mois').value} !`, null, null, null);
+        const embed = createEmbeds.createFullEmbed('🎂 We\'ll celebrate together!', `Your birthday has been registred for ${jourValue} ${interaction.options.get('mois').value} !`, null, null, null);
 
         try {         // Check if the user exists in the database
             await userDB.update_anniversaire(interaction.member.id, jourValue, mois[interaction.options.getString('mois')]);
         } catch (e) {
             console.error(e);
-            return await interaction.reply({ content: 'Une erreur est survenue pendant la sauvegarde de votre anniversaire.', ephemeral: true });
+            return await interaction.reply({ content: 'An error occurred while saving your birthday.', ephemeral: true });
         }
 
         await interaction.reply({ ephemeral: true, embeds: [embed] });

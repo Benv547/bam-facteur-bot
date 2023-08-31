@@ -12,13 +12,13 @@ module.exports = {
                     if (member.roles.cache.has(roleId)) {
                         // Remove role
                         await member.roles.remove(role);
-                        return await interaction.reply({content: 'Vous n\'avez plus le rôle **' + role.name + '**.', ephemeral: true});
+                        return await interaction.reply({content: 'You no longer have the role **' + role.name + '**.', ephemeral: true});
                     }
                     // If member doesn't have role
                     else {
                         // Add role
                         await member.roles.add(role);
-                        return await interaction.reply({ content:'Vous avez reçu le rôle **' + role.name + '**.', ephemeral: true});
+                        return await interaction.reply({ content:'You have been given the role **' + role.name + '**.', ephemeral: true});
                     }
                 }
             }

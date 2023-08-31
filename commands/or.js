@@ -6,12 +6,12 @@ const userDB = require("../database/user");
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('or')
-        .setDescription('Consultez votre solde d\'or !'),
+        .setName('gold')
+        .setDescription('Check your gold balance!'),
     async execute(interaction) {
         // Get the user's currency
 
-        let title = 'Quelle bourse bien remplie !';
+        let title = 'A lot of money!';
 
         let money = await orAction.get(interaction.user.id);
         if (money == null) {
@@ -21,15 +21,15 @@ module.exports = {
         }
 
         if (money == 0) {
-            title = 'Quelle bourse bien vide ...';
+            title = 'Outch! Is empty..';
         }
 
         let textHelp = '';
         if (money < 200) {
-            textHelp = '\n\nBesoin de savoir comment gagner de l\'or ? Consultez le salon <#864884869376507912> !';
+            textHelp = '\n\nNeed to know how to earn gold? Check out <#1057755820433088582>!';
         }
 
-        const embed = createEmbeds.createFullEmbed(title, 'Votre solde est de **' + money + ' <:piece:1045638309235404860>** !' + textHelp, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('What a well-filled purse!', 'Your balance is **' + money + ' <:gold:1058066245154525265>**!', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

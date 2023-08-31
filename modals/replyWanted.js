@@ -17,7 +17,7 @@ module.exports = {
 
         const content = interaction.fields.getTextInputValue('textWanted');
         if (content.trim() === '') {
-            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+            return await interaction.reply({content: "The message cannot be empty.", ephemeral: true});
         }
 
         let sender = await userDB.getUser(interaction.member.id);
@@ -66,16 +66,16 @@ module.exports = {
 
             const reply = await wantedDB.get_reply_for_user_and_channel(interaction.member.id, id_channel);
             if (reply !== null) {
-                return await interaction.reply({ content: 'Vous avez déjà répondu à cette recherche.', ephemeral: true });
+                return await interaction.reply({ content: 'You have already answered this wanted notice.', ephemeral: true });
             }
 
             const id_user = await wantedDB.get_id_user(interaction.message.id);
             if (id_user === interaction.member.id) {
-                return await interaction.reply({ content: 'Vous ne pouvez pas répondre à votre propre recherche.', ephemeral: true });
+                return await interaction.reply({ content: 'You can\'t answer your own wanted notice.', ephemeral: true });
             }
 
             const channel = await interaction.guild.channels.fetch(id_channel);
-            await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
+            await interaction.reply({ content: 'Your reply has been sent.', ephemeral: true });
 
             const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
@@ -83,20 +83,20 @@ module.exports = {
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('replyWanted')
-                        .setLabel('📨 Répondre')
+                        .setLabel('📨 Reply')
                         .setStyle(ButtonStyle.Primary),
                 )
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('warning_wantedReply')
-                        .setLabel('⚠️ Signaler')
+                        .setLabel('⚠️ Report')
                         .setStyle(ButtonStyle.Danger),
                 );
 
             const member = await interaction.guild.members.fetch(id_user);
 
             // Send message to channel of interaction
-            const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), embeds: [embed], components: [row] });
+            const message = await channel.send({ content: 'You have received a response ' + member.toString(), embeds: [embed], components: [row] });
 
             await wantedDB.insertWantedResponse(id_channel, interaction.guildId, interaction.member.id, message.id, content);
 

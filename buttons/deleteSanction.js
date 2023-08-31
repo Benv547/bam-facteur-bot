@@ -10,8 +10,8 @@ module.exports = {
             await interaction.message.delete();
         } catch (e) {
             console.error(e);
-            return await interaction.reply({ content: 'Une erreur est survenue lors de la suppression du signalement.', ephemeral: true });
+            return await interaction.reply({ content: 'An error occurred when deleting the report.', ephemeral: true });
         }
-        return await interaction.reply({ content: 'Le signalement a été supprimé (bug).', ephemeral: true });
+        return await interaction.reply({ content: 'The alert has been deleted (bug).', ephemeral: true });
     }
 };

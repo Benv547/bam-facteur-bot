@@ -8,11 +8,11 @@ module.exports = {
     public: true,
     price: 500,
     data: new SlashCommandBuilder()
-        .setName('couleur')
-        .setDescription('Choisissez la couleur de vos messages dans vos bouteilles !')
+        .setName('color')
+        .setDescription('Choose the color of your messages in your bottles!')
         .addStringOption(option =>
             option.setName('hex')
-                .setDescription('La couleur de la bouteille')),
+                .setDescription('The color of the bottle')),
     async execute(interaction) {
 
         let price = this.price;
@@ -28,14 +28,14 @@ module.exports = {
         if (codeGivenByUser !== null) {
             color = codeGivenByUser;
             if (color.length !== 6) {
-                const embed = createEmbeds.createFullEmbed('Erreur', 'Le code hexadécimal doit être composé de 6 caractères !', null, null, null, null);
+                const embed = createEmbeds.createFullEmbed('Error', 'The hexadecimal code must be composed of 6 characters!', null, null, null, null);
                 return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
             }
         }
 
 
         if(!await orAction.reduce(interaction.user.id, price)) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de couleur !\nEconomisez **' + price + ' <:piece:1045638309235404860>** et revenez me voir !', null, null, null, null);
+            const embed = createEmbeds.createFullEmbed('Something is missing..', 'You don\'t have enough money to change your color!\nSave **' + price + ' <:gold:1058066245154525265>** and come back!', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 
@@ -44,7 +44,7 @@ module.exports = {
         color = color.toLowerCase();
 
         const url = 'https://singlecolorimage.com/get/' + color + '/400x400.png'
-        const embed = createEmbeds.createFullEmbed('Une couleur qui en jette !', 'Voici votre couleur pour vos prochaines bouteilles !', null, url, null, 'Code de la couleur : ' + color);
+        const embed = createEmbeds.createFullEmbed('A color that looks great!', 'This is your color for your next bottles!', null, url, null, 'Code of the color: ' + color);
 
         // Check if the user exists in the database
         const userId = await userDB.getUser(interaction.user.id);

@@ -7,7 +7,7 @@ module.exports = {
 
         const content = interaction.fields.getTextInputValue('textBottle');
         if (content.trim() === '') {
-            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+            return await interaction.reply({content: "The message cannot be empty.", ephemeral: true});
         }
 
         const sender = interaction.member;
