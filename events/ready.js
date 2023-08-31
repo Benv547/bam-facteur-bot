@@ -74,7 +74,7 @@ module.exports = {
                 // choose a non bot member in the guild
                 const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.roles.cache.has(memberRole)).random();
                 // if member is not null
-                if (member !== null) {
+                if (member !== null && member !== undefined) {
                     // add permission to see the channel but not send messages
                     await channel.permissionOverwrites.edit(member, { ViewChannel: true, SendMessages: false });
 
