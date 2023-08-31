@@ -36,7 +36,7 @@ module.exports = {
         }
 
         // Create embed
-        const embed = createEmbeds.createFullEmbed('Historique', text, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('History', text, null, null, 0x2f3136, null);
 
         await interaction.reply({content: '', embeds: [embed], ephemeral: true});
     },

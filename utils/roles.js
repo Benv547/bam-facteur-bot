@@ -1,4 +1,4 @@
-const { modRole, adminRole, vipRole, boostRole, apprentiRole } = require('../config.json');
+const { modRole, adminRole, vipRole, boostRole } = require('../config.json');
 
 module.exports = {
      userIsAdmin: async function (member) {

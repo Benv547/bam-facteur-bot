@@ -22,7 +22,7 @@ module.exports = {
         // Get signalement
         const signalement = await signalementDB.getSignalement(interaction.message.id);
         if (signalement === null) {
-            return await interaction.reply({content: "Impossible de faire cela.", ephemeral: true});
+            return await interaction.reply({content: "Impossible to do that.", ephemeral: true});
         }
 
         // Get sender id
@@ -31,7 +31,7 @@ module.exports = {
         try {
             sender = await interaction.guild.members.fetch(id_sender);
         } catch (e) {
-            return await interaction.reply({content: "Impossible de trouver le membre concerné (sender) (" + id_sender + ").", ephemeral: true});
+            return await interaction.reply({content: "Impossible to find the concerned member (sender) (" + id_sender + ").", ephemeral: true});
         }
 
         // Get receiver id
@@ -40,27 +40,24 @@ module.exports = {
         try {
             receiver = await interaction.guild.members.fetch(id_receiver);
         } catch (e) {
-            return await interaction.reply({content: "Impossible de trouver le membre concerné (receiver) (" + id_receiver + ").", ephemeral: true});
+            return await interaction.reply({content: "Impossible to find the concerned member (receiver) (" + id_receiver + ").", ephemeral: true});
         }
 
         // set title and apply sanction
         let title;
-        let description = 'Une de vos actions a été jugée comme inappropriée par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**';
+        let description = 'One of your actions was judged inappropriate by ' + mod.toString() + ' for the following reason: **' + raison + '**';
         if (sanctionType === 'ban') {
-            title = 'Vous avez été banni•e';
+            title = 'You have been banned';
             try {
                 await receiver.ban({ deleteMessageSeconds: 60 * 60 * 24 * 7, reason: raison });
             } catch (error) {
                 console.log(error);
             }
         } else if (sanctionType === 'warn' || sanctionType === 'abusif') {
-            title = 'Vous avez été averti•e';
-            if (sanctionType === 'abusif') {
-                description = 'Votre signalement a bien été pris en compte par ' + mod.toString() + ' cependant le message ne déroge pas aux règles du serveur. Votre signalement a donc été refusé pour la raison suivante : **' + raison + '**';
-            }
+            title = 'You have been warned';
         } else if (sanctionType === 'mute') {
             const timeout = parseInt(interaction.fields.getTextInputValue('timeout'));
-            title = 'Vous avez été mute pour ' + timeout + ' minutes';
+            title = 'You have been muted for ' + timeout + ' minutes';
             // Mute receiver
             try {
                 await receiver.timeout(parseInt(timeout) * 60 * 1000, raison);
@@ -146,7 +143,7 @@ module.exports = {
             } catch {}
             // save sanction to channel
             const channel = await interaction.guild.channels.fetch(sanction);
-            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed(sanctionType, 'L\'utilisateur ' + receiver.toString() + ' a été '+ sanctionType +' par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
+            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed(sanctionType, 'The user ' + receiver.toString() + ' was '+ sanctionType +' by ' + mod.toString() + ' for the following reason: **' + raison + '**', null, null, 0x2f3136, null)] });
         } else {
             //Save the informations in the Sanctions tab
             await sanctionsDB.saveSanction(id_sender, mod.id, sanctionType, raison);
@@ -158,10 +155,10 @@ module.exports = {
             } catch {}
             // save sanction to channel
             const channel = await interaction.guild.channels.fetch(sanction);
-            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed(sanctionType, 'L\'utilisateur ' + sender.toString() + ' a été '+ sanctionType +' par ' + mod.toString() + ' pour la raison suivante : **' + raison + '**', null, null, 0x2f3136, null)] });
+            await channel.send({ content: '', embeds: [createEmbeds.createFullEmbed(sanctionType, 'The user ' + sender.toString() + ' was '+ sanctionType +' by ' + mod.toString() + ' for the following reason: **' + raison + '**', null, null, 0x2f3136, null)] });
         }
 
-        await interaction.reply({ content: 'Votre réponse au signalement a été envoyé.', ephemeral: true });
+        await interaction.reply({ content: 'Your response to the report has been sent.', ephemeral: true });
         await interaction.message.delete();
         await signalementDB.deleteSignalement(interaction.message.id);
     }

@@ -46,21 +46,19 @@ module.exports = {
                             // Send message to the inviter
                                 await invite.inviter.send({
                                     content: '',
-                                    embeds: [createEmbeds.createFullEmbed('Une very importante personne !', 'Vous avez atteint le nombre d\'invitation nécessaire pour obtenir **le rôle VIP** !', null, null, 0x2f3136, null)]
+                                    embeds: [createEmbeds.createFullEmbed('A very important person!', 'You have reached the number of invitations needed to get **the VIP role**!', null, null, 0x2f3136, null)]
                                 });
                             } catch {}
                         }
 
-                        if (!invite.inviter.bot) {
-                            await xpAction.increment(member.guild, invite.inviter.id, 100);
-                            await orAction.increment(invite.inviter.id, 250);
-                        }
+                        await xpAction.increment(member.guild, invite.inviter.id, 100);
+                        await orAction.increment(invite.inviter.id, 250);
 
                         try {
                             // Send message to the inviter
                             await invite.inviter.send({
                                 content: '',
-                                embeds: [createEmbeds.createFullEmbed('Plus un !', 'Vous avez invité une nouvelle personne sur le serveur.\nVous avez gagné **250** <:piece:1045638309235404860> et de l\'<:xp:851123277497237544>.', null, null, 0x2f3136, null)]
+                                embeds: [createEmbeds.createFullEmbed('One more!', 'You have invited a new person on the server.\nYou have won **250** <:gold:1058066245154525265> and <:xp:1058066266797113455>.', null, null, 0x2f3136, null)]
                             });
                         } catch {}
                     }
@@ -68,7 +66,7 @@ module.exports = {
                     // Send message
                     await channel.send({
                         content: '',
-                        embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur grâce à l\'invitation de ' + invite.inviter.toString() + '\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)]
+                        embeds: [createEmbeds.createFullEmbed('New member', 'The user ' + member.toString() + ' has joined the server thanks to the invitation of ' + invite.inviter.toString() + '\nWe are now **' + member.guild.memberCount + ' members** in the server!', null, null, 0x2f3136, null)]
                     });
                 } catch (e) {
                     console.log(e);
@@ -78,7 +76,7 @@ module.exports = {
                     // Send message
                     await channel.send({
                         content: '',
-                        embeds: [createEmbeds.createFullEmbed('Nouveau membre', 'L\'utilisateur ' + member.toString() + ' a rejoint le serveur !\nNous sommes désormais **' + member.guild.memberCount + ' membres** sur le serveur !', null, null, 0x2f3136, null)]
+                        embeds: [createEmbeds.createFullEmbed('New member', 'The user ' + member.toString() + ' has joined the server!\nWe are now **' + member.guild.memberCount + ' members** in the server!', null, null, 0x2f3136, null)]
                     });
                 } catch (e) {
                     console.log(e);

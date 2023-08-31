@@ -19,9 +19,9 @@ module.exports = {
                 if (sticker && sticker.length > 0) {
                     try {
                         await stickerDB.giveStickerToUser(member.id, sticker[0].id_sticker, interaction.guildId);
-                        return await interaction.reply({content: 'Vous avez reçu le sticker **' + sticker[0].name + '**.', ephemeral: true});
+                        return await interaction.reply({content: 'You have received the sticker **' + sticker[0].name + '**.', ephemeral: true});
                     } catch (e) {
-                        return await interaction.reply({content: 'Vous avez déjà le sticker **' + sticker[0].name + '**.', ephemeral: true});
+                        return await interaction.reply({content: 'You already have the sticker **' + sticker[0].name + '**.', ephemeral: true});
                     }
                 }
             }

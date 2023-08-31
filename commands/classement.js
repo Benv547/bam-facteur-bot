@@ -6,8 +6,8 @@ const userDB = require("../database/user");
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('classement')
-        .setDescription('Voyez à quel point vous êtes actifs !'),
+        .setName('leaderboard')
+        .setDescription('Look at how active you are!'),
     async execute(interaction) {
         // Get the user's currency
         const user = await userDB.getUser(interaction.user.id);
@@ -20,20 +20,32 @@ module.exports = {
         const money =  user.money;
         const xp =  user.xp;
         if (rankXp == 1){
-            rankXp+="er•e"
+            rankXp+="st"
+        }
+        if (rankXp == 2){
+            rankXp+="nd"
+        }
+        if (rankXp == 3){
+            rankXp+="rd"
         }
         else {
-            rankXp+="ème"
+            rankXp+="th"
         }
 
         if (rankMoney == 1){
-            rankMoney+="er•e"
+            rankMoney+="st"
+        }
+        if (rankMoney == 2){
+            rankMoney+="nd"
+        }
+        if (rankMoney == 3){
+            rankMoney+="rd"
         }
         else {
-            rankMoney+="ème"
+            rankMoney+="th"
         }
 
-        const embed = createEmbeds.createFullEmbed('Regardez comme vous êtes puissants !', 'Vous êtes **' + rankMoney +'** au classement de l\'or avec un total de **' + money + ' <:piece:1045638309235404860>** ! \n\n Vous êtes **' + rankXp + '** au classement de l\'XP avec un total de **' + xp + ' points d\'<:xp:851123277497237544>** !', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Look how powerful you are!', 'You are **' + rankMoney +'** in the gold ranking with a total of **' + money + ' <:gold:1058066245154525265>** ! \n\n You are **' + rankXp + '** i the XP ranking with a total of **' + xp + ' points <:xp:1058066266797113455>** !', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

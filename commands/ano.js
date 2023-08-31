@@ -10,10 +10,10 @@ module.exports = {
     public: true,
     data: new SlashCommandBuilder()
         .setName('ano')
-        .setDescription('Envoie un message anonyme sur l\'île !')
+        .setDescription('Send an anonymous message on the island!')
         .addStringOption(option =>
             option.setName('message')
-                .setDescription('Le message à envoyer anonymement')
+                .setDescription('The message to send anonymously')
                 .setRequired(true)),
     async execute(interaction) {
         // Check if the user exists in the database
@@ -27,7 +27,7 @@ module.exports = {
         let content = interaction.options.getString('message');
 
         if (content.trim() === '') {
-            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+            return await interaction.reply({content: "The message cannot be empty.", ephemeral: true});
         }
 
         // Fetch user
@@ -46,9 +46,9 @@ module.exports = {
         const randNumber = await user_ileDB.getRandNumber(interaction.user.id);
 
         if (!finded) {
-            await interaction.reply({ content: "Bienvenue sur l'île en tant que **" + profile.signature + ' anonyme#' + randNumber + "** ! Vous pouvez maintenant envoyer des messages anonymes sur l'île !", ephemeral: true });
+            await interaction.reply({ content: "Welcome to the island as **" + profile.signature + ' anonymous#' + randNumber + "**! You can now send anonymous messages on the island!", ephemeral: true });
         } else {
-            await interaction.reply({ content: "Votre message a bien été envoyé !", ephemeral: true });
+            await interaction.reply({ content: "Your message has been successfully sent!", ephemeral: true });
         }
 
         // content = content.replace(/<@&/g, '$%@&#$');
@@ -61,7 +61,7 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('createIleMessage')
-                    .setLabel('✉️ Envoyer un message')
+                    .setLabel('✉️ Send a message')
                     .setStyle(ButtonStyle.Secondary),
             );
 
@@ -76,7 +76,7 @@ module.exports = {
         }
 
         // Send message
-        const message = await webhook.send({ content: content, username: profile.signature + ' anonyme#' + randNumber, avatarURL: profile.image_url, components: [row] });
+        const message = await webhook.send({ content: content, username: profile.signature + ' anonymous#' + randNumber, avatarURL: profile.image_url, components: [row] });
 
         // partern = 'https:\/\/discord\.com\/channels\/([0-9]*)\/([0-9]*)\/([0-9]*)'
 

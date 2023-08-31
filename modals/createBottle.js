@@ -5,7 +5,7 @@ module.exports = {
     async execute(interaction) {
 
         if (global.semaphore.includes(interaction.user.id)) {
-            return await interaction.reply({ content: 'Vous avez déjà une bouteille en cours de création !', ephemeral: true });
+            return await interaction.reply({ content: 'You already have a bottle being created!', ephemeral: true });
         }
 
         try {
@@ -14,12 +14,12 @@ module.exports = {
 
             const content = interaction.fields.getTextInputValue('textBottle');
             if (content.trim() === '') {
-                return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+                return await interaction.reply({ content: "The message cannot be empty.", ephemeral: true });
             }
 
             const sender = interaction.member;
 
-            await interaction.reply({ content: 'Votre bouteille a été envoyée.', ephemeral: true });
+            await interaction.reply({ content: 'Your bottle has been sent.', ephemeral: true });
 
             try {
                 await bottle.create(interaction.guild, sender.id, content, 0);

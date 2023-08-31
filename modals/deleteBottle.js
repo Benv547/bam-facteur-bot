@@ -9,12 +9,12 @@ module.exports = {
         // Check if the user has confirmed the deletion
         const textSuppression = interaction.fields.getTextInputValue('textSuppression');
         let textRaison = interaction.fields.getTextInputValue('textRaison');
-        if (!textSuppression.toLocaleLowerCase().includes('supprimer')) {
-            await interaction.reply({ content: 'La bouteille n\'a pas été supprimée.', ephemeral: true });
+        if (!textSuppression.toLocaleLowerCase().includes('delete')) {
+            await interaction.reply({ content: 'The bottle has not been removed.', ephemeral: true });
             return;
         }
 
-        textRaison = textRaison ? textRaison : 'Aucune raison spécifiée';
+        textRaison = textRaison ? textRaison : 'No reason specified';
 
         await messageDB.insertMessage(interaction.channel.id, interaction.channel.id, interaction.userId, textRaison);
 
@@ -27,7 +27,7 @@ module.exports = {
         if (receiver) {
             try {
                 const bottle = await bottleDB.getBottle(interaction.channel.id);
-                const embed = createEmbeds.createFullEmbed('Bouteille terminée', 'La ' + bottle.name + ' a été terminée par votre correspondant pour la raison suivante : ' + textRaison, null, null, null, null);
+                const embed = createEmbeds.createFullEmbed('Bottle finished', 'The ' + bottle.name + ' has been closed by your correspondent for the following reason: ' + textRaison, null, null, null, null);
                 await receiver.send({ embeds: [embed] });
             } catch {}
         }

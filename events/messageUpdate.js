@@ -20,15 +20,15 @@ module.exports = {
                     if (content && !voteId.includes(newMessage.id)) {
                         voteId.push(newMessage.id);
                         const user = newMessage.interaction.user;
-                        if (content.includes('a Vot')) {
+                        if (content.includes('voted')) {
                             await orAction.increment(user.id, OR_VOTE);
                             await xpAction.increment(newMessage.guild, user.id, XP_VOTE);
-                            const embed = createEmbeds.createFullEmbed(`Merci pour votre vote !`, user.toString()  + ', vous avez reçu **' + OR_VOTE + ' <:piece:1045638309235404860>** et de l\'<:xp:851123277497237544>.', null, null, null, null);
+                            const embed = createEmbeds.createFullEmbed(`Thank you for your vote!`, user.toString()  + ', you have received **' + OR_VOTE + ' <:gold:1058066245154525265>** and <:xp:1058066266797113455>.', null, null, null, null);
                             await newMessage.channel.send({content: "", embeds: [embed]});
                         } else if (content.includes('a BUMP')) {
                             await orAction.increment(user.id, OR_BUMP);
                             await xpAction.increment(newMessage.guild, user.id, XP_BUMP);
-                            const embed = createEmbeds.createFullEmbed(`Merci pour votre bump !`, user.toString()  + ', vous avez reçu **' + OR_BUMP + ' <:piece:1045638309235404860>** et de l\'<:xp:851123277497237544>.', null, null, null, null);
+                            const embed = createEmbeds.createFullEmbed(`Thank you for your bump!`, user.toString()  + ', you have received **' + OR_BUMP + ' <:gold:1058066245154525265>** and <:xp:1058066266797113455>.', null, null, null, null);
                             await newMessage.channel.send({content: "", embeds: [embed]});
                         }
                         if (voteId.length > 10) {

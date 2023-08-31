@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('createOpinion')
-            .setTitle('Donnez votre avis');
+            .setTitle('Give your feedback');
 
         // Add components to modal
         const input = new TextInputBuilder()
             .setCustomId('textOpinion')
-            .setLabel("Quel est votre avis sur le serveur ?")
+            .setLabel("What's your opinion about the server?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);

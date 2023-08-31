@@ -18,7 +18,7 @@ module.exports = {
         // Get content
         const content = interaction.fields.getTextInputValue('textOpinion');
         if (content.trim() === '') {
-            return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
+            return await interaction.reply({content: "The message cannot be empty.", ephemeral: true});
         }
 
         // Check if the user dont have a opinion
@@ -38,14 +38,14 @@ module.exports = {
                 await opinionDB.deleteOpinion(interaction.user.id);
             } catch (e) {
                 console.error(e);
-                return await interaction.reply({ content: 'Une erreur est survenue lors de la suppression de votre avis.', ephemeral: true });
+                return await interaction.reply({ content: 'An error occurred while deleting your feedback.', ephemeral: true });
             }
         } else {
             await xpAction.increment(interaction.guild, interaction.member.id, 250);
         }
 
         // Create embed
-        const embed = createEmbeds.createFullEmbed("Un•e illustre inconnu•e", content, null, null, 0x2F3136, null);
+        const embed = createEmbeds.createFullEmbed("An illustrious stranger", content, null, null, 0x2F3136, null);
 
         // Send embed
         const message = await interaction.channel.send({ content: '', embeds: [embed] });
@@ -53,6 +53,6 @@ module.exports = {
         // Save message id in database
         await opinionDB.insertOpinion(message.id, interaction.user.id, content);
 
-        await interaction.reply({ content: 'Votre opinion a été envoyée.', ephemeral: true });
+        await interaction.reply({ content: 'Your feedback has been sent, ty.', ephemeral: true });
     }
 };

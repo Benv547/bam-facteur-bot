@@ -19,9 +19,9 @@ module.exports = {
                 if (footer && footer.length > 0) {
                     try {
                         await footerDB.giveFooterToUser(member.id, footer[0].id_footer, interaction.guildId);
-                        return await interaction.reply({content: 'Vous avez reçu l\'arabesque **' + footer[0].name + '**.', ephemeral: true});
+                        return await interaction.reply({content: 'You have received the arabesque **' + footer[0].name + '**.', ephemeral: true});
                     } catch (e) {
-                        return await interaction.reply({content: 'Vous avez déjà l\'arabesque **' + footer[0].name + '**.', ephemeral: true});
+                        return await interaction.reply({content: 'You have already the arabesque **' + footer[0].name + '**.', ephemeral: true});
                     }
                 }
             }

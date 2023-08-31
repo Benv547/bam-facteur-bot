@@ -14,38 +14,38 @@ module.exports = {
 
         await messageReaction.users.remove(member.id);
 
-        const content = "Message contraire au règlement";
+        const content = "Message against the rules";
 
         let row = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_abusif')
-                    .setLabel('😡 Abusif')
+                    .setLabel('😡 Abusive')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_warn')
-                    .setLabel('⚠️ Avertir')
+                    .setLabel('⚠️ Warn')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_mute')
-                    .setLabel('🚫 Exclure')
+                    .setLabel('🚫 Mute')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_ban')
-                    .setLabel('⛔️ Bannir')
+                    .setLabel('⛔️ Ban')
                     .setStyle(ButtonStyle.Danger),
             );
 
 
         if (await signalementDB.getSignalementIleMessageByMessage(messageReaction.message.id) !== null) {
             try {
-                return await member.send({content: "Ce message a déjà été signalé."});
+                return await member.send({content: "This message has already been reported."});
             } catch {
             }
         }
@@ -94,12 +94,12 @@ module.exports = {
         const channel = messageReaction.message.guild.channels.cache.get(signalement);
         // Get mod role by id
         const mod = messageReaction.message.guild.roles.cache.get(modRole);
-        const embed = createEmbeds.createFullEmbed('Nouveau signalement', '**Message :** ' + warningContent + '\n**Raison : **' + content + '\n\n**Casier judiciaire : **' + resume + "\n**Détail :** \n" + text, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('New report', '**Message:** ' + warningContent + '\n**Reason: **' + content + '\n\n**Judicial record: **' + resume + "\n**Detail: ** \n" + text, null, null, 0x2f3136, null);
         // Send message
         const message = await channel.send({ content: mod.toString(), embeds: [embed], components: [row] });
 
         try {
-            await member.send({ content: 'Votre signalement a été envoyé.' });
+            await member.send({ content: 'Your report has been sent.' });
         } catch {}
 
         // Save signalement to DB

@@ -6,7 +6,7 @@ const roles = require("../utils/roles");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('givexp')
-        .setDescription('Permet de donner de l\'<:xp:851123277497237544> à un membre.')
+        .setDescription('Gives <:xp:1058066266797113455> to a member.')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')
@@ -25,15 +25,15 @@ module.exports = {
 
             // Fetch user
             const user = await interaction.guild.members.fetch(userId);
-            const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu **' + xp + ' XP** !', null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed('What luck!', 'You\'ve received **' + xp + ' XP**!', null, null, 0x2f3136, null);
 
             // Send direct message to user
             try {
                 await user.send({content: "", embeds: [embed]});
             } catch {
             }
-            return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+            return await interaction.reply({ content:'Done.', ephemeral: true});
         }
-        return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
+        return interaction.reply({ content:'You don\'t have the right to do that.', ephemeral: true});
     },
 };

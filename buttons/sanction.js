@@ -8,19 +8,19 @@ module.exports = {
 
         const sanctionType = interaction.customId.split('_')[1];
         if (sanctionType === 'ban') {
-            modal.setTitle('Raison du bannissement');
+            modal.setTitle('Reason for banishment');
         } else if (sanctionType === 'mute') {
-            modal.setTitle('Raison du mute');
+            modal.setTitle('Reason for mute');
         } else if (sanctionType === 'warn') {
-            modal.setTitle('Raison du warn');
+            modal.setTitle('Reason for warn');
         } else if (sanctionType === 'abusif') {
-            modal.setTitle('Raison du warn abusif');
+            modal.setTitle('Reason for abusive warn');
         }
 
         // Add components to modal
         let hobbiesInput = new TextInputBuilder()
             .setCustomId('raison')
-            .setLabel("Pourquoi le signalement est justifié ?")
+            .setLabel("Why is the report justified?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);
@@ -28,7 +28,7 @@ module.exports = {
         if (sanctionType === 'abusif') {
             hobbiesInput = new TextInputBuilder()
                 .setCustomId('raison')
-                .setLabel("Pourquoi le signalement est abusif ?")
+                .setLabel("Why is the report abusive?")
                 // Paragraph means multiple lines of text.
                 .setStyle(TextInputStyle.Paragraph)
                 .setMaxLength(1500);
@@ -43,7 +43,7 @@ module.exports = {
         if (sanctionType === 'mute') {
             const timeoutInput = new TextInputBuilder()
                 .setCustomId('timeout')
-                .setLabel("Combien de temps ? (en minutes)")
+                .setLabel("How long? (in minutes)")
                 .setStyle(TextInputStyle.Short);
             const secondActionRow = new ActionRowBuilder().addComponents(timeoutInput);
             // Add inputs to the modal

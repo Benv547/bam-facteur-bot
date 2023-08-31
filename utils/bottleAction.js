@@ -15,7 +15,7 @@ module.exports = {
     name: 'bottleAction',
     create: async function (guild, id_user_sender, content, nb_sea) {
         // TODO: check if message is OK (moderation, sad text, injuries, ...)
-
+        
         if (content.indexOf("discord.gg") > -1) {
             await sanctionDB.saveSanction(id_user_sender, null, "warn", "AutoMod : Pub");
 
@@ -47,7 +47,7 @@ module.exports = {
         const color = await stateAndColorDB.getRandomColor();
         const state = await stateAndColorDB.getRandomState();
         const emoji = await stateAndColorDB.getRandomEmoji();
-        const channel_name = emoji + "│bouteille-" + color + "-" + state;
+        const channel_name = emoji + "│bottle-" + color + "-" + state;
 
         // TODO: create channel
         const everyoneRole = guild.roles.everyone;
@@ -78,7 +78,7 @@ module.exports = {
         // TODO: choose random member who are not a bot
 
         // Fetch all members
-        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender && !m.roles.cache.has(afkRole));
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender);
         const randMember = members.random();
 
         if (await userDB.getUser(randMember.id) === null) {
@@ -102,7 +102,7 @@ module.exports = {
                     // share sticker
                     try {
                         await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
-                        const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille " + channel_name + " a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
+                        const embed = createEmbeds.createFullEmbed("Nice find!", "The author of the bottle " + channel_name + " has shared with you the **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
                         try {
                             await randMember.send({ content: "", embeds: [embed] });
                         } catch { }
@@ -117,24 +117,24 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('📨 Répondre')
+                    .setLabel('📨 Reply')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('seaBottle')
-                    .setLabel('🌊 Remettre à la mer')
+                    .setLabel('🌊 Putting back to sea')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bottle')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('⚠️ Report')
                     .setStyle(ButtonStyle.Danger),
             );
 
         // Send to channel
-        const message = await channel.send({ content: 'Vous avez reçu une bouteille ' + randMember.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'You\'ve received a bottle ' + randMember.toString(), embeds: [embed], components: [row] });
 
         // TODO: save bottle to DB
         await bottleDB.insertBottle(channel.id, guild.id, randMember.id, id_user_sender, channel.id, channel_name, nb_sea);
@@ -243,24 +243,24 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('📨 Répondre')
+                    .setLabel('📨 Reply')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bottle')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('⚠️ Report')
                     .setStyle(ButtonStyle.Danger),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteBottle')
-                    .setLabel('🗑️ Supprimer')
+                    .setLabel('🗑️ Delete')
                     .setStyle(ButtonStyle.Secondary),
             );
 
         // Send message
-        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'You\'ve received a answer ' + receiver.toString(), embeds: [embed], components: [row] });
 
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
@@ -323,7 +323,7 @@ module.exports = {
         //Cherche l'utilisateur qui a envoyé la bouteille à partir de son ID
         const sender = await guild.members.fetch(sender_id);
         //Crée l'embed
-        const embedFlow = createEmbeds.createFullEmbed("Une de perdue, dix de retrouvées !", 'Une de vos bouteilles a coulé, elle contenait le message :\n"**' + original_message + '**"', null, null, null, null);
+        const embedFlow = createEmbeds.createFullEmbed("One down, ten to go!", 'One of your bottles sank, it contained the mesage:\n"**' + original_message + '**"', null, null, null, null);
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] })
     },
@@ -344,7 +344,7 @@ module.exports = {
         const color = await stateAndColorDB.getRandomColor();
         const state = await stateAndColorDB.getRandomState();
         const emoji = await stateAndColorDB.getRandomEmoji();
-        const channel_name = emoji + "│colombe-" + color + "-" + state;
+        const channel_name = emoji + "│dove-" + color + "-" + state;
 
         // TODO: create channel
         const everyoneRole = guild.roles.everyone;
@@ -403,14 +403,14 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bird')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('⚠️ Report')
                     .setStyle(ButtonStyle.Danger),
             );
 
         try {
             await channel.permissionOverwrites.edit(guild.id, { ViewChannel: false, SendMessages: false });
             for (let i = 0; i < 5; i++) {
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender && !member.roles.cache.has(afkRole)).random();
+                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender).random();
                 await channel.permissionOverwrites.edit(member.id, { ViewChannel: true, SendMessages: false });
             }
         } catch (error) {
@@ -418,7 +418,7 @@ module.exports = {
         }
 
         // Send to channel
-        await channel.send({ content: 'Vous avez reçu un nouvel oiseau ||@here||', embeds: [embed], components: [row] });
+        await channel.send({ content: 'You\'ve received a new bird ||@here||', embeds: [embed], components: [row] });
 
         if (id === null || id === undefined) {
             await birdDB.insertBird(channel.id, guild.id, id_user_sender, channel_name, content);
@@ -449,7 +449,7 @@ module.exports = {
 
         const sender = await guild.members.fetch(bird.id_user);
         //Crée l'embed
-        const embedFlow = createEmbeds.createFullEmbed("Votre oiseau est revenu !", 'Votre oiseau est revenu, il contenait le message :\n"**' + bird.content + '**"\n\nIl a reçu :\n **' + love + '** 😍\n**' + joy + '** 😂\n**' + mouth + '** 😮\n**' + cry + '** 😢', null, null, null, null);
+        const embedFlow = createEmbeds.createFullEmbed("Your bird came back!", 'Your bird came back, it contained the message:\n"**' + bird.content + '**"\n\nIt received:\n **' + love + '** 😍\n**' + joy + '** 😂\n**' + mouth + '** 😮\n**' + cry + '** 😢', null, null, null, null);
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] });
         await birdDB.setArchived(bird.id_bird);

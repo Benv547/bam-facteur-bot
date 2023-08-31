@@ -4,7 +4,7 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('role')
-        .setDescription('Permet de créer un rôle dans le salon.')
+        .setDescription('Create a role in the channel.')
         .addStringOption(option =>
             option.setName('emoji')
                 .setDescription('The emoji of the role')
@@ -43,8 +43,8 @@ module.exports = {
                     .setStyle(ButtonStyle.Secondary),
                 );
             await message.edit({components: [rowMessage]});
-            return await interaction.reply({ content:'C\'est fait.', ephemeral: true});
+            return await interaction.reply({ content:'Done.', ephemeral: true});
         }
-        return interaction.reply({ content:'Vous n\'avez pas le droit de faire cela.', ephemeral: true});
+        return interaction.reply({ content:'You don\'t have the right to do that.', ephemeral: true});
     },
 };

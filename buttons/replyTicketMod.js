@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('replyTicketMod')
-            .setTitle('Répondre au ticket');
+            .setTitle('Answer the ticket');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textTicket')
-            .setLabel("Quelle est votre réponse ?")
+            .setLabel("What's your answer?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);

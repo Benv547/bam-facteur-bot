@@ -9,10 +9,10 @@ module.exports = {
     price: 500,
     data: new SlashCommandBuilder()
         .setName('signature')
-        .setDescription('Choisissez la signature de vos bouteilles !')
+        .setDescription('Choose the signature of your bottles!')
         .addStringOption(option =>
-            option.setName('texte')
-                .setDescription('La signature de la bouteille')
+            option.setName('text')
+                .setDescription('The signature of the bottle')
                 .setRequired(true)),
     async execute(interaction) {
 
@@ -24,13 +24,13 @@ module.exports = {
         }
 
         if(!await orAction.reduce(interaction.user.id, price)) {
-            const embed = createEmbeds.createFullEmbed('Il manque quelque chose..', 'Vous n\'avez pas assez d\'argent pour changer de signature !\nEconomisez **' + price + ' <:piece:1045638309235404860>** et revenez me voir !', null, null, null, null);
+            const embed = createEmbeds.createFullEmbed('Something is missing..', 'You don\'t have enough money to change your signature!\nSave **' + price + ' <:gold:1058066245154525265>** and come back!', null, null, null, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral: true });
         }
 
-        const signature = interaction.options.getString('texte');
+        const signature = interaction.options.getString('text');
 
-        const embed = createEmbeds.createFullEmbed('Signé et approuvé !', 'Voici votre signature pour vos prochaines bouteilles !\n\n"**'+ signature +'**"', null, null, null, null);
+        const embed = createEmbeds.createFullEmbed('Signed and approved!', 'This is your signature for your next bottles!\n\n"**'+ signature +'**"', null, null, null, null);
 
         // Check if the user exists in the database
         const userId = await userDB.getUser(interaction.user.id);

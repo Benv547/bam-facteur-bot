@@ -5,12 +5,12 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('createTicket')
-            .setTitle('Nouveau ticket');
+            .setTitle('New ticket');
 
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textTicket')
-            .setLabel("Quelle est la raison du ticket ?")
+            .setLabel("What's the reason for the ticket?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMaxLength(1500);
