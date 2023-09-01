@@ -10,7 +10,7 @@ const userDB = require("../database/user");
 const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -79,7 +79,7 @@ module.exports = {
                     await channel.permissionOverwrites.edit(member, { ViewChannel: true, SendMessages: false });
 
                     // if member is online or idle
-                    if (member.presence != null && member.presence.status === "online") {
+                    if (member.roles.cache.has(treasureRole)) {
                         membersArrived.push(member);
                     } else {
                         membersArrived.push(member.user.username);
@@ -121,7 +121,7 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_valise')
-                            .setLabel('Défaire la valise')
+                            .setLabel('Unpacking the suitcase')
                             .setStyle(ButtonStyle.Primary),
                     );
                 const embed = createEmbeds.createFullEmbed('', 'A **suitcase** was found on the beach, **open it quickly**!', null, null, 0x2F3136, null);
@@ -131,7 +131,7 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_botte')
-                            .setLabel('Vider la botte')
+                            .setLabel('Empty the boot')
                             .setStyle(ButtonStyle.Primary),
                     );
                 const embed = createEmbeds.createFullEmbed('', 'A **boot** was found on the beach, **open it quickly**!', null, null, 0x2F3136, null);

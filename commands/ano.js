@@ -66,7 +66,7 @@ module.exports = {
             );
 
         // Fetch webhook from channel by name
-        const name = "IleMessage";
+        const name = "IslandMessage";
         const webhooks = await interaction.channel.fetchWebhooks();
         let webhook = webhooks.find(webhook => webhook.name === name);
 

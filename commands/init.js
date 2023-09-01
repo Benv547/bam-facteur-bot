@@ -62,10 +62,10 @@ module.exports = {
                             .setStyle(ButtonStyle.Primary),
                     );
                 const embed = createEmbeds.createFullEmbed('**Your opinion is important!**',
-                    'Do you like (or not) the server? **Leave us your feedback!\n' +
+                    'Do you like (or not) the server? **Leave us your feedback!**\n' +
                     '\n' +
-                    'Please note, suggestions must go in <#1030839758361993246>.',
-                    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/blue-heart_1f499.png',
+                    'Please note, suggestions must go in <#1059206681835348081>.',
+                    'https://em-content.zobj.net/source/apple/354/blue-heart_1f499.png',
                     null, 0x2f3136, null, false);
                 await interaction.reply({ content:'It\'s done.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });

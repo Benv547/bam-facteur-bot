@@ -5,11 +5,11 @@ const { ile } = require('../config.json');
 module.exports = {
     public: true,
     data: new SlashCommandBuilder()
-        .setName('renommer')
-        .setDescription('Renommer l\'île !')
+        .setName('rename')
+        .setDescription('Rename the island!')
         .addStringOption(option =>
-            option.setName('nom')
-                .setDescription('le nouveau nom de l\'île')
+            option.setName('name')
+                .setDescription('The new name of the island')
                 .setRequired(true)),
     async execute(interaction) {
 
@@ -17,20 +17,20 @@ module.exports = {
 
         // fetch channel
         if (interaction.channelId !== ile) {
-            return interaction.reply({content: 'Vous ne pouvez pas renommer l\'île ici.', ephemeral: true});
+            return interaction.reply({content: 'You can\'t rename the island here.', ephemeral: true});
         }
 
-        if (interaction.channel.name !== '🏝│île_facteur') {
-            return interaction.reply({content: 'Vous ne pouvez pas renommer l\'île maintenant, attendez demain.', ephemeral: true});
+        if (interaction.channel.name !== '🏝│island_factor') {
+            return interaction.reply({content: 'You can\'t rename the island now, wait tomorrow.', ephemeral: true});
         }
 
-        const newName = interaction.options.getString('nom');
+        const newName = interaction.options.getString('name');
 
-        if (!newName.includes('île') && !newName.includes('ile')) {
-            return interaction.reply({content: 'Le nom de l\'île doit contenir le mot "île" ou "ile".', ephemeral: true});
+        if (!newName.includes('île') && !newName.includes('island')) {
+            return interaction.reply({content: "The name of the island must contain the word 'island'.", ephemeral: true});
         }
 
         await interaction.channel.setName('🏝│' + newName);
-        return interaction.reply({content: 'L\'île a été renommée en ' + newName + ' par <@' + interaction.user + '>.'});
+        return interaction.reply({content: 'The island as rename in' + newName + ' by <@' + interaction.user + '>.'});
     },
 };
