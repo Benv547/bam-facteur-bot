@@ -73,6 +73,21 @@ module.exports = {
             }
         }
 
+        else if (treasureType === 'sable') {
+            if (random <= 10) {
+                gain = " un tas d'ossements enfouis.. 💀";
+            } else if (random <= 70) {
+                // choose a random number between 1 and 300
+                const random = Math.floor(Math.random() * 25) + 1;
+                await orAction.increment(interaction.user.id, random);
+                gain = random + " <:piece:1045638309235404860>";
+            } else {
+                // choose a random number between 1 and 500
+                const random = Math.floor(Math.random() * 50) + 1;
+                await xpAction.increment(interaction.guild, interaction.user.id, random);
+                gain = random + " <:xp:851123277497237544>";
+            }
+        }
 
         else if (treasureType === 'coffre') {
             if (random <= 2) {
