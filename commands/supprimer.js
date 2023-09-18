@@ -6,7 +6,7 @@ const bottleDB = require("../database/bottle")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('supprimer')
-        .setDescription('Permet de supprimer une bouteille de la base de donnée')
+        .setDescription('Delete a bottle from the database')
         .addStringOption(option =>
             option.setName('channel_id')
                 .setDescription('The channel id')
