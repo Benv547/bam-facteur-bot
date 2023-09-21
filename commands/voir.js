@@ -28,7 +28,7 @@ module.exports = {
         if (categorie == 'sticker') {
             const stickers = await stickerDB.getStickerWithName(item);
             if (stickers === null || stickers.length == 0) {
-                return await interaction.reply('No sticker matches this name.');
+                return await interaction.reply({ content:'No sticker matches this name.', ephemeral: true});
             }
             if (stickers.length === 1) {
                 const sticker = stickers[0];
