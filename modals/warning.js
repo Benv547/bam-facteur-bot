@@ -131,7 +131,7 @@ module.exports = {
             row.addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteSanction')
-                    .setLabel('❌ (Signalement buggé)')
+                    .setLabel('❌ No action taken (bugs, ..)')
                     .setStyle(ButtonStyle.Danger),
             )
         }
@@ -185,7 +185,7 @@ module.exports = {
         const channel = interaction.guild.channels.cache.get(signalement);
         // Get mod role by id
         const mod = interaction.guild.roles.cache.get(modRole);
-        const embed = createEmbeds.createFullEmbed('Report in ' + interaction.channel.name, '**Message:** ' + warningContent + '\n\n**Reason: **' + content + '\n\n**The accused has:**' + resume + '\n**Detail of the accused:** \n' + text +'\n**The accuser has:' + nbWarnAbusSender +'** abusive warn\n**Detail of the accuser:**\n' + textAcusateur, null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('Report in ' + interaction.channel.name, '**Message:** ' + warningContent + '\n\n**Reason: **' + content + '\n\n**The accused has: **' + resume + '\n**Detail of the accused:** \n' + text +'\n**The accuser has: ' + nbWarnAbusSender +'** abusive warn\n**Detail of the accuser:**\n' + textAcusateur, null, null, 0x2f3136, null);
         // Send message
         const message = await channel.send({ content: mod.toString(), embeds: [embed], components: [row] });
 

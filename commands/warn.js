@@ -9,7 +9,7 @@ const userDB = require("../database/user")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('warn')
-        .setDescription('Permet de Warn un membre sans signalement')
+        .setDescription('Warn a member without report them')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')

@@ -4,7 +4,7 @@ const roles = require('../utils/roles.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('button')
-        .setDescription('Permet de créer un bouton sur le message.')
+        .setDescription('Create a button on the message.')
         .addStringOption(option =>
             option.setName('texte')
                 .setDescription('The text of the button')

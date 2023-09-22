@@ -18,7 +18,7 @@ module.exports = {
         // Add components to modal
         const hobbiesInput = new TextInputBuilder()
             .setCustomId('textWanted')
-            .setLabel("What do you want to write in your wanted notice?")
+            .setLabel("What are you looking for?")
             // Paragraph means multiple lines of text.
             .setStyle(TextInputStyle.Paragraph)
             .setMinLength(10)
