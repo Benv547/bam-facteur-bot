@@ -11,8 +11,8 @@ module.exports = {
     name: 'messageCreate',
     async execute(message) {
         // if message is a webhook message, return
-        if (message.webhookId) {
-            const content = message.content;
+        if (message.author.bot && message.embeds.lenght > 0) {
+            const content = message.embeds[0].description;
             let regex = /The player \*\*(.*)\*\* just voted for the server./g;
             let match = regex.exec(content);
             if (!match) {
