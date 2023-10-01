@@ -11,6 +11,7 @@ module.exports = {
     name: 'messageCreate',
     async execute(message) {
         // if message is a webhook message, return
+        // A FIX
         if (message.author.bot && message.embeds.lenght > 0) {
             const content = message.embeds[0].description;
             let regex = /The player \*\*(.*)\*\* just voted for the server./g;
@@ -19,12 +20,21 @@ module.exports = {
                 regex = /(.*) just voted for the server!/g;
                 match = regex.exec(content);
             }
+            if (message.webhookId) {
+                const content = message.content;
+                let regex = /Le joueur \*\*(.*)\*\* vient de voter pour le serveur./g;
+                let match = regex.exec(content);
+                if (!match) {
+                    regex = /(.*) vient de voter pour le serveur !/g;
+                    match = regex.exec(content);
+                }
+            }
             if (match) {
                 const user = message.guild.members.cache.find(m => m.user.username === match[1]);
                 if (user) {
                     await orAction.increment(user.id, OR_VOTE);
                     await xpAction.increment(message.guild, user.id, XP_VOTE);
-                    const embed = createEmbeds.createFullEmbed(`Thank you for your vote!`, user.toString()  + ', you have received **' + OR_VOTE + ' <:gold:1058066245154525265>** and some <:xp:1058066266797113455>.', null, null, null, null);
+                    const embed = createEmbeds.createFullEmbed(`Thank you for your vote!`, user.toString() + ', you have received **' + OR_VOTE + ' <:gold:1058066245154525265>** and some <:xp:1058066266797113455>.', null, null, null, null);
                     return await message.channel.send({ content: '', embeds: [embed], ephemeral: true });
                 }
             }
