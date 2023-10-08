@@ -31,7 +31,9 @@ module.exports = {
         const treasureType = interaction.customId.split('_')[1];
 
         if (treasureType === 'botte') {
-            if (random <= 40) {
+            if (random <= 2) {
+                gain = " a reproduction of the Mona Lisa... 🖼️";
+            } else if (random <= 40) {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 10) + 1;
                 await orAction.increment(interaction.user.id, random);
@@ -40,13 +42,15 @@ module.exports = {
                 // choose a random number between 1 and 500
                 const random = Math.floor(Math.random() * 25) + 1;
                 await xpAction.increment(interaction.guild, interaction.user.id, random);
-                gain = random + " <:xp:1058066266797113455>";
+                gain = random + " <:xp:851123277497237544>";
             }
         }
 
 
         else if (treasureType === 'valise') {
-            if (random <= 60) {
+            if (random <= 4) {
+                gain = " a rusty old sword... 🗡️";
+            } else if (random <= 60) {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 25) + 1;
                 await orAction.increment(interaction.user.id, random);
@@ -69,9 +73,28 @@ module.exports = {
             }
         }
 
+        else if (treasureType === 'sable') {
+            if (random <= 10) {
+                gain = " a pile of buried bones... 💀";
+            } else if (random <= 70) {
+                // choose a random number between 1 and 300
+                const random = Math.floor(Math.random() * 25) + 1;
+                await orAction.increment(interaction.user.id, random);
+                gain = random + " <:gold:1058066245154525265>";
+            } else {
+                // choose a random number between 1 and 500
+                const random = Math.floor(Math.random() * 50) + 1;
+                await xpAction.increment(interaction.guild, interaction.user.id, random);
+                gain = random + " <:xp:1058066266797113455>";
+            }
+        }
 
         else if (treasureType === 'coffre') {
-            if (random <= 60) {
+            if (random <= 2) {
+                gain = " a nest of spiders... 🕷️";
+            } else if (random <= 3) {
+                gain = " air.. 🍃";
+            } else if (random <= 60) {
                 // choose a random number between 1 and 300
                 const random = Math.floor(Math.random() * 75) + 1;
                 await orAction.increment(interaction.user.id, random);
@@ -96,7 +119,9 @@ module.exports = {
 
 
         else if (treasureType === 'carnet') {
-            if (random <= 50) {
+            if (random == 1) {
+                gain = " a fake 100$ banknote... 💶";
+            } else if (random <= 50) {
                 const randFloat = Math.random();
                 const sticker = await stickerDB.getRandomWinnableSticker(randFloat);
                 if (sticker !== null) {
@@ -121,14 +146,14 @@ module.exports = {
 
 
 
-        const embed = createEmbeds.createFullEmbed('Congratulations!', 'You\'ve received **' + gain + '**', null, null, null, null);
+        const embed = createEmbeds.createFullEmbed('Congrats!', 'You\'ve received **' + gain + '**', null, null, null, null);
         try {
             await userDB.incr_nb_treasures(interaction.user.id);
             await interaction.user.send({ content: "", embeds: [embed], ephemeral: true });
         } catch {
         }
 
-        const embedPublic = createEmbeds.createFullEmbed('','An illustrious stranger has received **' + gain + '**', null, null, null, null);
+        const embedPublic = createEmbeds.createFullEmbed('', 'An illustrious stranger has received **' + gain + '**', null, null, null, null);
         // fetch interaction message
         const message = await interaction.channel.messages.fetch(interaction.message.id);
         // update message

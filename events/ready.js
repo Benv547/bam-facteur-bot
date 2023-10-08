@@ -138,7 +138,7 @@ module.exports = {
                 await channel.send({ content: '', embeds: [embed], components: [row] });
             }
 
-            setTimeout(checkTreasure, 1000 * 60 * 5);
+            setTimeout(checkTreasure, 1000 * 60 * 30);
         }
         checkTreasure();
 
@@ -221,7 +221,7 @@ module.exports = {
                             const user = await guild.members.fetch(receiver_id);
                             await user.roles.add(afkRole);
                             // Create Embed AFK
-                            const embedAFK = createEmbeds.createFullEmbed("We miss you..", 'You have been put in AFK mode on the [Bottle in the Sea] server (https://discord.gg/bottle) because you missed a lot of bottles ! *You can remove your AFK mode by running the command `/afk`.*', null, null, null, null);
+                            const embedAFK = createEmbeds.createFullEmbed("We miss you..", 'You have been put in AFK mode on the [Bottle in the Sea](https://discord.gg/ZnvHEVH2ja) server because you missed a lot of bottles ! *You can remove your AFK mode by running the command `/afk`.*', null, null, null, null);
                             // Send Embed AFK
                             await user.send({ content: '', embeds: [embedAFK] });
                         }

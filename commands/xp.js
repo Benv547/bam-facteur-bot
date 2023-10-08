@@ -32,7 +32,7 @@ module.exports = {
             const embed = createEmbeds.createFullEmbed('An impressive level!', "You are at max level with **" + xp + " XP**!", null, null, 0x2f3136, null);
             return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
         }
-        const embed = createEmbeds.createFullEmbed('An impressive level!', 'You are **<@&' + role + '>** and have **' + xp + '** <:xp:851123277497237544> !\nYou need **' + difference + '** <:xp:1058066266797113455> to level up.', null, null, 0x2f3136, null);
+        const embed = createEmbeds.createFullEmbed('An impressive level!', 'You are **<@&' + role + '>** and have **' + xp + '** XP! \nYou need **' + difference + '** <:xp:1058066266797113455> to level up.', null, null, 0x2f3136, null);
         return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
 };

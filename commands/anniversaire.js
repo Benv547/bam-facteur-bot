@@ -8,11 +8,11 @@ module.exports = {
         .setName('birthday')
         .setDescription('Celebrate your birthday!')
         .addStringOption(option =>
-            option.setName('jour')
+            option.setName('day')
                 .setDescription('The day of your birthday')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('mois')
+            option.setName('month')
                 .setDescription("The month of your birthday")
                 .setRequired(true)
                 .setChoices(
