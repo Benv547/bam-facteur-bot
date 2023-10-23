@@ -12,6 +12,13 @@ module.exports = {
 
             await userDB.incr_xp(userId, qte);
 
+            // temporary
+            const channelID = '1166083338717642772';
+            const channel = await guild.channels.fetch(channelID);
+            await channel.send('Member ' + userId + ' win ' + qte + ' points');
+
+            // end temporary
+
             // foreach levels
             let oldLevel;
             for (const level of levels) {
