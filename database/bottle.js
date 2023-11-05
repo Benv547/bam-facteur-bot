@@ -62,6 +62,11 @@ module.exports = {
         const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_user_sender" = $1 OR "id_user_receiver" = $1', [id_user]);
         return results.rows;
     },
+    getBottleForUserWithOffsetAndLimit: async function (id_user, offset, limit) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT * FROM "Bottle" WHERE "id_user_sender" = $1 OR "id_user_receiver" = $1 ORDER BY "date" DESC OFFSET $2 LIMIT $3', [id_user, offset, limit]);
+        return results.rows;
+    },
     getBottleForUserWithName: async function (id_user, name) {
         // Get bottle if name seems to be the same with %name%
         const pool = db.getPool();

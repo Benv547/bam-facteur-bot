@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const createEmbeds = require("../utils/createEmbeds");
@@ -13,7 +14,7 @@ module.exports = {
                 .setDescription('Le nom de la bouteille')),
     async execute(interaction) {
         if (interaction.options.getString('nom') === null) {
-            const bottles = await bottleDB.getBottleForUser(interaction.user.id);
+            const bottles = await bottleDB.getBottleForUserWithOffsetAndLimit(interaction.user.id, 0, 10);
             let message = '';
             if (bottles.length === 0) {
                 message = 'Vous n\'avez pas de bouteille !';
@@ -45,7 +46,18 @@ module.exports = {
                 });
             }
             const embed = createEmbeds.createFullEmbed("Vos bouteilles", message, null, null, 0x2f3136, null);
-            return interaction.reply({content: '', embeds: [embed], ephemeral: true});
+            // Create an action row with navigation buttons
+            if (bottles.length < 10) {
+                return interaction.reply({ content: '', embeds: [embed], ephemeral: true });
+            }
+            const row = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('bottlePage_1')
+                        .setLabel('Suivant')
+                        .setStyle(ButtonStyle.Secondary),
+                );
+            return interaction.reply({ content: '', embeds: [embed], components: [row], ephemeral: true });
         } else {
             let bottle;
             const bottles = await bottleDB.getBottleForUserWithName(interaction.user.id, interaction.options.getString('nom'));
