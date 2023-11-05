@@ -47,7 +47,7 @@ module.exports = {
     },
     getAllBirdAfterOneHour: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Bird" WHERE "date" < NOW() - INTERVAL \'1 hour\' AND "archived" = false');
+        const results = await pool.query('SELECT * FROM "Bird" WHERE "date" < NOW() - INTERVAL \'24 hours\' AND "archived" = false');
         if (results.rows.length > 0) {
             return results.rows;
         }
@@ -55,7 +55,7 @@ module.exports = {
     },
     getReactions: async function (id_bird) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "BirdReaction" WHERE id_bird = $1', [id_bird]);
+        const results = await pool.query('SELECT id_emoji, COUNT(id_user) as c FROM "BirdReaction" WHERE id_bird = $1 GROUP BY id_emoji ORDER BY c', [id_bird]);
         if (results.rows.length > 0) {
             return results.rows;
         }

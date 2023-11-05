@@ -11,7 +11,7 @@ const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const boutiqueAction = require("../utils/boutiqueAction");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole, boutique } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole, newBirdChannel, boutique } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -283,14 +283,10 @@ module.exports = {
                 for (let i = 0; i < birds.length; i++) {
                     try {
                         const guild = await client.guilds.fetch(birds[i].id_guild);
-                        const channel = await guild.channels.fetch(birds[i].id_channel);
-                        await channel.delete();
-
-                        if (birds[i].sea < 10) {
-                            await bottle.createBird(guild, birds[i].id_user, birds[i].content, birds[i].sea + 1, birds[i].id_bird);
-                        } else {
-                            await bottle.flowBird(guild, birds[i].id_channel);
-                        }
+                        const channel = await guild.channels.fetch(newBirdChannel);
+                        const message = await channel.messages.fetch(birds[i].id_channel);
+                        await message.delete();
+                        await bottle.flowBird(guild, birds[i].id_channel);
                     } catch (error) {
                         console.log(error);
                         await birdDB.setArchived(birds[i].id_bird);
