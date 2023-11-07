@@ -70,14 +70,16 @@ module.exports = {
         }
 
         if (signalement.type === 'bottle') {
-            const signalementBottle = await signalementDB.getSignalementBottle(interaction.message.id);
-            const id_bottle = signalementBottle.id_bottle;
-            try {
-                const bottle = await interaction.guild.channels.fetch(id_bottle);
-                await bottle.delete();
-            } catch {}
-            await bottleDB.setBottleArchived(id_bottle);
-            await bottleDB.setBottleTerminated(id_bottle);
+            if (sanctionType !== 'abusif') {
+                const signalementBottle = await signalementDB.getSignalementBottle(interaction.message.id);
+                const id_bottle = signalementBottle.id_bottle;
+                try {
+                    const bottle = await interaction.guild.channels.fetch(id_bottle);
+                    await bottle.delete();
+                } catch {}
+                await bottleDB.setBottleArchived(id_bottle);
+                await bottleDB.setBottleTerminated(id_bottle);
+            }
         } else if (signalement.type === 'wanted') {
             if (sanctionType !== 'abusif') {
                 const signalementWanted = await signalementDB.getSignalementWanted(interaction.message.id);
