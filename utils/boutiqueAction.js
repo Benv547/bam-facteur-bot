@@ -71,7 +71,11 @@ module.exports = {
         }
         return await interaction.reply({ content:'Cette catégorie n\'existe pas.', ephemeral: true });
     },
-    diplayShop: async function (interaction) {
+    diplayShop: async function (channel) {
+
+        // Clear channel
+        await channel.bulkDelete(25);
+
         const items = await boutiqueDB.getProductOnBoutique();
 
         let types = [];
@@ -80,9 +84,9 @@ module.exports = {
 
             if (!types.includes(item.type)) {
                 if (types.length === 0) {
-                    await interaction.channel.send({ content: '**' + item.type.toUpperCase() + 'S**' });
+                    await channel.send({ content: '**' + item.type.toUpperCase() + 'S**' });
                 } else {
-                    await interaction.channel.send({ content: '** **\n\n\n**' + item.type.toUpperCase() + 'S**' });
+                    await channel.send({ content: '** **\n\n\n**' + item.type.toUpperCase() + 'S**' });
                 }
                 types.push(item.type);
             }
@@ -90,6 +94,9 @@ module.exports = {
             const textExample = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer enim neque volutpat ac tincidunt vitae semper. Fames ac turpis egestas integer eget aliquet nibh. Faucibus purus in massa tempor nec feugiat nisl pretium fusce.";
             const randomText = "boutique";
             const randomHexColor = Math.floor(Math.random() * 16777215).toString(16);
+            if (randomHexColor.length < 6) {
+                randomHexColor = '0'.repeat(6 - randomHexColor.length) + randomHexColor;
+            }
 
             if (item.type === 'sticker') {
                 const sticker = await stickerDB.getSticker(item.id_item);
@@ -102,7 +109,7 @@ module.exports = {
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji('1045638309235404860'),
                     );
-                await interaction.channel.send({ content: "** **", embeds: [embed], components: [row] });
+                await channel.send({ content: "** **", embeds: [embed], components: [row] });
             } else if (item.type === 'arabesque') {
                 const footer = await footerDB.getFooter(item.id_item);
                 const embed = await createEmbeds.createBottle(textExample, randomText, 1, "Un•e illustre inconnu•e", randomHexColor, footer.id_footer);
@@ -114,10 +121,20 @@ module.exports = {
                             .setStyle(ButtonStyle.Secondary)
                             .setEmoji('1045638309235404860'),
                     );
-                await interaction.channel.send({ content: "** **", embeds: [embed], components: [row] });
+                await channel.send({ content: "** **", embeds: [embed], components: [row] });
             }
         }
+        let message = "** **\n\n\n__Commandes utiles :__\n- /voir [categorie] [item] : voir un item de la boutique.\n- /boutique [categorie] [item] : acheter un item de la boutique.";
+        return await channel.send({ content: message + '\n\n__Rappel :__\n- Les **boosters** ont **50% de réduction** sur toute la boutique.\n- Les **V.I.P.** ont **25% de réduction** sur toute la boutique.\n(*Le prix affiché est le prix public.*)' });
+    },
+    randomShop: async function () {
+        // Remove all items from shop
+        await boutiqueDB.removeAllItemsOnBoutique();
 
-        return await interaction.channel.send({ content: '** **\n\n\n__Rappel :__\n- Les **boosters** ont **50% de réduction** sur toute la boutique.\n- Les **V.I.P.** ont **25% de réduction** sur toute la boutique.\n(*Le prix affiché est le prix public.*)' });
+        // Stickers
+        await boutiqueDB.set3RandomStickersWinnableInTheBoutique();
+
+        // Footers
+        await boutiqueDB.set3RandomArabesquesWinnableInTheBoutique();
     }
 }
