@@ -4,9 +4,54 @@ const messageIleDB = require("../database/message_ile");
 const sanctionDB = require("../database/sanctions");
 const {signalement, modRole, ile} = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
+const {newBirdChannel} = require("../config.json");
+const roles = require("../utils/roles");
+const userDB = require("../database/user");
+const xpAction = require("../utils/xpAction");
+const birdDB = require("../database/bird");
+
 module.exports = {
     name: 'messageReactionAdd',
     async execute(messageReaction, member) {
+
+        if (messageReaction.message.channelId === newBirdChannel) {
+            await messageReaction.users.remove(member.id);
+
+            const guild_member = await messageReaction.message.guild.members.fetch(member.id);
+            if (!await roles.userIsBooster(guild_member) && !await roles.userIsVip(guild_member)) {
+                return await member.send({content: "Vous devez être VIP ou Booster pour pouvoir réagir à ce message avec un émoji personnalisé."});
+            }
+
+            if (await userDB.getUser(member.id) === null) {
+                await userDB.createUser(member.id, 0, 0);
+            }
+
+            const bird = await birdDB.getBird(messageReaction.message.id);
+            if (bird == null) {
+                return await member.send({content: "Ce message n'est plus disponible."});
+            }
+            const old = await birdDB.getReactionByUser(bird.id_bird, member.id);
+            if (old) {
+                return await member.send({content: "Vous avez déjà réagi à ce message."});
+            }
+            if (bird.id_user === member.id) {
+                return await member.send({content: "Vous ne pouvez pas réagir à votre propre message."});
+            }
+
+            // update message embed footer
+            let newContent = '1 réaction(s)';
+            try {
+                let reactionCount = parseInt(messageReaction.message.content.split(' ')[0]);
+                if (isNaN(reactionCount)) reactionCount = 0;
+                const newReactionCount = reactionCount + 1;
+                newContent = newReactionCount + ' réaction(s)';
+            } catch {}
+            await messageReaction.message.edit({ content: newContent, embeds: messageReaction.message.embeds });
+            
+            await birdDB.insertBirdReaction(bird.id_bird, guild_member.id, messageReaction.emoji.toString());
+            await xpAction.increment(messageReaction.message.guild, guild_member.id, 15);
+            return await member.send({content: "Votre réaction a été prise en compte."});
+        }
 
         if (messageReaction.emoji.toString() !== '⚠️') {
             return;
