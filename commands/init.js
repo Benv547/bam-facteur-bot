@@ -110,7 +110,7 @@ module.exports = {
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'shop') {
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
-                return await boutiqueAction.diplayShop(interaction);
+                return await boutiqueAction.diplayShop(interaction.channel);
             }
             return interaction.reply({ content:'Commande non trouvée.', ephemeral: true});
         }

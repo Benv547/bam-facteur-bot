@@ -9,8 +9,9 @@ const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
+const boutiqueAction = require("../utils/boutiqueAction");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole, boutique } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -488,5 +489,21 @@ module.exports = {
             setTimeout(checkAnniversaire, 1000 * 60 * 60 * 1);
         };
         checkAnniversaire();
+
+        // Every monday at 7:00, reset the shop
+        checkBoutique = async () => {
+            
+            const now = new Date();
+            if (now.getDay() == 1 && now.getHours() == 7) {
+                // fetch the boutique channel
+                const guild = await client.guilds.fetch(guildId);
+                const channel = await guild.channels.fetch(boutique);
+
+                await boutiqueAction.diplayShop(channel);
+                await boutiqueAction.randomShop();
+            }
+            setTimeout(checkBoutique, 1000 * 60 * 60 * 1);
+        };
+        checkBoutique();
     },
 };
