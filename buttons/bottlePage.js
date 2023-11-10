@@ -49,6 +49,7 @@ module.exports = {
                     new ButtonBuilder()
                         .setCustomId('bottlePage_1')
                         .setLabel('Suivant')
+                        .setEmoji('➡️')
                         .setStyle(ButtonStyle.Secondary),
                 );
             return interaction.reply({ content: '', embeds: [embed], components: [row], ephemeral: true });
@@ -59,6 +60,7 @@ module.exports = {
                     new ButtonBuilder()
                         .setCustomId('bottlePage_' + (page - 1))
                         .setLabel('Précédent')
+                        .setEmoji('⬅️')
                         .setStyle(ButtonStyle.Secondary),
                 );
             return interaction.reply({ content: '', embeds: [embed], components: [row], ephemeral: true });

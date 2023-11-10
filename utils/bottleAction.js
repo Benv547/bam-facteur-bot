@@ -117,19 +117,22 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('📨 Répondre')
+                    .setLabel('Répondre')
+                    .setEmoji('📨')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('seaBottle')
-                    .setLabel('🌊 Remettre à la mer')
+                    .setLabel('Remettre à la mer')
+                    .setEmoji('🌊')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bottle')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Danger),
             );
 
@@ -243,19 +246,22 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('📨 Répondre')
+                    .setLabel('Répondre')
+                    .setEmoji('📨')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bottle')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Danger),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteBottle')
-                    .setLabel('🗑️ Supprimer')
+                    .setLabel('Supprimer')
+                    .setEmoji('🗑️')
                     .setStyle(ButtonStyle.Secondary),
             );
 
@@ -356,31 +362,36 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_love')
-                    .setLabel('😍')
+                    .setLabel("\u200b")
+                    .setEmoji('😍')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_joy')
-                    .setLabel('😂')
+                    .setLabel("\u200b")
+                    .setEmoji('😂')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_mouth')
-                    .setLabel('😮')
+                    .setLabel("\u200b")
+                    .setEmoji('😮')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_cry')
-                    .setLabel('😢')
+                    .setLabel("\u200b")
+                    .setEmoji('😢')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bird')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Danger),
             );
 
