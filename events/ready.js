@@ -97,57 +97,67 @@ module.exports = {
 
             // choose random number between 1 and 100
             const random = Math.floor(Math.random() * 100) + 1;
+            let row;
+            let embed;
             if (random < 3) {
-                const row = new ActionRowBuilder()
+                row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_carnet')
                             .setLabel('Ouvrir le carnet')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('', 'Un **carnet** a été trouvé sur la plage, **ouvrez-le vite** !', null, null, 0x2F3136, null);
-                await channel.send({ content: '', embeds: [embed], components: [row] });
+                embed = createEmbeds.createFullEmbed('', 'Un **carnet** a été trouvé sur la plage, **ouvrez-le vite** !', null, null, 0x2F3136, null);
             } else if (random < 6) {
-                const row = new ActionRowBuilder()
+                row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_sable')
                             .setLabel('Creuser dans le sable')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('', 'Un **tas de sable** a été trouvé sur la plage, **creusez vite** !', null, null, 0x2F3136, null);
-                await channel.send({ content: '', embeds: [embed], components: [row] });
+                embed = createEmbeds.createFullEmbed('', 'Un **tas de sable** a été trouvé sur la plage, **creusez vite** !', null, null, 0x2F3136, null);
             } else if (random < 10) {
-                const row = new ActionRowBuilder()
+                row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_coffre')
                             .setLabel('Ouvrir le coffre')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('', 'Un **coffre** a été trouvé sur la plage, **ouvrez-le vite** !', null, null, 0x2F3136, null);
-                await channel.send({ content: '', embeds: [embed], components: [row] });
+                embed = createEmbeds.createFullEmbed('', 'Un **coffre** a été trouvé sur la plage, **ouvrez-le vite** !', null, null, 0x2F3136, null);
             } else if (random < 40) {
-                const row = new ActionRowBuilder()
+                row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_valise')
                             .setLabel('Défaire la valise')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('', 'Une **valise** a été trouvée sur la plage, **ouvrez-la vite** !', null, null, 0x2F3136, null);
-                await channel.send({ content: '', embeds: [embed], components: [row] });
+                embed = createEmbeds.createFullEmbed('', 'Une **valise** a été trouvée sur la plage, **ouvrez-la vite** !', null, null, 0x2F3136, null);
             } else {
-                const row = new ActionRowBuilder()
+                row = new ActionRowBuilder()
                     .addComponents(
                         new ButtonBuilder()
                             .setCustomId('treasure_botte')
                             .setLabel('Vider la botte')
                             .setStyle(ButtonStyle.Primary),
                     );
-                const embed = createEmbeds.createFullEmbed('', 'Une **botte** a été trouvée sur la plage, **ouvrez-la vite** !', null, null, 0x2F3136, null);
-                await channel.send({ content: '', embeds: [embed], components: [row] });
+                embed = createEmbeds.createFullEmbed('', 'Une **botte** a été trouvée sur la plage, **ouvrez-la vite** !', null, null, 0x2F3136, null);
             }
+            const message = await channel.send({ content: '', embeds: [embed], components: [row] });
+            setTimeout(async () => {
+                try {
+                    const new_message = await channel.messages.fetch(message.id);
+                    if (!new_message.embeds[0].description.includes('Un•e illustre')) {
+                        embed = createEmbeds.createFullEmbed('', 'Personne n\'a ouvert ce trésor, il a été emporté par la mer..', null, null, 0x2F3136, null);
+                        await new_message.edit({ content: '', embeds: [embed], components: [] });
+                    }
+                }
+                catch (error) { 
+                    console.log(error);
+                }
+            }, 1000 * 60 * 5);
 
             setTimeout(checkTreasure, 1000 * 60 * 5);
         }
