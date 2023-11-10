@@ -64,7 +64,7 @@ module.exports = {
                 const embed = createEmbeds.createFullEmbed('**Votre avis compte !**',
                     'Vous aimez (ou pas) le serveur ? **Laissez-nous votre avis !**\n' +
                     '\n' +
-                    'Attention, les suggestions doivent aller dans <#1030839758361993246>.',
+                    'Attention, les suggestions doivent aller dans <#1048730368431366276>.',
                     'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/blue-heart_1f499.png',
                     null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
@@ -110,7 +110,7 @@ module.exports = {
                 return interaction.channel.send({ content: '', components: [row] });
             } else if (interaction.options.getString('type') === 'shop') {
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
-                return await boutiqueAction.diplayShop(interaction);
+                return await boutiqueAction.diplayShop(interaction.channel);
             }
             return interaction.reply({ content:'Commande non trouvée.', ephemeral: true});
         }

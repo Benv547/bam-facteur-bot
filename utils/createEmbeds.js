@@ -7,7 +7,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setColor(color) // Set the color of the embed from string to hex
-            .setAuthor({ name: signature, iconURL: 'https://avatars.dicebear.com/api/adventurer-neutral/' + diceBearSeed + '.png'})
+            .setAuthor({ name: signature, iconURL: 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=' + diceBearSeed})
             .setDescription(content)
             .setTimestamp();
 

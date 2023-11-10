@@ -34,7 +34,7 @@ module.exports = {
             code = codeGivenByUser;
         }
 
-        const url = 'https://avatars.dicebear.com/api/adventurer-neutral/' + code + '.png'
+        const url = 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=' + code
         const embed = createEmbeds.createFullEmbed('Encore un super avatar !', 'Voici votre avatar pour vos prochaines bouteilles !', null, url, null, 'Code de l\'avatar : ' + code);
 
         // Check if the user exists in the database

@@ -89,6 +89,14 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "xp" = "xp" + $1 WHERE "id_user" = $2', [qte, id_user]);
     },
+    getXp: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "xp" FROM "User" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].xp;
+        }
+        return null;
+    },
     set_vip: async function (id_user, vip = true) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "isVIP" = $1 WHERE "id_user" = $2', [vip, id_user]);

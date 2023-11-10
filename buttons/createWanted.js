@@ -39,6 +39,8 @@ module.exports = {
             waitMinutes = 11;
         } else if (await roles.userIsVip(interaction.member)) {
             waitMinutes = 20;
+        } else if (await roles.userIsAdmin(interaction.member)) {
+            waitMinutes = 1;
         }
 
         if (dateLastBottle) {
