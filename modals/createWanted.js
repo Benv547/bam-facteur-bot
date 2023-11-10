@@ -87,13 +87,15 @@ module.exports = {
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('replyWanted')
-                        .setLabel('📨 Répondre')
+                        .setLabel('Répondre')
+                        .setEmoji('📨')
                         .setStyle(ButtonStyle.Primary),
                 )
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('warning_wanted')
-                        .setLabel('⚠️ Signaler')
+                        .setLabel('Signaler')
+                        .setEmoji('⚠️')
                         .setStyle(ButtonStyle.Danger),
                 );
 

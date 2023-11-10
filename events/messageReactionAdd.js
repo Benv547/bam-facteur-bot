@@ -65,25 +65,29 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_abusif')
-                    .setLabel('😡 Abusif')
+                    .setLabel('Abusif')
+                    .setEmoji('😡')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_warn')
-                    .setLabel('⚠️ Avertir')
+                    .setLabel('Avertir')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_mute')
-                    .setLabel('🚫 Exclure')
+                    .setLabel('Exclure')
+                    .setEmoji('🚫')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('sanction_ban')
-                    .setLabel('⛔️ Bannir')
+                    .setLabel('Bannir')
+                    .setEmoji('⛔️')
                     .setStyle(ButtonStyle.Danger),
             );
 
