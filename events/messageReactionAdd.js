@@ -87,7 +87,7 @@ module.exports = {
                 new ButtonBuilder()
                     .setCustomId('sanction_ban')
                     .setLabel('Bannir')
-                    .setEmoji('⛔️')
+                    .setEmoji('💢')
                     .setStyle(ButtonStyle.Danger),
             );
 
@@ -128,7 +128,7 @@ module.exports = {
                     text += "🚫 ";
                     break;
                 case "ban":
-                    text += "⛔️ ";
+                    text += "💢 ";
                     break;
             }
             text += warnDetail[i].content + "\n\n";
@@ -137,7 +137,7 @@ module.exports = {
         const nbWarn = await sanctionDB.countDetail(receiver_id, "warn");
         const nbMute = await sanctionDB.countDetail(receiver_id, "mute");
         const nbBan = await sanctionDB.countDetail(receiver_id, "ban");
-        let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, ⛔️ **" + nbBan + "**";
+        let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, 💢 **" + nbBan + "**";
 
         // Get guild channel by id
         const channel = messageReaction.message.guild.channels.cache.get(signalement);

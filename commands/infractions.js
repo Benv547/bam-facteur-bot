@@ -27,7 +27,7 @@ module.exports = {
             const nbMute = await sanctionDB.countDetail(userId.id_user, "mute");
             const nbBan = await sanctionDB.countDetail(userId.id_user, "ban");
 
-            let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, ⛔️ **" + nbBan + "**";
+            let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, 💢 **" + nbBan + "**";
             const embed = createEmbeds.createFullEmbed(`Voici les infractions de l\'utilisateur :` , resume, null, null, 0x2f3136, null);
             
            
