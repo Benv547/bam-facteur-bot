@@ -49,7 +49,7 @@ module.exports = {
                 new ButtonBuilder()
                     .setCustomId('sanction_ban')
                     .setLabel('Bannir')
-                    .setEmoji('⛔️')
+                    .setEmoji('💢')
                     .setStyle(ButtonStyle.Danger),
             );
 
@@ -120,7 +120,7 @@ module.exports = {
             if (await signalementDB.getSignalementBirdByChannel(interaction.channelId) !== null) {
                 return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });
             }
-            const bird = await birdDB.getBird(interaction.channel.id);
+            const bird = await birdDB.getBird(interaction.message.id);
             receiver_id = bird.id_user;
             warningContent = bird.content;
         } else if (warningType === 'ileMessage') {
@@ -161,7 +161,7 @@ module.exports = {
                     text += "🚫 ";
                     break;
                 case "ban":
-                    text += "⛔️ ";
+                    text += "💢 ";
                     break;
                 default :
                     break;
@@ -185,7 +185,7 @@ module.exports = {
         const nbWarn = await sanctionDB.countDetail(receiver_id, "warn");
         const nbMute = await sanctionDB.countDetail(receiver_id, "mute");
         const nbBan = await sanctionDB.countDetail(receiver_id, "ban");
-        let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, ⛔️ **" + nbBan + "**";
+        let resume = "😡 **" + nbWarnAbus + "**, ⚠️ **" + nbWarn + "**, 🚫 **" + nbMute + "**, 💢 **" + nbBan + "**";
 
         // Get guild channel by id
         const channel = interaction.guild.channels.cache.get(signalement);
