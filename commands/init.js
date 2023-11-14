@@ -65,7 +65,7 @@ module.exports = {
                     'Vous aimez (ou pas) le serveur ? **Laissez-nous votre avis !**\n' +
                     '\n' +
                     'Attention, les suggestions doivent aller dans <#1048730368431366276>.',
-                    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/blue-heart_1f499.png',
+                    'https://images.emojiterra.com/google/noto-emoji/unicode-15/animated/1f499.gif',
                     null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
@@ -80,7 +80,7 @@ module.exports = {
                 const embed = createEmbeds.createFullEmbed('**Suggestions**',
                     'Pour faire avancer le serveur, n\'hésitez pas à nous transmettre vos suggestions.\n' +
                     'Vous pouvez aussi réagir pour les suggestions que vous trouvez intéressantes ou non.',
-                    'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/light-bulb_1f4a1.png',
+                    'https://images.emojiterra.com/google/noto-emoji/unicode-15/animated/1f4a1.gif',
                     null, 0x2f3136, null, false);
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', embeds: [embed], components: [row] });
