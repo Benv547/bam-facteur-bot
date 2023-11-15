@@ -279,11 +279,11 @@ module.exports = {
                         } catch { }
 
                         await wantedDB.setArchived(wanteds[i].id_channel);
-                        await wantedDB.set_id_channel_null(wanteds[i].id_channel);
+                        await wantedDB.set_replied(wanteds[i].id_message);
                     } catch (error) {
                         console.log(error);
                         await wantedDB.setArchived(wanteds[i].id_channel);
-                        await wantedDB.set_id_channel_null(wanteds[i].id_channel);
+                        await wantedDB.set_replied(wanteds[i].id_message);
                         continue;
                     }
                 }
@@ -308,7 +308,7 @@ module.exports = {
                                 //Envoie l'embed crée à l'utilisateur
                                 await sender.send({ content: '', embeds: [embedFlow] });
                             } catch { }
-                            await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                            await wantedDB.set_replied(wantedsArchived[i].id_message);
                         }
                         if (wantedsArchived[i].id_message !== null) {
                             const wChannel = await guild.channels.fetch(wantedChannel);
@@ -318,7 +318,7 @@ module.exports = {
 
                     } catch (error) {
                         console.log(error);
-                        await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                        await wantedDB.set_replied(wantedsArchived[i].id_message);
                         continue;
                     }
                 }
