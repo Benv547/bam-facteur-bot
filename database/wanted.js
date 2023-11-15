@@ -50,6 +50,10 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('UPDATE "Wanted" SET "id_channel" = NULL WHERE "id_message" = $1', [id_message]);
     },
+    set_replied: async function (id_message) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "Wanted" SET "replied" = true WHERE "id_message" = $1', [id_message]);
+    },
     get_id_user: async function (id_message) {
         const pool = db.getPool();
         const results = await pool.query('SELECT "id_user" FROM "Wanted" WHERE id_message = $1', [id_message]);
@@ -112,7 +116,7 @@ module.exports = {
     },
     getWantedFromThreeHoursAndArchived: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Wanted" WHERE "date" < NOW() - INTERVAL \'48 hours\' AND "archived" = true AND "id_channel" IS NOT NULL');
+        const results = await pool.query('SELECT * FROM "Wanted" WHERE "date" < NOW() - INTERVAL \'48 hours\' AND "archived" = true AND "replied" = false');
         return results.rows;
     },
 
