@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction) {
         const page = parseInt(interaction.customId.split('_')[1]);
 
-        const bottles = await bottleDB.getBottleForUserWithOffsetAndLimit(interaction.user.id, page, 10);
+        const bottles = await bottleDB.getBottleForUserWithOffsetAndLimit(interaction.user.id, page * 10, 10);
         let message = '';
         if (bottles.length === 0) {
             message = 'Vous n\'avez pas de bouteille !';
