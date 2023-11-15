@@ -15,6 +15,8 @@ module.exports = {
     name: 'replyWanted',
     async execute(interaction) {
 
+        const type = interaction.customId.split('_')[1];
+
         const content = interaction.fields.getTextInputValue('textWanted');
         if (content.trim() === '') {
             return await interaction.reply({content: "Le message ne peut pas être vide.", ephemeral: true});
@@ -26,42 +28,9 @@ module.exports = {
             sender = await userDB.getUser(interaction.member.id);
         }
 
-
         const id_channel = await wantedDB.get_id_channel(interaction.message.id);
         if (id_channel === null) {
-
-            const id_channel = interaction.channelId;
-            const id_message = await wantedDB.get_id_message(interaction.channel.id);
-
-            const channel = await interaction.guild.channels.fetch(wantedChannel);
-            const message = await channel.messages.fetch(id_message);
-            await message.delete();
-
-            await interaction.update({ content: '', components: [] });
-
-            const listMessageIds = await wantedDB.getAllReplies(id_channel);
-            for (let i = 0; i < listMessageIds.length; i++) {
-                if (listMessageIds[i].id_message !== interaction.message.id) {
-                    const message = await interaction.channel.messages.fetch(listMessageIds[i].id_message);
-                    await message.delete();
-                }
-            }
-
-            const id_user = await wantedDB.get_id_user_response(interaction.message.id);
-
-            await bottleDB.insertBottle(id_channel, interaction.guildId, interaction.member.id, id_user, interaction.channelId, interaction.channel.name, 0);
-
-            const wanted = await wantedDB.get_wanted(id_channel);
-            const response = await wantedDB.get_wanted_response(interaction.message.id);
-            await wantedDB.setArchived(id_channel);
-
-            // Insert initial message...
-            await messageDB.insertMessage(wanted.id_message, id_channel, wanted.id_user, wanted.content);
-            await messageDB.insertMessage(response.id_message, id_channel, response.id_user, response.content);
-
-            await bottle.reply(interaction.guild, interaction.member.id, interaction.channel, content);
-
-            await xpAction.increment(interaction.guild, interaction.member.id, 50);
+            return await interaction.reply({ content: 'Une erreur est survenue.', ephemeral: true });
         } else {
 
             const reply = await wantedDB.get_reply_for_user_and_channel(interaction.member.id, id_channel);
@@ -76,14 +45,16 @@ module.exports = {
 
             const channel = await interaction.guild.channels.fetch(id_channel);
             await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
+            // random dicebear seed
+            const diceBearSeed = Math.floor(Math.random() * 1000000000);
+            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), diceBearSeed, null,  "Un•e illustre inconnu•e", '945b44', null);
 
-            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
-
-            const row = new ActionRowBuilder()
-                .addComponents(
+            const row = new ActionRowBuilder();
+            if (type !== 'anonymous') {
+                row.addComponents(
                     new ButtonBuilder()
-                        .setCustomId('replyWanted')
-                        .setLabel('Répondre')
+                        .setCustomId('replyWanted_join')
+                        .setLabel('Inviter')
                         .setEmoji('📨')
                         .setStyle(ButtonStyle.Primary),
                 )

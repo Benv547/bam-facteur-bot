@@ -279,13 +279,46 @@ module.exports = {
                         } catch { }
 
                         await wantedDB.setArchived(wanteds[i].id_channel);
+                        await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
                     } catch (error) {
                         console.log(error);
                         await wantedDB.setArchived(wanteds[i].id_channel);
+                        await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
                         continue;
                     }
                 }
             }
+
+            const wantedsArchived = await wantedDB.getWantedFromThreeHoursAndArchived();
+            if (wantedsArchived !== null) {
+                for (let i = 0; i < wantedsArchived.length; i++) {
+                    try {
+                        const guild = await client.guilds.fetch(wantedsArchived[i].id_guild);
+                        const channel = await guild.channels.fetch(wantedsArchived[i].id_channel);
+                        // get last message of the channel
+                        const lastMessageOfChannel = await channel.messages.fetch({ limit: 1 });
+                        // if the last message is older than 48h
+                        const now = new Date();
+                        if (lastMessageOfChannel.first().createdTimestamp + 48 * 60 * 60 * 1000 > now.getTime()) {
+                            await channel.delete();
+                            try {
+                                const sender = await guild.members.fetch(wantedsArchived[i].id_user);
+                                //Crée l'embed
+                                const embedFlow = createEmbeds.createFullEmbed("L'avis de recherche a été supprimé", "Votre avis de recherche a été supprimé car il n'y a pas eu d'activité dessus depuis plus de **48h**.", null, null, null, null);
+                                //Envoie l'embed crée à l'utilisateur
+                                await sender.send({ content: '', embeds: [embedFlow] });
+                            } catch { }
+                            await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                        }
+
+                    } catch (error) {
+                        console.log(error);
+                        await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                        continue;
+                    }
+                }
+            }
+
 
 
             const birds = await birdDB.getAllBirdAfterOneHour();
