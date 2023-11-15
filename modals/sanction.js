@@ -123,7 +123,7 @@ module.exports = {
             if (sanctionType !== 'abusif') {
                 const signalementBird = await signalementDB.getSignalementBird(interaction.message.id);
                 const channel = await interaction.guild.channels.fetch(newBirdChannel);
-                const message = await channel.messages.fetch(signalementBird.id_message);
+                const message = await channel.messages.fetch(signalementBird.id_channel);
                 await message.delete();
                 await birdDB.deleteBird(signalementBird.id_channel);
             }
