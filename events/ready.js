@@ -279,11 +279,11 @@ module.exports = {
                         } catch { }
 
                         await wantedDB.setArchived(wanteds[i].id_channel);
-                        await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                        await wantedDB.set_id_channel_null(wanteds[i].id_channel);
                     } catch (error) {
                         console.log(error);
                         await wantedDB.setArchived(wanteds[i].id_channel);
-                        await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                        await wantedDB.set_id_channel_null(wanteds[i].id_channel);
                         continue;
                     }
                 }
@@ -309,6 +309,11 @@ module.exports = {
                                 await sender.send({ content: '', embeds: [embedFlow] });
                             } catch { }
                             await wantedDB.set_id_channel_null(wantedsArchived[i].id_channel);
+                        }
+                        if (wantedsArchived[i].id_message !== null) {
+                            const wChannel = await guild.channels.fetch(wantedChannel);
+                            const message = await wChannel.messages.fetch(wantedsArchived[i].id_message);
+                            await message.delete();
                         }
 
                     } catch (error) {

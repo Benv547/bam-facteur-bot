@@ -58,14 +58,14 @@ module.exports = {
                         .setEmoji('📨')
                         .setStyle(ButtonStyle.Primary),
                 )
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('warning_wantedReply')
-                        .setLabel('Signaler')
-                        .setEmoji('⚠️')
-                        .setStyle(ButtonStyle.Danger),
-                );
-
+            }
+            row.addComponents(
+                new ButtonBuilder()
+                    .setCustomId('warning_wantedReply')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
+                    .setStyle(ButtonStyle.Danger),
+            );
             const member = await interaction.guild.members.fetch(id_user);
 
             // Send message to channel of interaction
