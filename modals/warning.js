@@ -212,7 +212,7 @@ module.exports = {
         } else if (warningType === 'help') {
             await signalementDB.insertSignalementHelp(message.id, interaction.message.id, interaction.channelId);
         } else if (warningType === 'bird') {
-            await signalementDB.insertSignalementBird(message.id, interaction.channelId);
+            await signalementDB.insertSignalementBird(message.id, interaction.message.id);
         } else if (warningType === 'ileMessage') {
             await signalementDB.insertSignalementIleMessage(message.id, interaction.message.id, interaction.channelId);
         }
