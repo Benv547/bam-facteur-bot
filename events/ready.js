@@ -157,7 +157,7 @@ module.exports = {
                 catch (error) { 
                     console.log(error);
                 }
-            }, 1000 * 60 * 5);
+            }, 1000 * 60 * 15);
 
             setTimeout(checkTreasure, 1000 * 60 * 5);
         }
