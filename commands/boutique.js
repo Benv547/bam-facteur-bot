@@ -70,7 +70,7 @@ module.exports = {
             }
         }
 
-        const embed = createEmbeds.createFullEmbed('Boutique de Bouteille à la mer', '**Voici les items de la catégorie "__' + categorie.toUpperCase() + '__" :**\n\n' + message, 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/325/shopping-cart_1f6d2.png', null, 0x2f3136, 'Pour acheter un item, faites /boutique [catégorie] <item> ou /voir [catégorie] [item] pour le voir.', false);
+        const embed = createEmbeds.createFullEmbed('Boutique de Bouteille à la mer', '**Voici les items de la catégorie "__' + categorie.toUpperCase() + '__" :**\n\n' + message, 'https://images.emojiterra.com/google/noto-emoji/unicode-15/color/256px/1f6d2.png', null, 0x2f3136, 'Pour acheter un item, faites /boutique [catégorie] <item> ou /voir [catégorie] [item] pour le voir.', false);
 
         // Send embed
         return await interaction.reply({ embeds: [embed], ephemeral: true });

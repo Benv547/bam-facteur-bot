@@ -12,9 +12,9 @@ module.exports = {
         if (bottles.length === 0) {
             message = 'Vous n\'avez pas de bouteille !';
         } else {
-            message += '📥 en attente de réponse de votre correspondant';
+            message += '📥 du côté de votre interlocuteur';
             message += '\n';
-            message += '📨 en attente de votre réponse';
+            message += '📨 de votre côté';
             message += '\n';
             message += '💀 bouteille terminée';
             message += '\n';
@@ -22,7 +22,7 @@ module.exports = {
             message += '\n\n'
 
             bottles.forEach(bottle => {
-                message += '• **' + bottle.name + '**\n';
+                message += '• **' + bottle.name + '** [';
                 let status = '';
                 if (bottle.archived) {
                     status = '🗄';
@@ -35,7 +35,7 @@ module.exports = {
                 if (bottle.terminated) {
                     status = '💀';
                 }
-                message += '**Statut** : ' + status + '\n\n';
+                message += status + ']\n';
             });
         }
         const embed = createEmbeds.createFullEmbed("Vos bouteilles", message, null, null, 0x2f3136, null);
@@ -49,19 +49,19 @@ module.exports = {
                     new ButtonBuilder()
                         .setCustomId('bottlePage_1')
                         .setLabel('Suivant')
+                        .setEmoji('➡️')
                         .setStyle(ButtonStyle.Secondary),
                 );
             return interaction.reply({ content: '', embeds: [embed], components: [row], ephemeral: true });
         }
-        if (bottles.length < 10) {
-            const row = new ActionRowBuilder()
-                .addComponents(
-                    new ButtonBuilder()
-                        .setCustomId('bottlePage_' + (page - 1))
-                        .setLabel('Précédent')
-                        .setStyle(ButtonStyle.Secondary),
-                );
-            return interaction.reply({ content: '', embeds: [embed], components: [row], ephemeral: true });
-        }
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('bottlePage_' + (page - 1))
+                    .setLabel('Précédent')
+                    .setEmoji('⬅️')
+                    .setStyle(ButtonStyle.Secondary),
+            );
+        return interaction.reply({ content: '', embeds: [embed], components: [row], ephemeral: true });
     },
 };

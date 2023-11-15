@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType, ButtonBuilder, ButtonStyle } = require('discord.js');
 const footerDB = require("../database/footer");
 const userDB = require("../database/user");
 const createEmbeds = require("../utils/createEmbeds");
@@ -16,11 +16,20 @@ module.exports = {
     async execute(interaction) {
         if (interaction.options.getString('nom') === null) {
             const footers = await footerDB.getAllFootersFromUser(interaction.user.id);
-            let message = '';
-            if (footers === null) {
-                message = 'Vous n\'avez pas d\'arabesque !';
+            let current_footer_item = null;
+            let content = '';
+
+            const current_footer = await userDB.get_id_footer(interaction.user.id);
+            if (current_footer !== null) {
+                current_footer_item = await footerDB.getFooter(current_footer);
             } else {
-                message = 'Voici vos arabesques :\n';
+                current_footer_item = await footerDB.getFooter(DEFAULT);
+            }
+            content = 'Votre arabesque actuellement équipé est **' + current_footer_item.name + '**';
+            const select = new StringSelectMenuBuilder()
+                .setCustomId('starter')
+                .setPlaceholder('Choisissez une arabesque');
+
                 for (const footer of footers) {
                     const footer_item = await footerDB.getFooter(footer.id_footer);
                     let rarity = 'commun';
@@ -29,20 +38,53 @@ module.exports = {
                     else if (footer_item.sharable_percentage <= 0.1) rarity = 'légendaire'; // 10%
                     else if (footer_item.sharable_percentage <= 0.25) rarity = 'épic'; // 25%
                     else if (footer_item.sharable_percentage <= 0.5) rarity = 'rare'; // 50%
-                    message += '• **' + footer_item.name + '** (*' + rarity + '*)\n';
+                    
+                    select.addOptions(
+                        new StringSelectMenuOptionBuilder()
+                            .setLabel(footer_item.name)
+                            .setDescription('Arabesque ' + rarity)
+                            .setValue(footer_item.name),
+                    );
                 }
-                message += '\n';
-                const current_footer = await userDB.get_id_footer(interaction.user.id);
-                if (current_footer !== null) {
-                    const current_footer_item = await footerDB.getFooter(current_footer);
-                    message += 'Votre footer actuellement équipé est **' + current_footer_item.name + '**';
-                } else {
-                    message += 'Vous n\'avez pas d\'arabesque actuellement !';
-                }
-            }
+            
+            const rowB = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('select_footer')
+                        .setLabel('Valider')
+                        .setStyle(ButtonStyle.Secondary),
+                )
 
-            const embed = createEmbeds.createFullEmbed("Vos arabesques", message, null, null, null, 'Faite /arabesque <nom> pour changer d\'arabesque');
-            return interaction.reply({content: '', embeds: [embed], ephemeral: true});
+            const rowS = new ActionRowBuilder()
+                .addComponents(select);
+
+            const embed = createEmbeds.createFullEmbed("Vos arabesques", content, null, current_footer_item.url, null, 'Faite /arabesque <nom> pour changer d\'arabesque');
+            const message = await interaction.reply({content: '', embeds: [embed], components: [rowS, rowB], ephemeral: true});
+            
+            const collectorSelect = message.createMessageComponentCollector({ componentType: ComponentType.StringSelectMenuBuilder, time: 60000 });
+            collectorSelect.on('collect', async i => {
+                if (i.customId === 'starter') {
+                    const footer_name = i.values[0];
+                    const footer = await footerDB.getFooterFromUserWithName(interaction.user.id, footer_name);
+                    const embed = createEmbeds.createFullEmbed('Vos arabesques', 'L\'arabesque actuellement sélectionnée est **' + footer[0].name + '**.\nCelle actuellement équipée est **' + current_footer_item.name + '**.', null, footer[0].url, null, 'Faite /arabesque <nom> pour changer d\'arabesque');
+                    return i.update({content: '', embeds: [embed], ephemeral: true});
+                }
+            });
+            const collectorButton = message.createMessageComponentCollector({ componentType: ComponentType.ButtonBuilder, time: 60000 });
+            collectorButton.on('collect', async i => {
+                if (i.customId === 'select_footer') {
+                    // fetch message
+                    const message = await i.channel.messages.fetch(i.message.id);
+                    // find footer name from embed with regex
+                    const footer_name = message.embeds[0].description.match(/\*\*(.*)\*\*/)[1];
+                    console.log(footer_name);
+                    const footer = await footerDB.getFooterFromUserWithName(interaction.user.id, footer_name);
+                    await userDB.update_id_footer(interaction.user.id, footer[0].id_footer);
+                    const embed = createEmbeds.createFullEmbed('Arabesque changée', 'Votre arabesque a bien été changé !', null, footer[0].url, null, null);
+                    return i.update({content: '', embeds: [embed], ephemeral: true, components: []});
+                }
+            });
+            return;
         } else {
             let footer_name = interaction.options.getString('nom');
 
