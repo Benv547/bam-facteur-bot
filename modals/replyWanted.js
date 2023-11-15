@@ -54,18 +54,17 @@ module.exports = {
                 row.addComponents(
                     new ButtonBuilder()
                         .setCustomId('replyWanted_join')
-                        .setLabel('📨 Inviter')
+                        .setLabel('Inviter')
+                        .setEmoji('📨')
                         .setStyle(ButtonStyle.Primary),
                 )
-            } else {
-                embed.setFooter({ text: 'Réponse anonyme' });
-            }
-            row.addComponents(
-                new ButtonBuilder()
-                    .setCustomId('warning_wantedReply')
-                    .setLabel('⚠️ Signaler')
-                    .setStyle(ButtonStyle.Danger),
-            );
+                .addComponents(
+                    new ButtonBuilder()
+                        .setCustomId('warning_wantedReply')
+                        .setLabel('Signaler')
+                        .setEmoji('⚠️')
+                        .setStyle(ButtonStyle.Danger),
+                );
 
             const member = await interaction.guild.members.fetch(id_user);
 

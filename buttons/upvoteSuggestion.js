@@ -29,11 +29,13 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('upvoteSuggestion')
-                    .setLabel('👍 ' + await voteDB.getNumberOfUpVotesOfAMessage(interaction.message.id))
+                    .setLabel(await voteDB.getNumberOfUpVotesOfAMessage(interaction.message.id))
+                    .setEmoji('👍')
                     .setStyle(ButtonStyle.Success),
                 new ButtonBuilder()
                     .setCustomId('downvoteSuggestion')
-                    .setLabel('👎 ' + await voteDB.getNumberOfDownVotesOfAMessage(interaction.message.id))
+                    .setLabel(await voteDB.getNumberOfDownVotesOfAMessage(interaction.message.id))
+                    .setEmoji('👎')
                     .setStyle(ButtonStyle.Danger),
                 new ButtonBuilder()
                     .setCustomId('replySuggestion')
@@ -41,7 +43,8 @@ module.exports = {
                     .setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder()
                     .setCustomId('warning_suggestion')
-                    .setLabel('⚠️')
+                    .setLabel("\u200b")
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Secondary),
             );
 

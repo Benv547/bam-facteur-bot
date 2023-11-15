@@ -61,7 +61,8 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('createIleMessage')
-                    .setLabel('✉️ Envoyer un message')
+                    .setLabel('Envoyer un message')
+                    .setEmoji('✉️')
                     .setStyle(ButtonStyle.Secondary),
             );
 

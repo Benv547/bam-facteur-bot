@@ -1,5 +1,5 @@
 const { ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle, userMention } = require("discord.js");
-const { newBottleCategory, newWantedCategory, conversations, newBirdCategory, afkRole, sanction } = require("../config.json");
+const { newBottleCategory, newWantedCategory, conversations, newBirdChannel, afkRole, sanction } = require("../config.json");
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
@@ -117,19 +117,22 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('📨 Répondre')
+                    .setLabel('Répondre')
+                    .setEmoji('📨')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('seaBottle')
-                    .setLabel('🌊 Remettre à la mer')
+                    .setLabel('Remettre à la mer')
+                    .setEmoji('🌊')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bottle')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Danger),
             );
 
@@ -243,19 +246,22 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBottle')
-                    .setLabel('📨 Répondre')
+                    .setLabel('Répondre')
+                    .setEmoji('📨')
                     .setStyle(ButtonStyle.Primary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bottle')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Danger),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('deleteBottle')
-                    .setLabel('🗑️ Supprimer')
+                    .setLabel('Supprimer')
+                    .setEmoji('🗑️')
                     .setStyle(ButtonStyle.Secondary),
             );
 
@@ -346,31 +352,8 @@ module.exports = {
         const emoji = await stateAndColorDB.getRandomEmoji();
         const channel_name = emoji + "│colombe-" + color + "-" + state;
 
-        // TODO: create channel
-        const everyoneRole = guild.roles.everyone;
-        var channel = await guild.channels.create({
-            name: channel_name,
-            type: ChannelType.GuildText
-        })
-        await channel.permissionOverwrites.edit(everyoneRole.id, { ViewChannel: false, SendMessages: false });
-
-        // TODO: move channel to "nouvelles bouteilles"
-        const category = (await guild.channels.fetch()).find(c => c.id == newBirdCategory);
-
-
-        // While number of channels in category is more than 45
-        while (category.children.cache.size > 45) {
-            try {
-                const channelToDelete = category.children.cache.first();
-                // Set archive to true
-                await this.flowBird(guild, channelToDelete.id);
-                // Delete channel
-                await channelToDelete.delete();
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        await channel.setParent(category);
+        // Find the new bird channel and send the message
+        const channel = (await guild.channels.fetch()).find(c => c.id == newBirdChannel);
 
         const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
@@ -379,77 +362,74 @@ module.exports = {
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_love')
-                    .setLabel('😍')
+                    .setLabel("\u200b")
+                    .setEmoji('😍')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_joy')
-                    .setLabel('😂')
+                    .setLabel("\u200b")
+                    .setEmoji('😂')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_mouth')
-                    .setLabel('😮')
+                    .setLabel("\u200b")
+                    .setEmoji('😮')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('replyBird_cry')
-                    .setLabel('😢')
+                    .setLabel("\u200b")
+                    .setEmoji('😢')
                     .setStyle(ButtonStyle.Secondary),
             )
             .addComponents(
                 new ButtonBuilder()
                     .setCustomId('warning_bird')
-                    .setLabel('⚠️ Signaler')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
                     .setStyle(ButtonStyle.Danger),
             );
 
-        try {
-            await channel.permissionOverwrites.edit(guild.id, { ViewChannel: false, SendMessages: false });
-            for (let i = 0; i < 5; i++) {
-                const member = (await guild.members.fetch()).filter((member) => !member.user.bot && member.presence != null && member.id !== id_user_sender && !member.roles.cache.has(afkRole)).random();
-                await channel.permissionOverwrites.edit(member.id, { ViewChannel: true, SendMessages: false });
-            }
-        } catch (error) {
-            console.error(error);
-        }
-
         // Send to channel
-        await channel.send({ content: 'Vous avez reçu un nouvel oiseau ||@here||', embeds: [embed], components: [row] });
+        // set 1/20 chance to send message with "En tant que VIP ou Booster, vous pouvez réagir à ce message avec un émoji personnalisé."
+        const random = Math.floor(Math.random() * 20) + 1;
+        let content_message = ''
+        if (random === 1) {
+            content_message = 'En tant que **VIP ou Booster**, vous pouvez réagir à ce message avec un **émoji personnalisé**.';
+        }
+        const message = await channel.send({ content: content_message, embeds: [embed], components: [row] });
 
         if (id === null || id === undefined) {
-            await birdDB.insertBird(channel.id, guild.id, id_user_sender, channel_name, content);
+            await birdDB.insertBird(message.id, guild.id, id_user_sender, channel_name, content);
         } else {
-            await birdDB.update_id_channel(id, channel.id);
+            await birdDB.update_id_channel(id, message.id);
         }
     },
-    flowBird: async function (guild, id_channel) {
-        const bird = await birdDB.getBird(id_channel);
+    flowBird: async function (guild, id_message) {
+        const bird = await birdDB.getBird(id_message);
 
-        let love = 0;
-        let cry = 0;
-        let joy = 0;
-        let mouth = 0;
+        let message = 'Votre oiseau a coulé, il contenait le message :\n"**' + bird.content + '**"';
+        message += "\n\nIl a reçu :\n";
 
         const reactions = await birdDB.getReactions(bird.id_bird);
-        for (let i = 0; i < reactions.length; i++) {
-            if (reactions[i].id_emoji === 'love') {
-                love++;
-            } else if (reactions[i].id_emoji === 'cry') {
-                cry++;
-            } else if (reactions[i].id_emoji === 'joy') {
-                joy++;
-            } else if (reactions[i].id_emoji === 'mouth') {
-                mouth++;
+        if (reactions) {
+            for (let i = 0; i < reactions.length; i++) {
+                const reaction = reactions[i];
+                message += reaction.id_emoji + " **" + reaction.c + "**\n";
             }
+        }
+        else {
+            message += "Aucune réaction";
         }
 
         const sender = await guild.members.fetch(bird.id_user);
         //Crée l'embed
-        const embedFlow = createEmbeds.createFullEmbed("Votre oiseau est revenu !", 'Votre oiseau est revenu, il contenait le message :\n"**' + bird.content + '**"\n\nIl a reçu :\n **' + love + '** 😍\n**' + joy + '** 😂\n**' + mouth + '** 😮\n**' + cry + '** 😢', null, null, null, null);
+        const embedFlow = createEmbeds.createFullEmbed("Votre oiseau est revenu !", message, null, null, null, null);
         //Envoie l'embed crée à l'utilisateur
         await sender.send({ content: '', embeds: [embedFlow] });
         await birdDB.setArchived(bird.id_bird);

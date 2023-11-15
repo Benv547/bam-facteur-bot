@@ -1,4 +1,4 @@
-const { signalement, modRole, sanction, wantedChannel} = require("../config.json");
+const { signalement, modRole, sanction, wantedChannel, newBirdChannel} = require("../config.json");
 const messageDB = require("../database/message");
 const bottleDB = require("../database/bottle");
 const signalementDB = require("../database/signalement");
@@ -122,8 +122,9 @@ module.exports = {
         } else if (signalement.type === 'bird') {
             if (sanctionType !== 'abusif') {
                 const signalementBird = await signalementDB.getSignalementBird(interaction.message.id);
-                const channel = await interaction.guild.channels.fetch(signalementBird.id_channel);
-                await channel.delete();
+                const channel = await interaction.guild.channels.fetch(newBirdChannel);
+                const message = await channel.messages.fetch(signalementBird.id_channel);
+                await message.delete();
                 await birdDB.deleteBird(signalementBird.id_channel);
             }
         } else if (signalement.type === 'message_ile') {
