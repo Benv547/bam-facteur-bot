@@ -9,7 +9,7 @@ module.exports = {
         const pool = db.getPool();
         const results = await pool.query('SELECT * FROM "User_Sticker" WHERE "id_user" = $1', [id_user]);
         if (results.rows.length === 0) {
-            return null;
+            return [];
         }
         return results.rows;
     },
