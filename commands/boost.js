@@ -11,8 +11,9 @@ module.exports = {
         const text = '\n\nVoici les avantages que tu as :' +
             '\n- Avoir des **réductions de 50%** sur tes achats !' +
             '\n- Pouvoir **changer de pseudonyme** sur le serveur !' +
+            '\n- Un **super message hyper cool** dans <#871393726247878676> !' +
             '\n- Un **temps encore plus réduit** sur l\'envoi de tes bouteilles !' +
-            '\n- Faire des **chateaux de sable** sur les plages de Bouteille à la mer !';
+            '\n- Faire des **château de sable** sur les plages de Bouteille à la mer !';
 
         const textBooster = 'Tu es **déjà BOOSTER**, super !' + text;
         const textNotBooster = '[Booster](https://support.discord.com/hc/en-us/articles/360028038352-Server-Boosting-FAQ-) le serveur Bouteille à la mer pourrait te donner plus d\'un avantages !' + text;

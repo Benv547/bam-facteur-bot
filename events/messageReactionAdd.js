@@ -19,7 +19,7 @@ module.exports = {
 
             const guild_member = await messageReaction.message.guild.members.fetch(member.id);
             if (!await roles.userIsBooster(guild_member) && !await roles.userIsVip(guild_member)) {
-                return await member.send({content: "Vous devez être VIP ou Booster pour pouvoir réagir à ce message avec un émoji personnalisé."});
+                return await interaction.reply({ content: 'Vous devez être VIP ou Booster pour pouvoir réagir à ce message avec un émoji personnalisé.', ephemeral: true });
             }
 
             if (await userDB.getUser(member.id) === null) {
@@ -28,14 +28,14 @@ module.exports = {
 
             const bird = await birdDB.getBird(messageReaction.message.id);
             if (bird == null) {
-                return await member.send({content: "Ce message n'est plus disponible."});
+                return await interaction.reply({ content: 'Ce message n\'est plus disponible.', ephemeral: true });
             }
             const old = await birdDB.getReactionByUser(bird.id_bird, member.id);
             if (old) {
-                return await member.send({content: "Vous avez déjà réagi à ce message."});
+                return await interaction.reply({ content: 'Vous avez déjà réagi à ce message.', ephemeral: true });
             }
             if (bird.id_user === member.id) {
-                return await member.send({content: "Vous ne pouvez pas réagir à votre propre message."});
+                return await interaction.reply({ content: 'Vous ne pouvez pas réagir à votre propre message.', ephemeral: true });
             }
 
             // update message embed footer
@@ -50,7 +50,7 @@ module.exports = {
             
             await birdDB.insertBirdReaction(bird.id_bird, guild_member.id, messageReaction.emoji.toString());
             await xpAction.increment(messageReaction.message.guild, guild_member.id, 15);
-            return await member.send({content: "Votre réaction a été prise en compte."});
+            return await interaction.reply({ content: 'Votre réaction a été prise en compte.', ephemeral: true });
         }
 
         if (messageReaction.emoji.toString() !== '⚠️') {
@@ -94,7 +94,7 @@ module.exports = {
 
         if (await signalementDB.getSignalementIleMessageByMessage(messageReaction.message.id) !== null) {
             try {
-                return await member.send({content: "Ce message a déjà été signalé."});
+                return await interaction.reply({ content: 'Ce message a déjà été signalé.', ephemeral: true });
             } catch {
             }
         }
@@ -148,7 +148,7 @@ module.exports = {
         const message = await channel.send({ content: mod.toString(), embeds: [embed], components: [row] });
 
         try {
-            await member.send({ content: 'Votre signalement a été envoyé.' });
+            await interaction.reply({ content: 'Votre signalement a été envoyé.', ephemeral: true });
         } catch {}
 
         // Save signalement to DB
