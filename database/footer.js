@@ -5,9 +5,9 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('INSERT INTO "User_Footer" ("id_user", "id_footer", "id_guild") VALUES ($1, $2, $3)', [id_user, id_footer, id_guild]);
     },
-    getAllFootersFromUser: async function (id_user) {
+    getAllFootersFromUser: async function (id_user, offset, limit) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "User_Footer" WHERE "id_user" = $1', [id_user]);
+        const results = await pool.query('SELECT * FROM "User_Footer" WHERE "id_user" = $1 OFFSET $2 LIMIT $3', [id_user, offset, limit]);
         if (results.rows.length === 0) {
             return [];
         }
