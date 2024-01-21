@@ -46,14 +46,6 @@ module.exports = {
         }
         return null;
     },
-    set_id_channel_null: async function (id_message) {
-        const pool = db.getPool();
-        return await pool.query('UPDATE "Wanted" SET "id_channel" = NULL WHERE "id_message" = $1', [id_message]);
-    },
-    set_replied: async function (id_message) {
-        const pool = db.getPool();
-        return await pool.query('UPDATE "Wanted" SET "replied" = true WHERE "id_message" = $1', [id_message]);
-    },
     get_id_user: async function (id_message) {
         const pool = db.getPool();
         const results = await pool.query('SELECT "id_user" FROM "Wanted" WHERE id_message = $1', [id_message]);
@@ -77,10 +69,6 @@ module.exports = {
     setArchived: async function (id_channel) {
         const pool = db.getPool();
         return await pool.query('UPDATE "Wanted" SET "archived" = true WHERE "id_channel" = $1', [id_channel]);
-    },
-    addReply: async function (id_channel) {
-        const pool = db.getPool();
-        return await pool.query('UPDATE "Wanted" SET "nb_replies" = "nb_replies" + 1 WHERE "id_channel" = $1', [id_channel]);
     },
 
 
@@ -112,11 +100,6 @@ module.exports = {
     getWantedFromThreeHoursAndNotArchived: async function () {
         const pool = db.getPool();
         const results = await pool.query('SELECT * FROM "Wanted" WHERE "date" < NOW() - INTERVAL \'48 hours\' AND "archived" = false');
-        return results.rows;
-    },
-    getWantedFromThreeHoursAndArchived: async function () {
-        const pool = db.getPool();
-        const results = await pool.query('SELECT * FROM "Wanted" WHERE "date" < NOW() - INTERVAL \'48 hours\' AND "archived" = true AND "replied" = false');
         return results.rows;
     },
 

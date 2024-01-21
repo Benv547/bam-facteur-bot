@@ -42,6 +42,7 @@ module.exports = {
             const channel_name = emoji + "│recherche-" + color + "-" + state;
 
             // TODO: create channel
+            const everyoneRole = interaction.guild.roles.everyone;
             var channel = await interaction.guild.channels.create({
                 name: channel_name,
                 type: ChannelType.GuildText
@@ -63,7 +64,7 @@ module.exports = {
                         await message.delete();
 
                         const sender = await interaction.guild.members.fetch(wanted.id_user);
-                        const embed = createEmbeds.createFullEmbed("Mince...", "Votre avis de recherche a été supprimé car il y avait trop d'avis de recherche dans la catégorie.", null, null, null, null);
+                        const embed = createEmbeds.createFullEmbed("Mince...", "Votre avis de recherche a été supprimé car il y avait trop d'avis de recherche dans la catégorie et vous n'avez pas choisi de réponse (ou n'en avez pas reçu).", null, null, null, null);
                         await sender.send({ content: '', embeds: [embed] });
                     } catch {}
 
@@ -78,9 +79,8 @@ module.exports = {
             await channel.setParent(category);
 
             await channel.permissionOverwrites.create(interaction.member.id, {ViewChannel: true, SendMessages: false});
-            // random dicebear seed
-            const diceBearSeed = Math.floor(Math.random() * 1000000000);
-            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), diceBearSeed, 48, "Un•e illustre inconnu•e", '945b44', 13);
+
+            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, "Un•e illustre inconnu•e", sender.color, sender.id_footer);
 
             // ... with actions (reply, signal, resend to ocean)
             const row = new ActionRowBuilder()
@@ -93,24 +93,18 @@ module.exports = {
                 )
                 .addComponents(
                     new ButtonBuilder()
-                        .setCustomId('replyWanted_anonymous')
-                        .setLabel('Répondre anonymement')
-                        .setEmoji('📨')
-                        .setStyle(ButtonStyle.Primary),
-                )
-                .addComponents(
-                    new ButtonBuilder()
                         .setCustomId('warning_wanted')
                         .setLabel('Signaler')
                         .setEmoji('⚠️')
                         .setStyle(ButtonStyle.Danger),
                 );
+
+
+
             // Send to channel
-            embed.setFooter({text: "Attention, si vous invitez quelqu'un à discuter, elle pourra voir votre identité."});
             const messageInitial = await channel.send({ content: '', embeds: [embed] });
 
             // Send message to channel of interaction
-            embed.setFooter({text: "Attention, si vous répondez (sans être anonyme), la personne pourra voir votre identité si elle vous invite à discuter."});
             const message = await interaction.channel.send({ content: '', embeds: [embed], components: [row] });
 
             await wantedDB.insertWanted(channel.id, interaction.guildId, interaction.member.id, message.id, channel_name, content);
