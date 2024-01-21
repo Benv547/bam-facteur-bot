@@ -79,7 +79,7 @@ module.exports = {
             const lastMessageId = await messageDB.getLastMessageId(interaction.channel.id);
             const lastMessage = await interaction.channel.messages.fetch(lastMessageId);
             // Remove actions from last message
-            await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
+            await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: lastMessage.components });
         } else if (warningType === 'wanted') {
             if (await signalementDB.getSignalementWantedByMessage(interaction.message.id) !== null) {
                 return await interaction.reply({ content: "Ce message a déjà été signalé.", ephemeral: true });

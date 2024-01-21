@@ -13,6 +13,10 @@ module.exports = {
         }
         return null;
     },
+    updateBottleSender: async function (id_bottle, id_user_sender) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "Bottle" SET "id_user_sender" = $2 WHERE "id_bottle" = $1', [id_bottle, id_user_sender]);
+    },
     switchSenderReceiver: async function (id_bottle) {
         const pool = db.getPool();
         return await pool.query('UPDATE "Bottle" SET "id_user_sender" = "id_user_receiver", "id_user_receiver" = "id_user_sender" WHERE "id_bottle" = $1', [id_bottle]);

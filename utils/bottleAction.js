@@ -4,6 +4,7 @@ const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const stickerDB = require("../database/sticker");
+const footerDB = require("../database/footer");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
 const xpAction = require("./xpAction");
@@ -75,41 +76,57 @@ module.exports = {
 
         await channel.setParent(category);
 
-        // TODO: choose random member who are not a bot
-
-        // Fetch all members
-        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender && !m.roles.cache.has(afkRole));
-        const randMember = members.random();
-
-        if (await userDB.getUser(randMember.id) === null) {
-            await userDB.createUser(randMember.id, 0, 0);
-        }
-
-        // TODO: add member to channel
         // edits overwrites to disallow everyone to view the channel
         await channel.permissionOverwrites.edit(guild.id, { ViewChannel: false, SendMessages: false });
 
         // edits overwrites to allow a user to view the channel
-        await channel.permissionOverwrites.edit(randMember.id, { ViewChannel: true, SendMessages: false });
-
-        // TODO: create bottle message ...
-        const sticker = await stickerDB.getSticker(sender.id_sticker);
-        if (sticker !== null) {
-            if (sticker.sharable) {
-                // choose random float between 0 and 1
-                const randFloat = Math.random();
-                if (randFloat < sticker.sharable_percentage) {
-                    // share sticker
-                    try {
-                        await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
-                        const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille " + channel_name + " a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
+        // Fetch all members
+        const members = await (await guild.members.fetch()).filter(m => !m.user.bot && m.id !== id_user_sender && m.presence != null && m.id !== id_user_sender && !m.roles.cache.has(afkRole));
+        const limit = Math.min(5, members.size);
+        for (let i = 0; i < limit; i++) {
+            const randMember = members.random();
+            console.log(randMember.user.username);
+            if (await userDB.getUser(randMember.id) === null) {
+                await userDB.createUser(randMember.id, 0, 0);
+            }
+            await channel.permissionOverwrites.edit(randMember.id, { ViewChannel: true, SendMessages: false });
+            const sticker = await stickerDB.getSticker(sender.id_sticker);
+            if (sticker !== null) {
+                if (sticker.sharable) {
+                    // choose random float between 0 and 1
+                    const randFloat = Math.random();
+                    if (randFloat < sticker.sharable_percentage) {
+                        // share sticker
                         try {
-                            await randMember.send({ content: "", embeds: [embed] });
+                            await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
+                            const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
+                            try {
+                                await randMember.send({ content: "", embeds: [embed] });
+                            } catch { }
                         } catch { }
-                    } catch { }
+                    }
+                }
+            }
+            const footer = await footerDB.getFooter(sender.id_footer);
+            if (footer !== null) {
+                if (footer.sharable) {
+                    // choose random float between 0 and 1
+                    const randFloat = Math.random();
+                    if (randFloat < footer.sharable_percentage) {
+                        // share sticker
+                        try {
+                            await footerDB.giveFooterToUser(randMember.id, footer.id_footer, guild.id);
+                            const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous l'**arabesque " + footer.name + "** !", null, null, 0x2f3136, null);
+                            try {
+                                await randMember.send({ content: "", embeds: [embed] });
+                            } catch { }
+                        } catch { }
+                    }
                 }
             }
         }
+
+        // TODO: create bottle message ...
         const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
@@ -123,13 +140,6 @@ module.exports = {
             )
             .addComponents(
                 new ButtonBuilder()
-                    .setCustomId('seaBottle')
-                    .setLabel('Remettre à la mer')
-                    .setEmoji('🌊')
-                    .setStyle(ButtonStyle.Secondary),
-            )
-            .addComponents(
-                new ButtonBuilder()
                     .setCustomId('warning_bottle')
                     .setLabel('Signaler')
                     .setEmoji('⚠️')
@@ -137,10 +147,10 @@ module.exports = {
             );
 
         // Send to channel
-        const message = await channel.send({ content: 'Vous avez reçu une bouteille ' + randMember.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', embeds: [embed], components: [row] });
 
         // TODO: save bottle to DB
-        await bottleDB.insertBottle(channel.id, guild.id, randMember.id, id_user_sender, channel.id, channel_name, nb_sea);
+        await bottleDB.insertBottle(channel.id, guild.id, null, id_user_sender, channel.id, channel_name, nb_sea);
 
         // TODO: save message to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
@@ -182,6 +192,16 @@ module.exports = {
 
         // If category is not "conversations", move channel to "conversations"
         if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
+
+            // for each member in channel, remove permission
+            const members = await channel.members;
+            for (const member of members) {
+                await channel.permissionOverwrites.delete(member[0]);
+            }
+
+            // update bottle in DB with the responder as sender
+            await bottleDB.updateBottleSender(channel.id, id_user_sender);
+
             let moved = false;
             // Foreach conversations
             for (const conversation of conversations) {
