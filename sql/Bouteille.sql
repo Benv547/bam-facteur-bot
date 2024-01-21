@@ -176,8 +176,7 @@ CREATE TABLE "Wanted" (
     "name" varchar(50) NOT NULL,
     "content" text NOT NULL,
     "archived" boolean NOT NULL default false,
-    "date" timestamp default current_timestamp,
-    "nb_replies" int NOT NULL default 0
+    "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "WantedResponse" (
