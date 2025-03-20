@@ -38,5 +38,13 @@ module.exports = {
             return null;
         }
         return results.rows[0];
+    },
+    insertFooter: async function (name, url, winnable, sharable, sharable_percentage) {
+        const pool = db.getPool();
+        const result = await pool.query(
+            'INSERT INTO "Footer" ("name", "url", "winnable", "sharable", "sharable_percentage") VALUES ($1, $2, $3, $4, $5) RETURNING "id_footer"',
+            [name, url, winnable, sharable, sharable_percentage]
+        );
+        return result.rows[0].id_footer;
     }
 }
