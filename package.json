@@ -15,6 +15,6 @@
   "dependencies": {
     "discord.js": "^14.8.0",
     "pg": "^8.8.0",
-    "quickchart-js": "^3.1.2"
+    "quickchart-js": "^3.1.3"
   }
 }

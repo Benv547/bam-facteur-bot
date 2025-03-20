@@ -44,8 +44,7 @@
   "newBottleCategory": "<id_channel_category>",
   "wantedChannel": "<id_channel>",
   "newWantedCategory": "<id_channel_category>",
-
-  "newBirdCategory": "<id_channel_category>",
+  
   "newBirdChannel": "<id_channel>",
   "conversations": [
     "<id_channel_category>",

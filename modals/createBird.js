@@ -2,7 +2,6 @@ const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
 const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
-const {newBirdCategory} = require("../config.json");
 const birdDB = require("../database/bird");
 const createEmbeds = require("../utils/createEmbeds");
 const stickerDB = require("../database/sticker");
