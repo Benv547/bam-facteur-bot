@@ -160,22 +160,22 @@ module.exports = {
 
     getBottleCountForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date)');
+        const results = await pool.query('SELECT COUNT(*) FROM "Bottle" WHERE date >= (current_date - INTERVAL \'1 year\')');
         return results.rows[0]["count"];
     },
     getBottleCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE date >= (current_date - INTERVAL \'1 year\') GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleArchivedCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE date >= (current_date - INTERVAL \'1 year\') AND "archived" = true AND "terminated" = false GROUP BY time ORDER BY time ASC');
         return results.rows;
     },
     getBottleTerminatedCountEachMonthForThisYear: async function () {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "terminated" = true GROUP BY time ORDER BY time ASC');
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Bottle" WHERE date >= (current_date - INTERVAL \'1 year\') AND "terminated" = false GROUP BY time ORDER BY time ASC');
         return results.rows;
     }
 }

@@ -43,12 +43,12 @@ module.exports = {
 
     getSanctionCountForThisYear: async function (gravity) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) FROM "Sanctions" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "gravity" = $1', [gravity]);
+        const results = await pool.query('SELECT COUNT(*) FROM "Sanctions" WHERE date >= (current_date - INTERVAL \'1 year\') AND "gravity" = $1', [gravity]);
         return results.rows[0]["count"];
     },
     getSanctionCountEachMonthForThisYear: async function (gravity) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY-MM\') AS time FROM "Sanctions" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "gravity" = $1 GROUP BY time ORDER BY time ASC', [gravity]);
+        const results = await pool.query('SELECT COUNT(*) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Sanctions" WHERE date >= (current_date - INTERVAL \'1 year\') AND "gravity" = $1 GROUP BY time ORDER BY time ASC', [gravity]);
         return results.rows;
     }
 }

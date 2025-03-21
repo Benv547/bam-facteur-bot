@@ -31,12 +31,12 @@ module.exports = {
 
     getCountForThisYear: async function (type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT MAX(score) AS count FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1', [type]);
+        const results = await pool.query('SELECT MAX(score) AS count FROM "Record" WHERE date >= (current_date - INTERVAL \'1 year\') AND "type" = $1', [type]);
         return results.rows[0]["count"];
     },
     getCountEachMonthForThisYear: async function (type) {
         const pool = db.getPool();
-        const results = await pool.query('SELECT AVG(score) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Record" WHERE EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM current_date) AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
+        const results = await pool.query('SELECT AVG(score) AS count, to_char(date, \'YYYY/MM\') AS time FROM "Record" WHERE date >= (current_date - INTERVAL \'1 year\') AND "type" = $1 GROUP BY time ORDER BY time ASC', [type]);
         return results.rows;
     },
 
