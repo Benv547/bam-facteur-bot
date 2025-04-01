@@ -1,7 +1,7 @@
 const {SlashCommandBuilder} = require("discord.js");
 
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+// const stickerDB = require("../database/sticker");
+// const footerDB = require("../database/footer");
 const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {

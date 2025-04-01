@@ -3,8 +3,8 @@ const orAction = require("../utils/orAction");
 const xpAction = require("../utils/xpAction");
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require("../database/user");
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+// const stickerDB = require("../database/sticker");
+// const footerDB = require("../database/footer");
 
 module.exports = {
     name: 'treasure',

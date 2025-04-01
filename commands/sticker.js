@@ -1,5 +1,5 @@
 const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType, ButtonBuilder, ButtonStyle } = require('discord.js');
-const stickerDB = require("../database/sticker");
+// const stickerDB = require("../database/sticker");
 const userDB = require("../database/user");
 const createEmbeds = require("../utils/createEmbeds");
 

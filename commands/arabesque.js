@@ -1,5 +1,5 @@
 const { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, SlashCommandBuilder, ComponentType, ButtonBuilder, ButtonStyle } = require('discord.js');
-const footerDB = require("../database/footer");
+// const footerDB = require("../database/footer");
 const userDB = require("../database/user");
 const createEmbeds = require("../utils/createEmbeds");
 

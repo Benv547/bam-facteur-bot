@@ -1,8 +1,8 @@
-const stickerDB = require("../database/sticker");
+// const stickerDB = require("../database/sticker");
 const boutiqueDB = require("../database/boutique");
 const orAction = require("./orAction");
 const createEmbeds = require("./createEmbeds");
-const footerDB = require("../database/footer");
+// const footerDB = require("../database/footer");
 const {ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const roles = require("./roles");
 

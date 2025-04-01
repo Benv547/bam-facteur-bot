@@ -3,14 +3,16 @@ const { newBottleCategory, newWantedCategory, conversations, newBirdChannel, afk
 const createEmbeds = require("./createEmbeds");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+const decorationDB = require("../database/decoration");
+const backgroundDB = require("../database/background");
+const letterDB = require("../database/letter");
 const userDB = require("../database/user");
 const stateAndColorDB = require("../database/statesAndColors");
 const xpAction = require("./xpAction");
 const birdDB = require("../database/bird");
 const sanctionDB = require("../database/sanctions");
 const orAction = require("./orAction");
+const images = require("../utils/images");
 
 module.exports = {
     name: 'bottleAction',
@@ -90,44 +92,57 @@ module.exports = {
                 await userDB.createUser(randMember.id, 0, 0);
             }
             await channel.permissionOverwrites.edit(randMember.id, { ViewChannel: true, SendMessages: false });
-            const sticker = await stickerDB.getSticker(sender.id_sticker);
-            if (sticker !== null) {
-                if (sticker.sharable) {
-                    // choose random float between 0 and 1
-                    const randFloat = Math.random();
-                    if (randFloat < sticker.sharable_percentage) {
-                        // share sticker
-                        try {
-                            await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
-                            const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
-                            try {
-                                await randMember.send({ content: "", embeds: [embed] });
-                            } catch { }
-                        } catch { }
-                    }
-                }
-            }
-            const footer = await footerDB.getFooter(sender.id_footer);
-            if (footer !== null) {
-                if (footer.sharable) {
-                    // choose random float between 0 and 1
-                    const randFloat = Math.random();
-                    if (randFloat < footer.sharable_percentage) {
-                        // share sticker
-                        try {
-                            await footerDB.giveFooterToUser(randMember.id, footer.id_footer, guild.id);
-                            const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous l'**arabesque " + footer.name + "** !", null, null, 0x2f3136, null);
-                            try {
-                                await randMember.send({ content: "", embeds: [embed] });
-                            } catch { }
-                        } catch { }
-                    }
-                }
-            }
+
+            // const sticker = await stickerDB.getSticker(sender.id_sticker);
+            // if (sticker !== null) {
+            //     if (sticker.sharable) {
+            //         // choose random float between 0 and 1
+            //         const randFloat = Math.random();
+            //         if (randFloat < sticker.sharable_percentage) {
+            //             // share sticker
+            //             try {
+            //                 await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
+            //                 const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
+            //                 try {
+            //                     await randMember.send({ content: "", embeds: [embed] });
+            //                 } catch { }
+            //             } catch { }
+            //         }
+            //     }
+            // }
+            // const footer = await footerDB.getFooter(sender.id_footer);
+            // if (footer !== null) {
+            //     if (footer.sharable) {
+            //         // choose random float between 0 and 1
+            //         const randFloat = Math.random();
+            //         if (randFloat < footer.sharable_percentage) {
+            //             // share sticker
+            //             try {
+            //                 await footerDB.giveFooterToUser(randMember.id, footer.id_footer, guild.id);
+            //                 const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous l'**arabesque " + footer.name + "** !", null, null, 0x2f3136, null);
+            //                 try {
+            //                     await randMember.send({ content: "", embeds: [embed] });
+            //                 } catch { }
+            //             } catch { }
+            //         }
+            //     }
+            // }
         }
 
+        const user_background = await backgroundDB.getAppliedBackgroundFromUser(id_user_sender, guild.id);
+        const background = await backgroundDB.getBackground(user_background.id_background);
+        console.log(background);
+
+        const user_letter = await letterDB.getAppliedLetterFromUser(id_user_sender, guild.id);
+        const letter = await letterDB.getLetter(user_letter.id_letter);
+        console.log(letter);
+
+        const img = await images.createMyCustomImage(content, letter.url, background.url);
+        // const msg = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', files: [img.toBuffer()] });
+        // return;
+
         // TODO: create bottle message ...
-        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -147,7 +162,7 @@ module.exports = {
             );
 
         // Send to channel
-        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', components: [row], files: [img.toBuffer()] });
 
         // TODO: save bottle to DB
         await bottleDB.insertBottle(channel.id, guild.id, null, id_user_sender, channel.id, channel_name, nb_sea);
@@ -185,10 +200,20 @@ module.exports = {
             return;
         }
 
-        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+        const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
+        const background = await backgroundDB.getBackground(user_background.id_background);
+        console.log(background);
+
+        const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
+        const letter = await letterDB.getLetter(user_letter.id_letter);
+        console.log(letter);
+
+        const img = await images.createMyCustomImage(content, letter.url, background.url);
+
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // Send message
-        const messageTemp = await channel.send({ content: "", embeds: [embed] });
+        const messageTemp = await channel.send({ content: "", files: [img.toBuffer()] });
 
         // If category is not "conversations", move channel to "conversations"
         if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
@@ -286,7 +311,7 @@ module.exports = {
             );
 
         // Send message
-        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), embeds: [embed], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), files: [img.toBuffer()], components: [row] });
 
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
@@ -375,7 +400,17 @@ module.exports = {
         // Find the new bird channel and send the message
         const channel = (await guild.channels.fetch()).find(c => c.id == newBirdChannel);
 
-        const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+        const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
+        const background = await backgroundDB.getBackground(user_background.id_background);
+        console.log(background);
+
+        const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
+        const letter = await letterDB.getLetter(user_letter.id_letter);
+        console.log(letter);
+
+        const img = await images.createMyCustomImage(content, letter.url, background.url);
+
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -422,7 +457,7 @@ module.exports = {
         if (random === 1) {
             content_message = 'En tant que **VIP ou Booster**, vous pouvez réagir à ce message avec un **émoji personnalisé**.';
         }
-        const message = await channel.send({ content: content_message, embeds: [embed], components: [row] });
+        const message = await channel.send({ content: content_message, files: [img.toBuffer()], components: [row] });
 
         if (id === null || id === undefined) {
             await birdDB.insertBird(message.id, guild.id, id_user_sender, channel_name, content);

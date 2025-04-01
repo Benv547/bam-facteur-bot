@@ -57,11 +57,7 @@ CREATE TABLE "User" (
   "money" int default 0,
   "money_spent" int default 0,
   "xp" int default 0,
-  "diceBearSeed" text NOT NULL default md5(random()::text),
   "signature" text NOT NULL default 'Un•e illustre inconnu•e',
-  "color" varchar(6) NOT NULL default substring(md5(random()::text), 1, 6),
-  "id_sticker" int NOT NULL default 1,
-  "id_footer" int,
   "anniversaireJour" int,
   "anniversaireMois" int,
   "isVIP" boolean NOT NULL default false,
@@ -101,8 +97,8 @@ CREATE TABLE "Invite" (
     "id_user_invited" bigint NOT NULL
 );
 
-CREATE TABLE "Sticker" (
-    "id_sticker" serial PRIMARY KEY,
+CREATE TABLE "Background" (
+    "id_background" serial PRIMARY KEY,
     "name" text NOT NULL,
     "url" text NOT NULL,
     "sharable" boolean NOT NULL default false,
@@ -110,15 +106,16 @@ CREATE TABLE "Sticker" (
     "sharable_percentage" float NOT NULL default 0.0
 );
 
-CREATE TABLE "User_Sticker" (
+CREATE TABLE "User_Background" (
     "id_user" bigint NOT NULL,
-    "id_sticker" int NOT NULL,
+    "id_background" int NOT NULL,
     "id_guild" bigint NOT NULL,
-    PRIMARY KEY ("id_user", "id_sticker", "id_guild")
+    "applied" boolean NOT NULL default false,
+    PRIMARY KEY ("id_user", "id_background", "id_guild")
 );
 
-CREATE TABLE "Footer" (
-    "id_footer" SERIAL PRIMARY KEY,
+CREATE TABLE "Letter" (
+    "id_letter" serial PRIMARY KEY,
     "name" text NOT NULL,
     "url" text NOT NULL,
     "sharable" boolean NOT NULL default false,
@@ -126,11 +123,29 @@ CREATE TABLE "Footer" (
     "sharable_percentage" float NOT NULL default 0.0
 );
 
-CREATE TABLE "User_Footer" (
+CREATE TABLE "User_Letter" (
     "id_user" bigint NOT NULL,
-    "id_footer" int NOT NULL,
+    "id_letter" int NOT NULL,
     "id_guild" bigint NOT NULL,
-    PRIMARY KEY ("id_user", "id_footer")
+    "applied" boolean NOT NULL default false,
+    PRIMARY KEY ("id_user", "id_letter", "id_guild")
+);
+
+CREATE TABLE "Decoration" (
+    "id_decoration" serial PRIMARY KEY,
+    "name" text NOT NULL,
+    "url" text NOT NULL,
+    "sharable" boolean NOT NULL default false,
+    "winnable" boolean NOT NULL default false,
+    "sharable_percentage" float NOT NULL default 0.0
+);
+
+CREATE TABLE "User_Decoration" (
+    "id_user" bigint NOT NULL,
+    "id_decoration" int NOT NULL,
+    "id_guild" bigint NOT NULL,
+    "applied" boolean NOT NULL default false,
+    PRIMARY KEY ("id_user", "id_decoration", "id_guild")
 );
 
 CREATE TABLE "Message" (
@@ -357,11 +372,14 @@ ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") O
 ALTER TABLE "User" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "User" ADD FOREIGN KEY ("id_footer") REFERENCES "Footer" ("id_footer") ON DELETE SET NULL ON UPDATE CASCADE;
 
-ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Letter" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Letter" ADD FOREIGN KEY ("id_letter") REFERENCES "Letter" ("id_letter") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "User_Footer" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "User_Footer" ADD FOREIGN KEY ("id_footer") REFERENCES "Footer" ("id_footer") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Background" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Background" ADD FOREIGN KEY ("id_background") REFERENCES "Footer" ("id_background") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE "User_Decoration" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Decoration" ADD FOREIGN KEY ("id_decoration") REFERENCES "Decoration" ("id_decoration") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_achievement") REFERENCES "Achievement" ("id_achievement") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -453,38 +471,6 @@ INSERT INTO "Emoji" VALUES ('🍂'),
                            ('🎑'),
                            ('🌇');
 
--- Insert stickers for achievements
-INSERT INTO "Sticker" ("name", "url") VALUES ('Ma bouteille', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png'),
-                                                                                            ('Bouteille échouée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036280255666733087/bouteille_echouee.png'),
-                                                                                            ('Trésor vide', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507425742868/tresorvide.png'),
-                                                                                            ('Trésor remplis', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037428766785421432/tresor.png'),
-                                                                                            ('Trésor débordant', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507325063320/tresordebordant.png'),
-                                                                                            ('Coffre fermé', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037485184716652544/pirate.png'),
-                                                                                            ('Bretagne', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036973819283378257/bretagne.png'),
-                                                                                            ('Etoile montante', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036967149899624518/vip.png'),
-                                                                                            ('3 étoiles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037430577323835442/3etoiles.png'),
-                                                                                            ('Parchemin', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037695619571134475/parchemin.png'),
-                                                                                            ('Parchemin doré', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037695620279963668/parcheminor.png'),
-                                                                                            ('Coeur de crystal', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037477249076699137/avis.png'),
-                                                                                            ('Ampoule', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037471320021160057/suggestion.png'),
-                                                                                            ('Valise', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037766312526618715/valise.png'),
-                                                                                            ('Botte', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037770415197659267/botte.png'),
-                                                                                            ('Raz-de-marée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037772293675434004/mes_bouteilles.png'),
-                                                                                            ('Bouteilles échouées', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037774771854790748/mes_bouteille_echouees.png'),
-                                                                                            ('Couronne', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037809961020964884/Couronne.png'),
-                                                                                            ('Fauché•e', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037819169137250314/Pochevide.png'),
-                                                                                            ('Tirelire cassée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037824800149753957/cochonvide.png');
-
--- Insert stickers
-INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01),
-                                             ('Biche', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036971155011153980/biche.png', true, true, 0.2),
-                                             ('Panda', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653282252328961/panda.png', true, false, 0.1),
-                                             ('Ours', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653281539305542/ours.png', true, true, 0.1),
-                                             ('Bulles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162265934135346/bulle.png', true, true, 0.2),
-                                             ('Lanternes', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162007221075998/lanterne.png', true, true, 0.2),
-                                             ('Désert', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162005354614845/desert.png', true, true, 0.1),
-                                             ('Vague', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162005266538516/vague.png', true, true, 0.02);
-
 INSERT INTO "Achievement" ("name", "description", "rarity", "type", "value", "id_sticker") VALUES ('Océan messager', 'Vous avez envoyé votre première bouteille !', 'commun', 'bottleSend', 1, 1),
                                                                                     ('Courrier marin', 'Vous avez reçu votre première bouteille !', 'commun', 'bottleReceive', 1, 2),
                                                                                     ('Pirate sans carte', 'Vous avez trouvé et ouvert un trésor !', 'rare', 'userNbTreasures', 1, 15),
@@ -552,11 +538,7 @@ INSERT INTO "Profile_ile" ("image_url", "signature") VALUES ('https://cdn.discor
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364612702249/Loup.png', 'Loup'),
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364931457044/Plume.png', 'Plume');
 
+-- Insert stickers
+INSERT INTO "Background" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Défaut', 'https://cdn.discordapp.com/attachments/1004073840093184000/1353092597949927564/UntitledArtwork2.png', true, false, 0.01);
 
-INSERT INTO "Footer" ("name", "url") VALUES ('Fin', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844978667343966/Illustration_sans_titre_2.png'),
-                                            ('Partition', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979191631942/Partition.png'),
-                                            ('Poissons', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979573293106/Illustration_sans_titre_3.png'),
-                                            ('Élégant', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979246157916/arabesque-par-defaut.png'),
-                                            ('Feuilles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844980688977980/Illustration_sans_titre_1.png'),
-                                            ('Printemps', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844981825650698/bas-de-page.png'),
-                                            ('Aurore polaire', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844981695627384/Illustration_sans_titre.png');
+INSERT INTO "Letter" ("name", "url") VALUES ('Défaut', 'https://cdn.discordapp.com/attachments/1004073840093184000/1353093651818872852/UntitledArtwork1.png');

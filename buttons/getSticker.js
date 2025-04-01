@@ -1,4 +1,4 @@
-const stickerDB = require("../database/sticker");
+// const stickerDB = require("../database/sticker");
 const userDB = require("../database/user");
 
 module.exports = {

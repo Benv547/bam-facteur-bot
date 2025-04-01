@@ -1,6 +1,6 @@
 const {EmbedBuilder} = require("discord.js");
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+// const stickerDB = require("../database/sticker");
+// const footerDB = require("../database/footer");
 
 module.exports = {
     createBottle: async function (content, diceBearSeed, id_sticker, signature, color, id_footer) {

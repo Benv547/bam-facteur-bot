@@ -4,7 +4,6 @@ const stateAndColorDB = require("../database/statesAndColors");
 const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
 const birdDB = require("../database/bird");
 const createEmbeds = require("../utils/createEmbeds");
-const stickerDB = require("../database/sticker");
 
 let semaphore = [];
 

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
-const stickerDB = require('../database/sticker');
+// const stickerDB = require('../database/sticker');
 const roles = require("../utils/roles");
 const userDB = require("../database/user");
 
