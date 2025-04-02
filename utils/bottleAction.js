@@ -93,30 +93,30 @@ module.exports = {
             }
             await channel.permissionOverwrites.edit(randMember.id, { ViewChannel: true, SendMessages: false });
 
-            // const sticker = await stickerDB.getSticker(sender.id_sticker);
-            // if (sticker !== null) {
-            //     if (sticker.sharable) {
-            //         // choose random float between 0 and 1
-            //         const randFloat = Math.random();
-            //         if (randFloat < sticker.sharable_percentage) {
-            //             // share sticker
-            //             try {
-            //                 await stickerDB.giveStickerToUser(randMember.id, sticker.id_sticker, guild.id);
-            //                 const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous le **sticker " + sticker.name + "** !", null, null, 0x2f3136, null);
-            //                 try {
-            //                     await randMember.send({ content: "", embeds: [embed] });
-            //                 } catch { }
-            //             } catch { }
-            //         }
-            //     }
-            // }
+            const background = await backgroundDB.getBackground(sender.id_background);
+            if (background !== null) {
+                if (background.sharable) {
+                    // choose random float between 0 and 1
+                    const randFloat = Math.random();
+                    if (randFloat < background.sharable_percentage) {
+                        // share background
+                        try {
+                            await backgroundDB.giveBackgroundToUser(randMember.id, background.id_background, guild.id);
+                            const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous le **fond " + background.name + "** !", null, null, 0x2f3136, null);
+                            try {
+                                await randMember.send({ content: "", embeds: [embed] });
+                            } catch { }
+                        } catch { }
+                    }
+                }
+            }
             // const footer = await footerDB.getFooter(sender.id_footer);
             // if (footer !== null) {
             //     if (footer.sharable) {
             //         // choose random float between 0 and 1
             //         const randFloat = Math.random();
             //         if (randFloat < footer.sharable_percentage) {
-            //             // share sticker
+            //             // share background
             //             try {
             //                 await footerDB.giveFooterToUser(randMember.id, footer.id_footer, guild.id);
             //                 const embed = createEmbeds.createFullEmbed("Quelle belle trouvaille !", "L'auteur•e de la bouteille **" + channel_name + "** a partagé•e avec vous l'**arabesque " + footer.name + "** !", null, null, 0x2f3136, null);
@@ -140,7 +140,7 @@ module.exports = {
         const img = await images.createMyCustomImage(content, letter.url, background.url);
 
         // TODO: create bottle message ...
-        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()
@@ -208,7 +208,7 @@ module.exports = {
 
         const img = await images.createMyCustomImage(content, letter.url, background.url);
         const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
-        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 
         // Send message
         const messageTemp = await channel.send({ content: "", files: [img2] });
@@ -350,12 +350,12 @@ module.exports = {
         for (const message of messages) {
             if (message.id_user === bottle.id_user_sender) {
                 // Create embedded bottle message ...
-                const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, message.content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+                const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, message.content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(newMessage.id, message.id_message);
             } else {
                 // Create embedded bottle message ...
-                const embed = await createEmbeds.createBottle(message.content, receiver.diceBearSeed, sender.id_sticker, receiver.signature, receiver.color, sender.id_footer);
+                const embed = await createEmbeds.createBottle(message.content, receiver.diceBearSeed, sender.id_background, receiver.signature, receiver.color, sender.id_footer);
                 const newMessage = await newChannel.send({ content: '', embeds: [embed] });
                 await messageDB.update_id_message(message.id_message, newMessage.id);
             }
@@ -408,7 +408,7 @@ module.exports = {
 
         const img = await images.createMyCustomImage(content, letter.url, background.url);
 
-        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 
         // ... with actions (reply, signal, resend to ocean)
         const row = new ActionRowBuilder()

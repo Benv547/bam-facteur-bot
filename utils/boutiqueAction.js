@@ -93,7 +93,7 @@ module.exports = {
         await boutiqueDB.removeAllItemsOnBoutique();
 
         // Stickers
-        await boutiqueDB.set3RandomStickersWinnableInTheBoutique();
+        await boutiqueDB.set3RandomBackgroundsWinnableInTheBoutique();
 
         // Footers
         await boutiqueDB.set3RandomArabesquesWinnableInTheBoutique();
