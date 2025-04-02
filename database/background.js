@@ -52,6 +52,11 @@ module.exports = {
         }
         return results.rows[0];
     },
+    setAppliedBackgroundFromUser: async function (background_id, id_user, id_guild) {
+        const pool = db.getPool();
+        await pool.query('UPDATE "User_Background" SET "applied" = false WHERE "id_user" = $1 AND "id_guild" = $2', [id_user, id_guild]);
+        return await pool.query('UPDATE "User_Background" SET "applied" = true WHERE "id_background" = $1 AND "id_user" = $2 AND "id_guild" = $3', [background_id, id_user, id_guild]);
+    },
     insertBackground: async function (name, url, winnable, sharable, sharable_percentage) {
         const pool = db.getPool();
         const result = await pool.query(

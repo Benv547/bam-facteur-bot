@@ -6,13 +6,10 @@ const {wantedChannel} = require("../config.json");
 const wantedDB = require("../database/wanted");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
-const createEmbeds = require("../utils/createEmbeds");
-// const stickerDB = require("../database/sticker");
 const xpAction = require("../utils/xpAction");
 const backgroundDB = require("../database/background");
 const letterDB = require("../database/letter");
 const images = require("../utils/images");
-// const footerDB = require("../database/footer");
 
 module.exports = {
     name: 'replyWanted',

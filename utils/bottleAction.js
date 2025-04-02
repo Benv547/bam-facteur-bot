@@ -38,7 +38,7 @@ module.exports = {
         }
 
         if (nb_sea === 0) {
-            await userDB.set_date_bottle(id_user_sender, new Date());
+            // await userDB.set_date_bottle(id_user_sender, new Date());
         }
 
         let sender = await userDB.getUser(id_user_sender);

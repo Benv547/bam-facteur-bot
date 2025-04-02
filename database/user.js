@@ -33,10 +33,6 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "signature" = $1 WHERE "id_user" = $2', [signature, id_user]);
     },
-    update_color: async function (id_user, color) {
-        const pool = db.getPool();
-        return await pool.query('UPDATE "User" SET "color" = $1 WHERE "id_user" = $2', [color, id_user]);
-    },
     update_id_sticker: async function (id_user, id_sticker) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "id_sticker" = $1 WHERE "id_user" = $2', [id_sticker, id_user]);

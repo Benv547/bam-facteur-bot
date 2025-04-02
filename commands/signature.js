@@ -30,7 +30,7 @@ module.exports = {
 
         const signature = interaction.options.getString('texte');
 
-        const embed = createEmbeds.createFullEmbed('Signé et approuvé !', 'Voici votre signature pour vos prochaines bouteilles !\n\n"**'+ signature +'**"', null, null, null, null);
+        const embed = createEmbeds.createFullEmbed('Signé et approuvé !', 'Voici votre signature pour vos prochaines bouteilles !\nCette modification vous a coûté **' + price + ' <:piece:1045638309235404860>**\n\n"**'+ signature +'**"', null, null, null, null);
 
         // Check if the user exists in the database
         const userId = await userDB.getUser(interaction.user.id);

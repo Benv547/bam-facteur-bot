@@ -60,6 +60,8 @@ CREATE TABLE "User" (
                         "id_user" bigint PRIMARY KEY,
                         "money" int default 0,
                         "money_spent" int default 0,
+                        "corail" int default 0,
+                        "corail_spent" int default 0,
                         "xp" int default 0,
                         "signature" text NOT NULL default 'Un•e illustre inconnu•e',
                         "anniversaireJour" int,

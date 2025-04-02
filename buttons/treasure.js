@@ -3,7 +3,7 @@ const orAction = require("../utils/orAction");
 const xpAction = require("../utils/xpAction");
 const createEmbeds = require("../utils/createEmbeds");
 const userDB = require("../database/user");
-// const stickerDB = require("../database/sticker");
+const backgroundDB = require("../database/background");
 // const footerDB = require("../database/footer");
 
 module.exports = {
@@ -62,13 +62,13 @@ module.exports = {
                 gain = random + " <:xp:851123277497237544>";
             } else {
                 const randFloat = Math.random();
-                const footer = await footerDB.getRandomWinnableFooter(randFloat);
-                if (footer !== null) {
+                const background = await backgroundDB.getRandomWinnableBackground(randFloat);
+                if (background !== null) {
                     try {
-                        await footerDB.giveFooterToUser(interaction.user.id, footer.id_footer, interaction.guild.id);
+                        await backgroundDB.giveBackgroundToUser(interaction.user.id, background.id_background, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'l\'arabesque ' + footer.name;
+                    gain = 'le fond ' + background.name;
                 }
             }
         }
@@ -106,40 +106,40 @@ module.exports = {
                 gain = random + " <:xp:851123277497237544>";
             } else {
                 const randFloat = Math.random();
-                const sticker = await stickerDB.getRandomWinnableSticker(randFloat);
-                if (sticker !== null) {
+                const background = await backgroundDB.getRandomWinnableBackground(randFloat);
+                if (background !== null) {
                     try {
-                        await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
+                        await backgroundDB.giveBackgroundToUser(interaction.user.id, background.id_background, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'le sticker ' + sticker.name;
+                    gain = 'le fond ' + background.name;
                 }
             }
         }
 
 
         else if (treasureType === 'carnet') {
-            if (random == 1) {
+            if (random <= 1) {
                 gain = " un faux billet de 100€.. 💶";
             } else if (random <= 50) {
                 const randFloat = Math.random();
-                const sticker = await stickerDB.getRandomWinnableSticker(randFloat);
-                if (sticker !== null) {
+                const background = await backgroundDB.getRandomWinnableBackground(randFloat);
+                if (background !== null) {
                     try {
-                        await stickerDB.giveStickerToUser(interaction.user.id, sticker.id_sticker, interaction.guild.id);
+                        await backgroundDB.giveBackgroundToUser(interaction.user.id, background.id_background, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'le sticker ' + sticker.name;
+                    gain = 'le fond ' + background.name;
                 }
             } else {
                 const randFloat = Math.random();
-                const footer = await footerDB.getRandomWinnableFooter(randFloat);
-                if (footer !== null) {
+                const background = await backgroundDB.getRandomWinnableBackground(randFloat);
+                if (background !== null) {
                     try {
-                        await footerDB.giveFooterToUser(interaction.user.id, footer.id_footer, interaction.guild.id);
+                        await backgroundDB.giveBackgroundToUser(interaction.user.id, background.id_background, interaction.guild.id);
                     } catch {
                     }
-                    gain = 'l\'arabesque ' + footer.name;
+                    gain = 'le fond ' + background.name;
                 }
             }
         }
