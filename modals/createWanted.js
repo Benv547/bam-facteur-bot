@@ -90,6 +90,7 @@ module.exports = {
             console.log(letter);
 
             const img = await images.createMyCustomImage(content, letter.url, background.url);
+            const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
 
             // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, "Un•e illustre inconnu•e", sender.color, sender.id_footer);
 
@@ -113,10 +114,10 @@ module.exports = {
 
 
             // Send to channel
-            const messageInitial = await channel.send({ content: '', files: [img.toBuffer()] });
+            const messageInitial = await channel.send({ content: '', files: [img2] });
 
             // Send message to channel of interaction
-            const message = await interaction.channel.send({ content: '', files: [img.toBuffer()], components: [row] });
+            const message = await interaction.channel.send({ content: '', files: [img], components: [row] });
 
             await wantedDB.insertWanted(channel.id, interaction.guildId, interaction.member.id, message.id, channel_name, content);
 

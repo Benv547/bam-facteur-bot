@@ -111,7 +111,7 @@ module.exports = {
             const member = await interaction.guild.members.fetch(id_user);
 
             // Send message to channel of interaction
-            const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), files: [img.toBuffer()], components: [row] });
+            const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), files: [img], components: [row] });
 
             await wantedDB.insertWantedResponse(id_channel, interaction.guildId, interaction.member.id, message.id, content);
 
