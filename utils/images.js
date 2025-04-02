@@ -1,8 +1,8 @@
-// const { createCanvas, loadImage } = require('canvas');
-// import {createCanvas, loadImage, registerFont} from 'canvas';
-// import {resolve} from 'path';
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const { resolve } = require('path');
+const GIFEncoder = require('gifencoder');
+const decodeGif = require('decode-gif');
+const axios = require('axios');
 
 const ZERO = 0;
 const DEFAULT_WIDTH = 600;
@@ -17,11 +17,10 @@ const FONT_SIZE = 16;
 
 const DEFAULT_TEXT = "Lorem 🥨 ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan tempus dui, 🥘 eget venenatis elit dignissim id. Suspendisse eleifend venenatis tortor id congue. 🍬 Maecenas sed finibus tellus. Fusce🍬 🍬viverra sagittis libero, quis aliquam tortor facilisis ac. Nulla facilisi. Ut a hendrerit ligula. Curabitur id dolor non ligula egestas scelerisque id non leo. Maecenas commodo, arcu sed suscipit vehicula, velit nunc posuere massa, in imperdiet nunc purus non urna. Aliquam erat volutpat. Nulla id odio non diam malesuada commodo. Nulla id ligula nibh. Cras ultricies rhoncus ipsum id dapibus. Integer ut enim mi.\n" +
     "\n" +
-    "Duis ullamcorper faucibus gravida. Aenean rutrum magna semper velit fringilla, in dignissim orci vestibulum. Fusce sit 🍬 amet mauris ligula. Duis lobortis, magna et molestie placerat, nibh tortor tempus erat, vitae varius dui turpis in dui. Suspendisse potenti. Curabitur posuere ullamcorper ipsum quis tincidunt. Nam aliquet bibendum urna. Phasellus id tellus sagittis, feugiat nisi sit amet, luctus justo. Suspendisse eget elit tempus, euismod mauris et, feugiat lectus. Praesent vel viverra massa, et pellentesque ipsum. Maecenas sit amet pulvinar orci, at pellentesque mi. Pellentesque eget mattis odio. Donec rutrum velit sit amet pulvinar posuere. In hac habitasse platea dictumst. Proin porttitor lobortis urna, id iaculis enim mollis eu."
+    "Duis ullamcorper faucibus gravida. Aenean rutrum magna semper velit fringilla, in dignissim orci vestibulum. Fusce sit 🍬 amet mauris ligula. Duis lobortis, magna et molestie placerat, nibh tortor tempus erat, vitae varius dui turpis in dui. Suspendisse potenti. Curabitur posuere ullamcorper ipsum quis tincidunt. Nam aliquet bibendum urna. Phasellus id tellus sagittis, feugiat nisi sit amet, luctus justo. Suspendisse eget elit tempus, euismod mauris et, feugiat lectus. Praesent vel viverra massa, et pellentesque ipsum. Maecenas sit amet pulvinar orci, at pellentesque mi. Pellentesque eget mattis odio. Donec rutrum velit sit amet pulvinar posuere. In hac habitasse platea dictumst. Proin porttitor lobortis urna, id iaculis enim mollis eu.";
 
-// Assurez-vous que le chemin vers le fichier de police est correct
 const FONT_PATH = resolve('fonts', 'open-dyslexic.ttf');
-registerFont(FONT_PATH, {family: 'OpenDyslexic'} );
+registerFont(FONT_PATH, { family: 'OpenDyslexic' });
 console.log('Font loaded !');
 
 function createBaseImage(width, height) {
@@ -34,9 +33,8 @@ function createBaseImage(width, height) {
     return canvas;
 }
 
-// Fonction pour écrire du texte sur le canevas avec gestion des retours à la ligne
 function writeTextOnImage(ctx, text, x, y, maxWidth) {
-    const lines = text.split('\n'); // Diviser le texte en lignes en fonction des sauts de ligne
+    const lines = text.split('\n');
 
     ctx.font = `${FONT_SIZE}px OpenDyslexic`;
     ctx.fillStyle = '#000';
@@ -53,13 +51,13 @@ function writeTextOnImage(ctx, text, x, y, maxWidth) {
             if (testWidth > maxWidth && testLine.length > 0) {
                 ctx.fillText(testLine, x, y);
                 testLine = word + ' ';
-                y += LINE_HEIGHT; // Passer à la ligne suivante
+                y += LINE_HEIGHT;
             } else {
                 testLine = newLine;
             }
         }
         ctx.fillText(testLine, x, y);
-        y += LINE_HEIGHT; // Passer à la ligne suivante après avoir traité une ligne complète
+        y += LINE_HEIGHT;
     }
 }
 
@@ -69,17 +67,91 @@ async function drawImage(ctx, imagePath, x, y, width, height) {
 }
 
 async function createMyCustomImage(text, letterUrl, backgroundUrl) {
-    const canvas = createBaseImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    const ctx = canvas.getContext('2d');
+    if (backgroundUrl.includes('.gif')) {
+        return createGifWithText(text, letterUrl, backgroundUrl);
+    } else {
+        const canvas = createBaseImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        const ctx = canvas.getContext('2d');
 
-    await drawImage(ctx, backgroundUrl, ZERO, ZERO, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    await drawImage(ctx, letterUrl, LETTER_X, LETTER_Y, LETTER_WIDTH, LETTER_HEIGHT);
+        await drawImage(ctx, backgroundUrl, ZERO, ZERO, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        await drawImage(ctx, letterUrl, LETTER_X, LETTER_Y, LETTER_WIDTH, LETTER_HEIGHT);
 
-    writeTextOnImage(ctx, text, LETTER_X + 35, LETTER_Y + 55, LETTER_WIDTH - 100);
+        writeTextOnImage(ctx, text, LETTER_X + 35, LETTER_Y + 70, LETTER_WIDTH - 100);
 
-    return canvas;
+        return {
+            attachment: canvas.toBuffer(),
+            name: 'file.jpeg',
+            contentType: 'image/jpeg'
+        }
+    }
+}
+
+async function getGifFrames(gifUrl) {
+    try {
+        // Fetch the GIF file from the remote URL
+        const response = await axios.get(gifUrl, { responseType: 'arraybuffer' });
+        const gifData = response.data;
+
+        // Decode the GIF data
+        const decodedGif = decodeGif(gifData);
+
+        // Extract frames from the decoded GIF
+        return decodedGif.frames.map(frame => {
+            // Create a canvas for each frame
+            const canvas = createCanvas(decodedGif.width, decodedGif.height);
+            const ctx = canvas.getContext('2d');
+
+            // Create an ImageData object from the frame data
+            const imageData = ctx.createImageData(decodedGif.width, decodedGif.height);
+            imageData.data.set(new Uint8ClampedArray(frame.data));
+
+            // Put the ImageData onto the canvas
+            ctx.putImageData(imageData, 0, 0);
+
+            return canvas;
+        });
+    } catch (error) {
+        console.error('Error fetching or decoding GIF:', error);
+        throw error;
+    }
+}
+
+async function createGifWithText(text, letterUrl, gifUrl) {
+    const frames = await getGifFrames(gifUrl);
+    const encoder = new GIFEncoder(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    const stream = encoder.createReadStream();
+
+    encoder.start();
+    encoder.setRepeat(0); // 0 for repeat indefinitely
+    encoder.setDelay(100); // Frame delay in ms
+    encoder.setQuality(10); // Image quality. 10 is default.
+
+    for (const frame of frames) {
+        const canvas = createBaseImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(frame, ZERO, ZERO, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        await drawImage(ctx, letterUrl, LETTER_X, LETTER_Y, LETTER_WIDTH, LETTER_HEIGHT);
+        writeTextOnImage(ctx, text, LETTER_X + 35, LETTER_Y + 70, LETTER_WIDTH - 100);
+
+        encoder.addFrame(ctx);
+    }
+
+    encoder.finish();
+
+    // Collect the stream data into a buffer
+    const chunks = [];
+    for await (const chunk of stream) {
+        chunks.push(chunk);
+    }
+
+    return {
+        attachment: Buffer.concat(chunks),
+        name: 'file.gif',
+        contentType: 'image/gif'
+    };
 }
 
 module.exports = {
     createMyCustomImage: createMyCustomImage
-}
+};

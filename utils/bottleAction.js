@@ -138,8 +138,6 @@ module.exports = {
         console.log(letter);
 
         const img = await images.createMyCustomImage(content, letter.url, background.url);
-        // const msg = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', files: [img.toBuffer()] });
-        // return;
 
         // TODO: create bottle message ...
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
@@ -162,7 +160,7 @@ module.exports = {
             );
 
         // Send to channel
-        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', components: [row], files: [img.toBuffer()] });
+        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', components: [row], files: [img] });
 
         // TODO: save bottle to DB
         await bottleDB.insertBottle(channel.id, guild.id, null, id_user_sender, channel.id, channel_name, nb_sea);
@@ -209,11 +207,11 @@ module.exports = {
         console.log(letter);
 
         const img = await images.createMyCustomImage(content, letter.url, background.url);
-
+        const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
         // Send message
-        const messageTemp = await channel.send({ content: "", files: [img.toBuffer()] });
+        const messageTemp = await channel.send({ content: "", files: [img2] });
 
         // If category is not "conversations", move channel to "conversations"
         if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
@@ -311,7 +309,7 @@ module.exports = {
             );
 
         // Send message
-        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), files: [img.toBuffer()], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), files: [img2], components: [row] });
 
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
@@ -457,7 +455,7 @@ module.exports = {
         if (random === 1) {
             content_message = 'En tant que **VIP ou Booster**, vous pouvez réagir à ce message avec un **émoji personnalisé**.';
         }
-        const message = await channel.send({ content: content_message, files: [img.toBuffer()], components: [row] });
+        const message = await channel.send({ content: content_message, files: [img], components: [row] });
 
         if (id === null || id === undefined) {
             await birdDB.insertBird(message.id, guild.id, id_user_sender, channel_name, content);
