@@ -69,6 +69,7 @@ module.exports = {
         }
         return null;
     },
+
     incr_money: async function (id_user, qte) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "money" = "money" + $1 WHERE "id_user" = $2', [qte, id_user]);
@@ -81,6 +82,20 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "money" = "money" - $1 WHERE "id_user" = $2', [qte, id_user]);
     },
+
+    incr_corail: async function (id_user, qte) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "corail" = "corail" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    incr_corail_spent: async function (id_user, qte) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "corail_spent" = "corail_spent" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    reduce_corail: async function (id_user, qte) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "corail" = "corail" - $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+
     incr_xp: async function (id_user, qte) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "xp" = "xp" + $1 WHERE "id_user" = $2', [qte, id_user]);
