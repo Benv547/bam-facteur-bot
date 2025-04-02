@@ -137,7 +137,7 @@ module.exports = {
         const letter = await letterDB.getLetter(user_letter.id_letter);
         console.log(letter);
 
-        const img = await images.createMyCustomImage(content, letter.url, background.url);
+        const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
 
         // TODO: create bottle message ...
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
@@ -206,7 +206,7 @@ module.exports = {
         const letter = await letterDB.getLetter(user_letter.id_letter);
         console.log(letter);
 
-        const img = await images.createMyCustomImage(content, letter.url, background.url);
+        const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
         const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 
@@ -406,7 +406,7 @@ module.exports = {
         const letter = await letterDB.getLetter(user_letter.id_letter);
         console.log(letter);
 
-        const img = await images.createMyCustomImage(content, letter.url, background.url);
+        const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
 
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 

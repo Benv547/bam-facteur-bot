@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS "User_Achievement" CASCADE;
 DROP TABLE IF EXISTS "Achievement" CASCADE;
 DROP TABLE IF EXISTS "Message" CASCADE;
 DROP TABLE IF EXISTS "Message_ile" CASCADE;
+DROP TABLE IF EXISTS "User_ile_ticket" CASCADE;
 DROP TABLE IF EXISTS "User_Background" CASCADE;
 DROP TABLE IF EXISTS "User_Letter" CASCADE;
 DROP TABLE IF EXISTS "User_Decoration" CASCADE;
@@ -47,7 +48,8 @@ CREATE TABLE "Product" (
                            "id_item" INT NOT NULL,
                            "price" INT NOT NULL,
                            "type" VARCHAR(255) NOT NULL,
-                           "boutique" BOOLEAN NOT NULL DEFAULT FALSE
+                           "boutique" BOOLEAN NOT NULL DEFAULT FALSE,
+                           "boutique_premium" BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE "Record" (
@@ -66,6 +68,7 @@ CREATE TABLE "User" (
                         "signature" text NOT NULL default 'Un•e illustre inconnu•e',
                         "anniversaireJour" int,
                         "anniversaireMois" int,
+                        "color" varchar(6) NOT NULL default '000000',
                         "isVIP" boolean NOT NULL default false,
                         "nb_treasures" int NOT NULL default 0,
                         "date_bottle" timestamp,
@@ -345,7 +348,13 @@ CREATE TABLE "User_ile" (
                             "randNumber" int NOT NULL default trunc(random() * 8999 + 1000)
 );
 
+CREATE TABLE "User_ile_ticket" (
+                            "id_user" bigint NOT NULL,
+                            "date" timestamp NOT NULL default current_timestamp + interval '7 days'
+);
+
 ALTER TABLE "User_ile" ADD FOREIGN KEY ("id_profile") REFERENCES "Profile_ile" ("id_profile") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_ile_ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;

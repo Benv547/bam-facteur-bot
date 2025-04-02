@@ -33,11 +33,11 @@ function createBaseImage(width, height) {
     return canvas;
 }
 
-function writeTextOnImage(ctx, text, x, y, maxWidth) {
+function writeTextOnImage(ctx, text, color, x, y, maxWidth) {
     const lines = text.split('\n');
 
     ctx.font = `${FONT_SIZE}px OpenDyslexic`;
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#' + color;
 
     for (const line of lines) {
         const words = line.split(' ');
@@ -66,9 +66,9 @@ async function drawImage(ctx, imagePath, x, y, width, height) {
     ctx.drawImage(image, x, y, width, height);
 }
 
-async function createMyCustomImage(text, letterUrl, backgroundUrl) {
+async function createMyCustomImage(text, color, letterUrl, backgroundUrl) {
     if (backgroundUrl.includes('.gif')) {
-        return createGifWithText(text, letterUrl, backgroundUrl);
+        return createGifWithText(text, color, letterUrl, backgroundUrl);
     } else {
         const canvas = createBaseImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         const ctx = canvas.getContext('2d');
@@ -76,7 +76,7 @@ async function createMyCustomImage(text, letterUrl, backgroundUrl) {
         await drawImage(ctx, backgroundUrl, ZERO, ZERO, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         await drawImage(ctx, letterUrl, LETTER_X, LETTER_Y, LETTER_WIDTH, LETTER_HEIGHT);
 
-        writeTextOnImage(ctx, text, LETTER_X + 35, LETTER_Y + 70, LETTER_WIDTH - 100);
+        writeTextOnImage(ctx, text, color, LETTER_X + 35, LETTER_Y + 70, LETTER_WIDTH - 100);
 
         return {
             attachment: canvas.toBuffer(),
@@ -116,7 +116,7 @@ async function getGifFrames(gifUrl) {
     }
 }
 
-async function createGifWithText(text, letterUrl, gifUrl) {
+async function createGifWithText(text, color, letterUrl, gifUrl) {
     const frames = await getGifFrames(gifUrl);
     const encoder = new GIFEncoder(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     const stream = encoder.createReadStream();
@@ -132,7 +132,7 @@ async function createGifWithText(text, letterUrl, gifUrl) {
 
         ctx.drawImage(frame, ZERO, ZERO, DEFAULT_WIDTH, DEFAULT_HEIGHT);
         await drawImage(ctx, letterUrl, LETTER_X, LETTER_Y, LETTER_WIDTH, LETTER_HEIGHT);
-        writeTextOnImage(ctx, text, LETTER_X + 35, LETTER_Y + 70, LETTER_WIDTH - 100);
+        writeTextOnImage(ctx, text, color, LETTER_X + 35, LETTER_Y + 70, LETTER_WIDTH - 100);
 
         encoder.addFrame(ctx);
     }

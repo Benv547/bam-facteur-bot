@@ -15,6 +15,7 @@ const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boo
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
+const embeds = require("../utils/createEmbeds");
 
 module.exports = {
     name: 'ready',
@@ -471,6 +472,38 @@ module.exports = {
             setTimeout(checkAchievement, 1000 * 60 * 30);
         };
         checkAchievement();
+
+
+
+        checkIle = async () => {
+            // console.log(new Date().toLocaleString() + " - Checking ile...");
+
+            const usersToRemove = await user_ileDB.checkUserIleTicket();
+            if (usersToRemove !== null) {
+
+                const guild = await client.guilds.fetch(guildId);
+                const channel = await guild.channels.fetch(ile);
+                const channelVoice = await guild.channels.fetch(ileVoice);
+
+                for (let i = 0; i < usersToRemove.length; i++) {
+                    try {
+                        const memberId = usersToRemove[i].id_user;
+                        const member = await client.guilds.cache.first().members.fetch(memberId);
+                        if (member !== null) {
+                            await channel.permissionOverwrites.edit(member, {ViewChannel: false, SendMessages: false});
+                            await channelVoice.permissionOverwrites.edit(member, {ViewChannel: false, Connect: false});
+                            const embed = embeds.createFullEmbed('', '<@' + memberId + '> est parti de l\'île.', null, null, 0x2f3136, null);
+                            await channel.send({content: '', embeds: [embed]});
+                            await member.send({ content: 'Votre ticket de l\'île a expiré, vous n\'êtes plus sur l\'île.' });
+                        }
+                    } catch {
+                    }
+                }
+            }
+
+            setTimeout(checkIle, 1000 * 60 * 30);
+        };
+        checkIle();
 
 
 

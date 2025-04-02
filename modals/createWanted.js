@@ -89,7 +89,7 @@ module.exports = {
             const letter = await letterDB.getLetter(user_letter.id_letter);
             console.log(letter);
 
-            const img = await images.createMyCustomImage(content, letter.url, background.url);
+            const img = await images.createMyCustomImage(content + '\n\n -Un•e illustre inconnu•e', sender.color, letter.url, background.url);
             const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
 
             // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, "Un•e illustre inconnu•e", sender.color, sender.id_footer);
