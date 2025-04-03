@@ -1,4 +1,5 @@
 const {ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder} = require("discord.js");
+const {setBottleArchived} = require("../database/bottle");
 
 module.exports = {
     name: 'replyDeleteBottle',
@@ -7,6 +8,11 @@ module.exports = {
         const type = interaction.customId.split('_')[1];
         if (type === 'ok') {
             await interaction.update({ components: [] });
+
+            setTimeout(async () => {
+                await setBottleArchived(interaction.channel.id);
+                await interaction.channel.delete();
+            }, 1000 * 60 * 5); // 5 minutes
             return;
         }
 
