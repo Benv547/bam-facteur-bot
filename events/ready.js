@@ -239,7 +239,7 @@ module.exports = {
                             } catch { }
                         }
                         await userDB.incr_afk_number(receiver_id);
-                        if (await userDB.get_afk_number(receiver_id) >= 5) {
+                        if (await userDB.get_afk_number(receiver_id) >= 20) {
                             const user = await guild.members.fetch(receiver_id);
                             await user.roles.add(afkRole);
                             // Create Embed AFK

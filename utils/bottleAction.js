@@ -160,7 +160,7 @@ module.exports = {
             );
 
         // Send to channel
-        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@here||', components: [row], files: [img] });
+        const message = await channel.send({ content: 'Vous avez reçu une bouteille ||@everyone||', components: [row], files: [img] });
 
         // TODO: save bottle to DB
         await bottleDB.insertBottle(channel.id, guild.id, null, id_user_sender, channel.id, channel_name, nb_sea);
@@ -314,6 +314,284 @@ module.exports = {
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
 
+        await xpAction.increment(guild, id_user_sender, 10);
+    },
+    delete: async function (guild, id_user_sender, channel, content) {
+        let sender = await userDB.getUser(id_user_sender);
+        if (sender === null) {
+            await userDB.createUser(id_user_sender, 0, 0);
+            sender = await userDB.getUser(id_user_sender);
+        }
+
+        // TODO: get receiver from DB
+        const receiver_id = await bottleDB.getReceiver(channel.id);
+        let receiver;
+
+        try {
+            receiver = await guild.members.fetch(receiver_id);
+        } catch (error) {
+            // Send message into channel
+            const embed = createEmbeds.createFullEmbed("Erreur", "Le destinataire de cette bouteille n'est plus sur le serveur. La bouteille va être supprimée.", null, null, 0x2f3136, null);
+            await channel.send({ content: "", embeds: [embed] });
+            // Delete channel in 5min
+            setTimeout(async () => {
+                await bottleDB.deleteBottle(channel.id);
+                await channel.delete();
+            }, 120000);
+            return;
+        }
+
+        const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
+        const background = await backgroundDB.getBackground(user_background.id_background);
+        console.log(background);
+
+        const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
+        const letter = await letterDB.getLetter(user_letter.id_letter);
+        console.log(letter);
+
+        const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
+        const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
+
+        // Send message
+        const messageTemp = await channel.send({ content: "", files: [img2] });
+
+        // If category is not "conversations", move channel to "conversations"
+        if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
+
+            // for each member in channel, remove permission
+            const members = await channel.members;
+            for (const member of members) {
+                await channel.permissionOverwrites.delete(member[0]);
+            }
+
+            // update bottle in DB with the responder as sender
+            await bottleDB.updateBottleSender(channel.id, id_user_sender);
+
+            let moved = false;
+            // Foreach conversations
+            for (const conversation of conversations) {
+                // Fetch category conversation channel
+                const category = (await guild.channels.fetch()).find(c => c.id == conversation);
+
+                // If number of channels in category is less than 45
+                if (category.children.cache.size < 45) {
+                    // Move channel to category
+                    await channel.setParent(category);
+                    moved = true;
+                    break;
+                }
+            }
+            // If channel not moved
+            while (!moved) {
+                // Get oldest bottle channel
+                const oldestChannel = await bottleDB.getOldestBottleNotArchived();
+                // Fetch channel
+                try {
+                    const oldestChannelFetched = await guild.channels.fetch(oldestChannel);
+                    // Get category
+                    const category = (await guild.channels.fetch()).find(c => c.id == oldestChannelFetched.parentId);
+                    // Set archive to true
+                    await bottleDB.setBottleArchived(oldestChannel);
+                    // Delete channel
+                    await oldestChannelFetched.delete();
+                    // Move channel to category
+                    try {
+                        await channel.setParent(category);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    moved = true;
+                } catch (e) {
+                    await bottleDB.setBottleArchived(oldestChannel);
+                    console.log(e);
+                }
+            }
+        }
+
+        // edits overwrites to allow a user to view the channel
+        await channel.permissionOverwrites.create(id_user_sender, { ViewChannel: false, SendMessages: false });
+
+        // Delete temp message
+        await messageTemp.delete();
+
+        // Remove actions from last message
+        // const lastMessageId = await messageDB.getLastMessageId(channel.id);
+        // const lastMessage = await channel.messages.fetch(lastMessageId);
+        // await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
+
+        // The receiver can see channel
+        await channel.permissionOverwrites.create(receiver_id, { ViewChannel: true, SendMessages: false });
+
+        // Switch receiver and sender in DB
+        await bottleDB.switchSenderReceiver(channel.id);
+
+        // ... with actions (reply, signal, resend to ocean)
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('replyDeleteBottle_reply')
+                    .setLabel('Adresser un dernier message')
+                    .setEmoji('📨')
+                    .setStyle(ButtonStyle.Primary),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('replyDeleteBottle_ok')
+                    .setLabel('D\'accord')
+                    .setEmoji('✅')
+                    .setStyle(ButtonStyle.Secondary),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('warning_bottle')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
+                    .setStyle(ButtonStyle.Danger),
+            );
+
+        // Send message
+        const message = await channel.send({ content: 'Vous avez reçu une **dernière** réponse ' + receiver.toString(), files: [img2], components: [row] });
+
+        // Save to DB
+        await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
+        await bottleDB.setBottleTerminated(channel.id);
+        await xpAction.increment(guild, id_user_sender, 10);
+    },
+    replyDelete: async function (guild, id_user_sender, channel, content) {
+        let sender = await userDB.getUser(id_user_sender);
+        if (sender === null) {
+            await userDB.createUser(id_user_sender, 0, 0);
+            sender = await userDB.getUser(id_user_sender);
+        }
+
+        // TODO: get receiver from DB
+        const receiver_id = await bottleDB.getReceiver(channel.id);
+        let receiver;
+
+        try {
+            receiver = await guild.members.fetch(receiver_id);
+        } catch (error) {
+            // Send message into channel
+            const embed = createEmbeds.createFullEmbed("Erreur", "Le destinataire de cette bouteille n'est plus sur le serveur. La bouteille va être supprimée.", null, null, 0x2f3136, null);
+            await channel.send({ content: "", embeds: [embed] });
+            // Delete channel in 5min
+            setTimeout(async () => {
+                await bottleDB.deleteBottle(channel.id);
+                await channel.delete();
+            }, 120000);
+            return;
+        }
+
+        const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
+        const background = await backgroundDB.getBackground(user_background.id_background);
+        console.log(background);
+
+        const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
+        const letter = await letterDB.getLetter(user_letter.id_letter);
+        console.log(letter);
+
+        const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
+        const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
+        // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
+
+        // Send message
+        const messageTemp = await channel.send({ content: "", files: [img2] });
+
+        // If category is not "conversations", move channel to "conversations"
+        if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
+
+            // for each member in channel, remove permission
+            const members = await channel.members;
+            for (const member of members) {
+                await channel.permissionOverwrites.delete(member[0]);
+            }
+
+            // update bottle in DB with the responder as sender
+            await bottleDB.updateBottleSender(channel.id, id_user_sender);
+
+            let moved = false;
+            // Foreach conversations
+            for (const conversation of conversations) {
+                // Fetch category conversation channel
+                const category = (await guild.channels.fetch()).find(c => c.id == conversation);
+
+                // If number of channels in category is less than 45
+                if (category.children.cache.size < 45) {
+                    // Move channel to category
+                    await channel.setParent(category);
+                    moved = true;
+                    break;
+                }
+            }
+            // If channel not moved
+            while (!moved) {
+                // Get oldest bottle channel
+                const oldestChannel = await bottleDB.getOldestBottleNotArchived();
+                // Fetch channel
+                try {
+                    const oldestChannelFetched = await guild.channels.fetch(oldestChannel);
+                    // Get category
+                    const category = (await guild.channels.fetch()).find(c => c.id == oldestChannelFetched.parentId);
+                    // Set archive to true
+                    await bottleDB.setBottleArchived(oldestChannel);
+                    // Delete channel
+                    await oldestChannelFetched.delete();
+                    // Move channel to category
+                    try {
+                        await channel.setParent(category);
+                    } catch (e) {
+                        console.log(e);
+                        return;
+                    }
+                    moved = true;
+                } catch (e) {
+                    await bottleDB.setBottleArchived(oldestChannel);
+                    console.log(e);
+                }
+            }
+        }
+
+        // edits overwrites to allow a user to view the channel
+        await channel.permissionOverwrites.create(id_user_sender, { ViewChannel: false, SendMessages: false });
+
+        // Delete temp message
+        await messageTemp.delete();
+
+        // Remove actions from last message
+        // const lastMessageId = await messageDB.getLastMessageId(channel.id);
+        // const lastMessage = await channel.messages.fetch(lastMessageId);
+        // await lastMessage.edit({ content: "", embeds: lastMessage.embeds, components: [] });
+
+        // The receiver can see channel
+        await channel.permissionOverwrites.create(receiver_id, { ViewChannel: true, SendMessages: false });
+
+        // Switch receiver and sender in DB
+        await bottleDB.switchSenderReceiver(channel.id);
+
+        // ... with actions (reply, signal, resend to ocean)
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('replyDeleteBottle_ok')
+                    .setLabel('D\'accord')
+                    .setEmoji('✅')
+                    .setStyle(ButtonStyle.Secondary),
+            )
+            .addComponents(
+                new ButtonBuilder()
+                    .setCustomId('warning_bottle')
+                    .setLabel('Signaler')
+                    .setEmoji('⚠️')
+                    .setStyle(ButtonStyle.Danger),
+            );
+
+        // Send message
+        const message = await channel.send({ content: 'Vous avez reçu une **dernière** réponse ' + receiver.toString(), files: [img2], components: [row] });
+
+        // Save to DB
+        await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);
         await xpAction.increment(guild, id_user_sender, 10);
     },
     unarchive: async function (guild, id_user_sender, id_bottle, content) {

@@ -1,6 +1,8 @@
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const createEmbeds = require("../utils/createEmbeds");
+const userDB = require("../database/user");
+const bottle = require("../utils/bottleAction");
 
 module.exports = {
     name: 'deleteBottle',
@@ -14,28 +16,16 @@ module.exports = {
             return;
         }
 
-        textRaison = textRaison ? textRaison : 'Aucune raison spécifiée';
+        textRaison = textRaison ? textRaison : 'Merci d\'avoir discuté avec moi, à très vite !';
 
-        await messageDB.insertMessage(interaction.channel.id, interaction.channel.id, interaction.userId, textRaison);
+        const sender = interaction.member;
+        await interaction.update({ content: '', components: [] });
 
-        // Send bottle terminated and archived
-        await bottleDB.setBottleTerminated(interaction.channel.id);
-        await bottleDB.setBottleArchived(interaction.channel.id);
-
-        const receiverId = await bottleDB.getReceiver(interaction.channel.id);
-        const receiver = await interaction.guild.members.fetch(receiverId);
-        if (receiver) {
-            try {
-                const bottle = await bottleDB.getBottle(interaction.channel.id);
-                const embed = createEmbeds.createFullEmbed('Bouteille terminée', 'La ' + bottle.name + ' a été terminée par votre correspondant pour la raison suivante : ' + textRaison, null, null, null, null);
-                await receiver.send({ embeds: [embed] });
-            } catch {}
+        try {
+            await userDB.reset_afk_number(interaction.member.id);
+            await bottle.delete(interaction.guild, sender.id, interaction.channel, textRaison);
+        } catch (e) {
+            console.log(e);
         }
-
-        // Delete channel
-        await interaction.channel.delete();
-
-        // Reply to user
-        await interaction.update({ components: [] });
     },
 };
