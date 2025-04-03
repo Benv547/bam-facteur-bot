@@ -354,8 +354,9 @@ module.exports = {
                     const bottle = await bottleDB.getBottle(channel.id);
                     if (bottle !== null) {
                         if (bottle.archived) {
+                            console.log("Channel " + channel.name + " is already archived (force delete)");
                             await channel.delete();
-                            break;
+                            continue;
                         }
                         if (bottle.terminated) {
                             try {
@@ -364,14 +365,16 @@ module.exports = {
                                 // Check if last message is older than 7 days
                                 if (lastMessage.first().createdTimestamp + 1000 * 60 * 60 * 24 * 7 < now.getTime()) {
                                     // Delete channel
+                                    console.log("Channel " + channel.name + " is terminated (force archive and delete)");
                                     await channel.delete();
                                     await bottleDB.setBottleArchived(channel.id);
-                                    break;
                                 }
                             } catch (error) {
                                 console.log(error);
                             }
                         }
+                    } else {
+                        console.log("Channel " + channel.name + " is not a bottle (or not found)");
                     }
                 }
             }
