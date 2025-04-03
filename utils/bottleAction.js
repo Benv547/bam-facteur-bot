@@ -210,9 +210,6 @@ module.exports = {
         const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 
-        // Send message
-        const messageTemp = await channel.send({ content: "", files: [img2] });
-
         // If category is not "conversations", move channel to "conversations"
         if (channel.parentId === newBottleCategory || channel.parentId === newWantedCategory || channel.parentId === null) {
 
@@ -266,6 +263,9 @@ module.exports = {
                 }
             }
         }
+
+        // Send message
+        const messageTemp = await channel.send({ content: "", files: [img2] });
 
         // edits overwrites to allow a user to view the channel
         await channel.permissionOverwrites.create(id_user_sender, { ViewChannel: false, SendMessages: false });
