@@ -123,7 +123,6 @@ module.exports = {
                 const message = await i.channel.messages.fetch(i.message.id);
                 // find footer name from embed with regex
                 const footer_name = message.embeds[0].description.match(/\*\*(.*)\*\*/)[1];
-                console.log(footer_name);
                 const footer = await footerDB.getFooterFromUserWithName(interaction.user.id, footer_name);
                 await userDB.update_id_footer(interaction.user.id, footer[0].id_footer);
                 const embed = createEmbeds.createFullEmbed('Arabesque changée', 'Votre arabesque a bien été changé !', null, footer[0].url, null, null);

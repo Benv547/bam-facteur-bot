@@ -83,11 +83,9 @@ module.exports = {
 
             const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
             const background = await backgroundDB.getBackground(user_background.id_background);
-            console.log(background);
 
             const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
             const letter = await letterDB.getLetter(user_letter.id_letter);
-            console.log(letter);
 
             const img = await images.createMyCustomImage(content + '\n\n -Un•e illustre inconnu•e', sender.color, letter.url, background.url);
             const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};

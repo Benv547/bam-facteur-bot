@@ -120,7 +120,6 @@ module.exports = {
                 const message = await i.channel.messages.fetch(i.message.id);
                 // find background name from embed with regex
                 const background_name = message.embeds[0].description.match(/\*\*(.*)\*\*/)[1];
-                console.log(background_name);
                 const background = await backgroundDB.getBackgroundFromUserWithName(interaction.user.id, background_name);
                 await backgroundDB.setAppliedBackgroundFromUser(background[0].id_background, interaction.user.id, interaction.guildId);
                 const embed = createEmbeds.createFullEmbed('Fond changé', 'Votre fond a bien été changé !', null, background[0].url, null, null);

@@ -87,7 +87,6 @@ module.exports = {
         const limit = Math.min(5, members.size);
         for (let i = 0; i < limit; i++) {
             const randMember = members.random();
-            console.log(randMember.user.username);
             if (await userDB.getUser(randMember.id) === null) {
                 await userDB.createUser(randMember.id, 0, 0);
             }
@@ -131,11 +130,9 @@ module.exports = {
 
         const user_background = await backgroundDB.getAppliedBackgroundFromUser(id_user_sender, guild.id);
         const background = await backgroundDB.getBackground(user_background.id_background);
-        console.log(background);
 
         const user_letter = await letterDB.getAppliedLetterFromUser(id_user_sender, guild.id);
         const letter = await letterDB.getLetter(user_letter.id_letter);
-        console.log(letter);
 
         const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
 
@@ -200,11 +197,9 @@ module.exports = {
 
         const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
         const background = await backgroundDB.getBackground(user_background.id_background);
-        console.log(background);
 
         const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
         const letter = await letterDB.getLetter(user_letter.id_letter);
-        console.log(letter);
 
         const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
         const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
@@ -343,11 +338,9 @@ module.exports = {
 
         const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
         const background = await backgroundDB.getBackground(user_background.id_background);
-        console.log(background);
 
         const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
         const letter = await letterDB.getLetter(user_letter.id_letter);
-        console.log(letter);
 
         const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
         const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
@@ -486,11 +479,9 @@ module.exports = {
 
         const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
         const background = await backgroundDB.getBackground(user_background.id_background);
-        console.log(background);
 
         const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
         const letter = await letterDB.getLetter(user_letter.id_letter);
-        console.log(letter);
 
         const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
         const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
@@ -678,11 +669,9 @@ module.exports = {
 
         const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
         const background = await backgroundDB.getBackground(user_background.id_background);
-        console.log(background);
 
         const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
         const letter = await letterDB.getLetter(user_letter.id_letter);
-        console.log(letter);
 
         const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
 
