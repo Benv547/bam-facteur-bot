@@ -11,7 +11,7 @@ const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const boutiqueAction = require("../utils/boutiqueAction");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole, newBirdChannel, boutique } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole, newBirdChannel, boutique, conversations } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -341,6 +341,45 @@ module.exports = {
         checkBottle();
 
 
+        checkArchivedBottles = async () => {
+            console.log(new Date().toLocaleString() + " - Checking archived bottles...");
+
+            const guild = await client.guilds.fetch(guildId);
+            // For every conversation, check if the last message is older than 1 hour
+            for (const conversation of conversations) {
+                // Fetch category conversation channel
+                const category = (await guild.channels.fetch()).find(c => c.id == conversation);
+                for (const channel of category.children.cache.values()) {
+                    // Check if channel is archived or terminated
+                    const bottle = await bottleDB.getBottle(channel.id);
+                    if (bottle !== null) {
+                        if (bottle.archived) {
+                            await channel.delete();
+                            break;
+                        }
+                        if (bottle.terminated) {
+                            try {
+                                const lastMessage = await channel.messages.fetch({limit: 1});
+                                const now = new Date();
+                                // Check if last message is older than 7 days
+                                if (lastMessage.first().createdTimestamp + 1000 * 60 * 60 * 24 * 7 < now.getTime()) {
+                                    // Delete channel
+                                    await channel.delete();
+                                    await bottleDB.setBottleArchived(channel.id);
+                                    break;
+                                }
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
+                    }
+                }
+            }
+
+            global.semaphore = [];
+            setTimeout(checkArchivedBottles, 1000 * 60 * 60 * 24 * 5);
+        };
+        checkArchivedBottles();
 
 
         checkAchievement = async () => {
