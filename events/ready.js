@@ -374,7 +374,7 @@ module.exports = {
                             }
                         }
                     } else {
-                        console.log("Channel " + channel.name + " is not a bottle (or not founded)");
+                        console.log("Channel " + channel.name + " is not a bottle (or not found)");
                     }
                 }
             }
