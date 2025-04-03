@@ -201,8 +201,16 @@ module.exports = {
         const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
         const letter = await letterDB.getLetter(user_letter.id_letter);
 
-        const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
-        const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
+        const maxText = images.computeMaxTextOnLetter(content + '\n\n - ' + sender.signature);
+        let img;
+        let img2;
+        let embed;
+        if (maxText > 17) {
+            embed = createEmbeds.createFullEmbed('', content + '\n\n - ' + sender.signature, null, null, 0x2f3136, "Cette bouteille est sous la forme d\'un embed\ncar le texte est trop long pour être affiché sur l\'image.", false);
+        } else {
+            img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
+            img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
+        }
         // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(guild, content), sender.diceBearSeed, sender.id_background, sender.signature, sender.color, sender.id_footer);
 
         // If category is not "conversations", move channel to "conversations"
@@ -260,7 +268,7 @@ module.exports = {
         }
 
         // Send message
-        const messageTemp = await channel.send({ content: "", files: [img2] });
+        const messageTemp = await channel.send({ content: "", files: img2 ? [img2] : [], embeds: embed ? [embed] : [] });
 
         // edits overwrites to allow a user to view the channel
         await channel.permissionOverwrites.create(id_user_sender, { ViewChannel: false, SendMessages: false });
@@ -304,7 +312,7 @@ module.exports = {
             );
 
         // Send message
-        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), files: [img2], components: [row] });
+        const message = await channel.send({ content: 'Vous avez reçu une réponse ' + receiver.toString(), files: img2 ? [img2] : [], embeds: embed ? [embed] : [], components: [row] });
 
         // Save to DB
         await messageDB.insertMessage(message.id, channel.id, id_user_sender, content);

@@ -154,6 +154,38 @@ async function createGifWithText(text, color, letterUrl, gifUrl) {
     };
 }
 
+function computeMaxTextOnLetter(text) {
+    const lines = text.split('\n');
+    let maxLines = 0;
+
+    const canvas = createBaseImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    const ctx = canvas.getContext('2d');
+    ctx.font = `${FONT_SIZE}px Journal`;
+
+    for (const line of lines) {
+        const words = line.split(' ');
+        let testLine = '';
+
+        for (const word of words) {
+            const newLine = testLine + word + ' ';
+            const metrics = ctx.measureText(newLine);
+            const testWidth = metrics.width;
+
+            if (testWidth > LETTER_WIDTH - 105 && testLine.length > 0) {
+                console.log('testLine', testLine);
+                maxLines++;
+                testLine = word + ' ';
+            } else {
+                testLine = newLine;
+            }
+        }
+        maxLines++;
+    }
+
+    return maxLines;
+}
+
 module.exports = {
-    createMyCustomImage: createMyCustomImage
+    createMyCustomImage: createMyCustomImage,
+    computeMaxTextOnLetter: computeMaxTextOnLetter
 };
