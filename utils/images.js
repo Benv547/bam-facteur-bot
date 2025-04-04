@@ -13,7 +13,7 @@ const LETTER_HEIGHT = DEFAULT_HEIGHT - 140;
 const LETTER_X = 50;
 const LETTER_Y = 70;
 const LINE_HEIGHT = 28;
-const FONT_SIZE = 36;
+const FONT_SIZE = 30;
 
 const DEFAULT_TEXT = "Lorem 🥨 ipsum dolor sit amet, consectetur adipiscing elit. Etiam accumsan tempus dui, 🥘 eget venenatis elit dignissim id. Suspendisse eleifend venenatis tortor id congue. 🍬 Maecenas sed finibus tellus. Fusce🍬 🍬viverra sagittis libero, quis aliquam tortor facilisis ac. Nulla facilisi. Ut a hendrerit ligula. Curabitur id dolor non ligula egestas scelerisque id non leo. Maecenas commodo, arcu sed suscipit vehicula, velit nunc posuere massa, in imperdiet nunc purus non urna. Aliquam erat volutpat. Nulla id odio non diam malesuada commodo. Nulla id ligula nibh. Cras ultricies rhoncus ipsum id dapibus. Integer ut enim mi.\n" +
     "\n" +
@@ -21,8 +21,12 @@ const DEFAULT_TEXT = "Lorem 🥨 ipsum dolor sit amet, consectetur adipiscing el
 
 // const FONT_PATH_DYSLEXIC = resolve('fonts', 'open-dyslexic.ttf');
 // registerFont(FONT_PATH_DYSLEXIC, { family: 'OpenDyslexic' });
-const FONT_PATH = resolve('fonts', 'journal.ttf');
-registerFont(FONT_PATH, { family: 'Journal' });
+// const FONT_PATH = resolve('fonts', 'journal.ttf');
+// registerFont(FONT_PATH, { family: 'Journal' });
+// const FONT_PATH = resolve('fonts', 'Vertically.otf');
+// registerFont(FONT_PATH, { family: 'Vertically' });
+const FONT_PATH = resolve('fonts', 'SimpleLetter.otf');
+registerFont(FONT_PATH, { family: 'SimpleLetter' });
 console.log('Font loaded !');
 
 function createBaseImage(width, height) {
@@ -38,7 +42,7 @@ function createBaseImage(width, height) {
 function writeTextOnImage(ctx, text, color, x, y, maxWidth) {
     const lines = text.split('\n');
 
-    ctx.font = `${FONT_SIZE}px Journal`;
+    ctx.font = `${FONT_SIZE}px SimpleLetter`;
     ctx.fillStyle = '#' + color;
 
     for (const line of lines) {
@@ -160,7 +164,7 @@ function computeMaxTextOnLetter(text) {
 
     const canvas = createBaseImage(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     const ctx = canvas.getContext('2d');
-    ctx.font = `${FONT_SIZE}px Journal`;
+    ctx.font = `${FONT_SIZE}px SimpleLetter`;
 
     for (const line of lines) {
         const words = line.split(' ');
@@ -172,7 +176,6 @@ function computeMaxTextOnLetter(text) {
             const testWidth = metrics.width;
 
             if (testWidth > LETTER_WIDTH - 105 && testLine.length > 0) {
-                console.log('testLine', testLine);
                 maxLines++;
                 testLine = word + ' ';
             } else {
