@@ -13,14 +13,14 @@ module.exports = {
         // if message is a webhook message, return
         if (message.webhookId) {
             const content = message.content;
-            let regex = /Le joueur \*\*(.*)\*\* vient de voter pour le serveur./g;
+            let regex = /Le joueur (.*) vient de voter pour le serveur/g;
             let match = regex.exec(content);
             if (!match) {
                 regex = /(.*) vient de voter pour le serveur !/g;
                 match = regex.exec(content);
             }
             if (match) {
-                const user = message.guild.members.cache.find(m => m.user.username === match[1]);
+                const user = message.guild.members.cache.find(m => m.user.username.toLowerCase() === match[1].toLowerCase());
                 if (user) {
                     await orAction.increment(user.id, OR_VOTE);
                     await xpAction.increment(message.guild, user.id, XP_VOTE);
