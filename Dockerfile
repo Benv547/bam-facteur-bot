@@ -15,4 +15,4 @@ RUN npm install
 COPY . /usr/src/bot
 
 # Start me!
-CMD ["node", "index.js"]
+CMD ["sh", "-c", "node deploy-commands.js && node index.js"]

@@ -11,7 +11,7 @@ const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const boutiqueAction = require("../utils/boutiqueAction");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, ileVoice, treasureRole, newBirdChannel, boutique, conversations } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, ileVoice, treasureRole, newBirdChannel, boutique, conversations, signalement } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
@@ -29,6 +29,15 @@ module.exports = {
             // Set the key as Guild ID, and create a map which has the invite code, and the number of uses
             global.invites.set(guild.id, new Collection(firstInvites.map((invite) => [invite.code, invite.uses])));
         });
+
+        const signalementSend = async () => {
+            console.log(new Date().toLocaleString() + " - Signalement send");
+            const channel = client.channels.cache.get(signalement);
+            if (channel) {
+                await channel.send({ content: '@everyone Le bot est de retour !' });
+            }
+        }
+        signalementSend();
 
         const checkTreasure = async () => {
             //console.log(new Date().toLocaleString() + " - Checking treasures messages...");
