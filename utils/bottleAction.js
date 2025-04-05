@@ -219,6 +219,7 @@ module.exports = {
             // for each member in channel, remove permission
             const members = await channel.members;
             for (const member of members) {
+                if (member[0] === id_user_sender) continue;
                 await channel.permissionOverwrites.delete(member[0]);
             }
 
