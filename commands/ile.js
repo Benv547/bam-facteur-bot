@@ -8,16 +8,16 @@ const { levels } = require('../xp.json');
 
 module.exports = {
     public: true,
-    price: 700,
+    price: 200,
     data: new SlashCommandBuilder()
         .setName('ile')
         .setDescription('Rejoignez une île !'),
     async execute(interaction) {
 
         const user = await userDB.getUser(interaction.user.id);
-        if (user === null || user.xp < levels[2].xp) {
+        if (user === null || user.xp < levels[4].xp) {
             // Fetch role
-            const role = await interaction.guild.roles.fetch(levels[2].role);
+            const role = await interaction.guild.roles.fetch(levels[4].role);
             return interaction.reply({content: 'Vous n\'avez pas assez d\'<:xp:851123277497237544> pour rejoindre une île.\nRevenez me voir quand vous aurez atteint le **' + role.name + '**.', ephemeral: true});
         }
 
