@@ -6,10 +6,10 @@ const {wantedChannel} = require("../config.json");
 const wantedDB = require("../database/wanted");
 const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
-const createEmbeds = require("../utils/createEmbeds");
-const stickerDB = require("../database/sticker");
 const xpAction = require("../utils/xpAction");
-const footerDB = require("../database/footer");
+const backgroundDB = require("../database/background");
+const letterDB = require("../database/letter");
+const images = require("../utils/images");
 
 module.exports = {
     name: 'replyWanted',
@@ -75,9 +75,18 @@ module.exports = {
             }
 
             const channel = await interaction.guild.channels.fetch(id_channel);
+            const guild = interaction.guild;
             await interaction.reply({ content: 'Votre réponse a été envoyée.', ephemeral: true });
 
-            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
+            const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
+            const background = await backgroundDB.getBackground(user_background.id_background);
+
+            const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
+            const letter = await letterDB.getLetter(user_letter.id_letter);
+
+            const img = await images.createMyCustomImage(content + '\n\n - ' + sender.signature, sender.color, letter.url, background.url);
+
+            // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, sender.signature, sender.color, sender.id_footer);
 
             const row = new ActionRowBuilder()
                 .addComponents(
@@ -97,7 +106,7 @@ module.exports = {
             const member = await interaction.guild.members.fetch(id_user);
 
             // Send message to channel of interaction
-            const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), embeds: [embed], components: [row] });
+            const message = await channel.send({ content: 'Vous avez reçu une réponse ' + member.toString(), files: [img], components: [row] });
 
             await wantedDB.insertWantedResponse(id_channel, interaction.guildId, interaction.member.id, message.id, content);
 

@@ -32,5 +32,27 @@ module.exports = {
             return results.rows[0].randNumber;
         }
         return null;
+    },
+
+    createUserIleTicket: async function (id_user) {
+        const pool = db.getPool();
+        return await pool.query('INSERT INTO "User_ile_ticket" ("id_user") VALUES ($1)', [id_user]);
+    },
+    checkUserIleTicket: async function () {
+        const pool = db.getPool();
+        // delete all tickets for the user when date is expired, and return all id_user
+        const results = await pool.query('DELETE FROM "User_ile_ticket" WHERE "date" < NOW() RETURNING "id_user"');
+        if (results.rows.length > 0) {
+            return results.rows;
+        }
+        return [];
+    },
+    getUserIleTicketDate: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('SELECT "date" FROM "User_ile_ticket" WHERE id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0].date;
+        }
+        return null;
     }
 };

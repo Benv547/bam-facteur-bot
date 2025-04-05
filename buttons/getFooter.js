@@ -1,4 +1,4 @@
-const footerDB = require("../database/footer");
+// const footerDB = require("../database/footer");
 const userDB = require("../database/user");
 
 module.exports = {

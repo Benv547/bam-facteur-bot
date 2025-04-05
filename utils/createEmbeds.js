@@ -1,6 +1,4 @@
 const {EmbedBuilder} = require("discord.js");
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
 
 module.exports = {
     createBottle: async function (content, diceBearSeed, id_sticker, signature, color, id_footer) {
@@ -10,20 +8,6 @@ module.exports = {
             .setAuthor({ name: signature, iconURL: 'https://api.dicebear.com/7.x/adventurer-neutral/png?seed=' + diceBearSeed})
             .setDescription(content)
             .setTimestamp();
-
-        const sticker = await stickerDB.getSticker(id_sticker);
-        let stickerUrl = null;
-        if (sticker !== null) {
-            stickerUrl = sticker.url;
-            embed.setThumbnail(stickerUrl);
-        }
-
-        const footer = await footerDB.getFooter(id_footer);
-        let footerUrl = null;
-        if (footer !== null) {
-            footerUrl = footer.url;
-            embed.setImage(footerUrl);
-        }
 
         return embed;
     },

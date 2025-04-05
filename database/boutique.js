@@ -29,14 +29,14 @@ module.exports = {
         const pool = db.getPool();
         await pool.query('UPDATE "Product" SET boutique = false WHERE boutique = true');
     },
-    set3RandomStickersWinnableInTheBoutique: async function () {
+    set3RandomBackgroundsWinnableInTheBoutique: async function () {
         const pool = db.getPool();
-        // inner join with sticker to check if the sticker is winnable
-        await pool.query('UPDATE "Product" SET boutique = true WHERE id_item IN (SELECT id_sticker FROM "Product" INNER JOIN "Sticker" ON "Product".id_item = "Sticker".id_sticker WHERE "Sticker".winnable = true AND "Product".type = \'sticker\' ORDER BY random() LIMIT 3)');
+        // inner join with background to check if the background is winnable
+        await pool.query('UPDATE "Product" SET boutique = true WHERE id_item IN (SELECT id_background FROM "Product" INNER JOIN "Background" ON "Product".id_item = "Background".id_background WHERE "Background".winnable = true AND "Product".type = \'background\' ORDER BY random() LIMIT 3)');
     },
     set3RandomArabesquesWinnableInTheBoutique: async function () {
         const pool = db.getPool();
-        // inner join with sticker to check if the sticker is winnable
+        // inner join with background to check if the background is winnable
         await pool.query('UPDATE "Product" SET boutique = true WHERE id_item IN (SELECT id_footer FROM "Product" INNER JOIN "Footer" ON "Product".id_item = "Footer".id_footer WHERE "Footer".winnable = true AND "Product".type = \'arabesque\' ORDER BY random() LIMIT 3)');
     },
 };

@@ -7,7 +7,10 @@ DROP TABLE IF EXISTS "User_Achievement" CASCADE;
 DROP TABLE IF EXISTS "Achievement" CASCADE;
 DROP TABLE IF EXISTS "Message" CASCADE;
 DROP TABLE IF EXISTS "Message_ile" CASCADE;
-DROP TABLE IF EXISTS "User_Sticker" CASCADE;
+DROP TABLE IF EXISTS "User_ile_ticket" CASCADE;
+DROP TABLE IF EXISTS "User_Background" CASCADE;
+DROP TABLE IF EXISTS "User_Letter" CASCADE;
+DROP TABLE IF EXISTS "User_Decoration" CASCADE;
 DROP TABLE IF EXISTS "Vote" CASCADE;
 DROP TABLE IF EXISTS "Suggestion" CASCADE;
 DROP TABLE IF EXISTS "Help" CASCADE;
@@ -15,11 +18,14 @@ DROP TABLE IF EXISTS "Signalement" CASCADE;
 DROP TABLE IF EXISTS "Opinion" CASCADE;
 DROP TABLE IF EXISTS "Ticket" CASCADE;
 DROP TABLE IF EXISTS "Bottle" CASCADE;
+DROP TABLE IF EXISTS "BottleStartExample" CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Couleur" CASCADE;
 DROP TABLE IF EXISTS "Etat" CASCADE;
 DROP TABLE IF EXISTS "Emoji" CASCADE;
-DROP TABLE IF EXISTS "Sticker" CASCADE;
+DROP TABLE IF EXISTS "Decoration" CASCADE;
+DROP TABLE IF EXISTS "Letter" CASCADE;
+DROP TABLE IF EXISTS "Background" CASCADE;
 DROP TABLE IF EXISTS "User_ile" CASCADE;
 DROP TABLE IF EXISTS "Profile_ile" CASCADE;
 DROP TABLE IF EXISTS "Bird" CASCADE;
@@ -39,289 +45,321 @@ DROP TABLE IF EXISTS "User_Footer" CASCADE;
 
 
 CREATE TABLE "Product" (
-    "id_product" SERIAL NOT NULL,
-    "id_item" INT NOT NULL,
-    "price" INT NOT NULL,
-    "type" VARCHAR(255) NOT NULL,
-    "boutique" BOOLEAN NOT NULL DEFAULT FALSE
+                           "id_product" SERIAL NOT NULL,
+                           "id_item" INT NOT NULL,
+                           "price" INT NOT NULL,
+                           "type" VARCHAR(255) NOT NULL,
+                           "boutique" BOOLEAN NOT NULL DEFAULT FALSE,
+                           "boutique_premium" BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE "Record" (
-  "score" bigint NOT NULL,
-  "date" timestamp NOT NULL DEFAULT current_timestamp,
-  "type" varchar(255) NOT NULL
+                          "score" bigint NOT NULL,
+                          "date" timestamp NOT NULL DEFAULT current_timestamp,
+                          "type" varchar(255) NOT NULL
 );
 
 CREATE TABLE "User" (
-  "id_user" bigint PRIMARY KEY,
-  "money" int default 0,
-  "money_spent" int default 0,
-  "xp" int default 0,
-  "diceBearSeed" text NOT NULL default md5(random()::text),
-  "signature" text NOT NULL default 'Un•e illustre inconnu•e',
-  "color" varchar(6) NOT NULL default substring(md5(random()::text), 1, 6),
-  "id_sticker" int NOT NULL default 1,
-  "id_footer" int,
-  "anniversaireJour" int,
-  "anniversaireMois" int,
-  "isVIP" boolean NOT NULL default false,
-  "nb_treasures" int NOT NULL default 0,
-  "date_bottle" timestamp,
-  "date_bird" timestamp,
-  "date_wanted" timestamp,
-  "date_treasure" timestamp,
-  "afk_number" int NOT NULL default 0
+                        "id_user" bigint PRIMARY KEY,
+                        "money" int default 0,
+                        "money_spent" int default 0,
+                        "corail" int default 0,
+                        "corail_spent" int default 0,
+                        "xp" int default 0,
+                        "signature" text NOT NULL default 'Un•e illustre inconnu•e',
+                        "anniversaireJour" int,
+                        "anniversaireMois" int,
+                        "color" varchar(6) NOT NULL default '000000',
+                        "isVIP" boolean NOT NULL default false,
+                        "nb_treasures" int NOT NULL default 0,
+                        "date_bottle" timestamp,
+                        "date_bird" timestamp,
+                        "date_wanted" timestamp,
+                        "date_treasure" timestamp,
+                        "afk_number" int NOT NULL default 0
 );
 
 CREATE TABLE "Sticky" (
-    "id_guild" bigint NOT NULL,
-    "id_channel" bigint NOT NULL,
-    "id_message" bigint NOT NULL,
-    "id_lastReply" bigint
+                          "id_guild" bigint NOT NULL,
+                          "id_channel" bigint NOT NULL,
+                          "id_message" bigint NOT NULL,
+                          "id_lastReply" bigint
 );
 
 CREATE TABLE "Achievement" (
-    "id_achievement" serial PRIMARY KEY,
-    "name" varchar(255) NOT NULL,
-    "rarity" varchar(255) NOT NULL,
-    "description" text NOT NULL,
-    "type" varchar(255) NOT NULL,
-    "value" text NOT NULL,
-    "id_sticker" int
+                               "id_achievement" serial PRIMARY KEY,
+                               "name" varchar(255) NOT NULL,
+                               "rarity" varchar(255) NOT NULL,
+                               "description" text NOT NULL,
+                               "type" varchar(255) NOT NULL,
+                               "value" text NOT NULL,
+                               "id_sticker" int
 );
 
 CREATE TABLE "User_Achievement" (
-    "id_user" bigint NOT NULL,
-    "id_achievement" int NOT NULL,
-    "date" timestamp NOT NULL DEFAULT current_timestamp
+                                    "id_user" bigint NOT NULL,
+                                    "id_achievement" int NOT NULL,
+                                    "date" timestamp NOT NULL DEFAULT current_timestamp
 );
 
 CREATE TABLE "Invite" (
-    "id_user_inviter" bigint NOT NULL,
-    "id_user_invited" bigint NOT NULL
+                          "id_user_inviter" bigint NOT NULL,
+                          "id_user_invited" bigint NOT NULL
 );
 
-CREATE TABLE "Sticker" (
-    "id_sticker" serial PRIMARY KEY,
-    "name" text NOT NULL,
-    "url" text NOT NULL,
-    "sharable" boolean NOT NULL default false,
-    "winnable" boolean NOT NULL default false,
-    "sharable_percentage" float NOT NULL default 0.0
+CREATE TABLE "Background" (
+                              "id_background" serial PRIMARY KEY,
+                              "name" text NOT NULL,
+                              "url" text NOT NULL,
+                              "sharable" boolean NOT NULL default false,
+                              "winnable" boolean NOT NULL default false,
+                              "sharable_percentage" float NOT NULL default 0.0
 );
 
-CREATE TABLE "User_Sticker" (
-    "id_user" bigint NOT NULL,
-    "id_sticker" int NOT NULL,
-    "id_guild" bigint NOT NULL,
-    PRIMARY KEY ("id_user", "id_sticker", "id_guild")
+CREATE TABLE "User_Background" (
+                                   "id_user" bigint NOT NULL,
+                                   "id_background" int NOT NULL,
+                                   "id_guild" bigint NOT NULL,
+                                   "applied" boolean NOT NULL default false,
+                                   "occurrence" int NOT NULL default 1,
+                                   PRIMARY KEY ("id_user", "id_background", "id_guild")
 );
 
-CREATE TABLE "Footer" (
-    "id_footer" SERIAL PRIMARY KEY,
-    "name" text NOT NULL,
-    "url" text NOT NULL,
-    "sharable" boolean NOT NULL default false,
-    "winnable" boolean NOT NULL default false,
-    "sharable_percentage" float NOT NULL default 0.0
+CREATE TABLE "Letter" (
+                          "id_letter" serial PRIMARY KEY,
+                          "name" text NOT NULL,
+                          "url" text NOT NULL,
+                          "sharable" boolean NOT NULL default false,
+                          "winnable" boolean NOT NULL default false,
+                          "sharable_percentage" float NOT NULL default 0.0
 );
 
-CREATE TABLE "User_Footer" (
-    "id_user" bigint NOT NULL,
-    "id_footer" int NOT NULL,
-    "id_guild" bigint NOT NULL,
-    PRIMARY KEY ("id_user", "id_footer")
+CREATE TABLE "User_Letter" (
+                               "id_user" bigint NOT NULL,
+                               "id_letter" int NOT NULL,
+                               "id_guild" bigint NOT NULL,
+                               "applied" boolean NOT NULL default false,
+                               "occurrence" int NOT NULL default 1,
+                               PRIMARY KEY ("id_user", "id_letter", "id_guild")
+);
+
+CREATE TABLE "Decoration" (
+                              "id_decoration" serial PRIMARY KEY,
+                              "name" text NOT NULL,
+                              "url" text NOT NULL,
+                              "sharable" boolean NOT NULL default false,
+                              "winnable" boolean NOT NULL default false,
+                              "sharable_percentage" float NOT NULL default 0.0
+);
+
+CREATE TABLE "User_Decoration" (
+                                   "id_user" bigint NOT NULL,
+                                   "id_decoration" int NOT NULL,
+                                   "id_guild" bigint NOT NULL,
+                                   "applied" boolean NOT NULL default false,
+                                   "occurrence" int NOT NULL default 1,
+                                   PRIMARY KEY ("id_user", "id_decoration", "id_guild")
 );
 
 CREATE TABLE "Message" (
-  "id_message" bigint PRIMARY KEY,
-  "id_bottle" bigint,
-  "id_user" bigint,
-  "date" timestamp default current_timestamp,
-  "content" text
+                           "id_message" bigint PRIMARY KEY,
+                           "id_bottle" bigint,
+                           "id_user" bigint,
+                           "date" timestamp default current_timestamp,
+                           "content" text
 );
 
 CREATE TABLE "Couleur" (
-  "couleur" text PRIMARY KEY
+                           "couleur" text PRIMARY KEY
 );
 
 CREATE TABLE "Emoji" (
-  "emoji" text PRIMARY KEY
+                         "emoji" text PRIMARY KEY
 );
 
 CREATE TABLE "Etat" (
-  "etat" text PRIMARY KEY
+                        "etat" text PRIMARY KEY
 );
 
 CREATE TABLE "Bottle" (
-  "id_bottle" bigint PRIMARY KEY,
-  "id_guild" bigint,
-  "id_user_sender" bigint,
-  "id_user_receiver" bigint,
-  "id_user_author" bigint,
-  "id_user_recipient" bigint,
-  "id_channel" bigint,
-  "name" varchar(50),
-  "nb_sea" int default 0,
-  "archived" boolean default false,
-  "terminated" boolean default false,
-  "date" timestamp default current_timestamp
+                          "id_bottle" bigint PRIMARY KEY,
+                          "id_guild" bigint,
+                          "id_user_sender" bigint,
+                          "id_user_receiver" bigint,
+                          "id_user_author" bigint,
+                          "id_user_recipient" bigint,
+                          "id_channel" bigint,
+                          "name" varchar(50),
+                          "nb_sea" int default 0,
+                          "archived" boolean default false,
+                          "terminated" boolean default false,
+                          "date" timestamp default current_timestamp
+);
+
+CREATE TABLE "BottleStartExample" (
+                          "text" text NOT NULL
 );
 
 CREATE TABLE "Wanted" (
-    "id_channel" bigint PRIMARY KEY,
-    "id_guild" bigint NOT NULL,
-    "id_user" bigint NOT NULL,
-    "id_message" bigint NOT NULL,
-    "name" varchar(50) NOT NULL,
-    "content" text NOT NULL,
-    "archived" boolean NOT NULL default false,
-    "date" timestamp default current_timestamp
+                          "id_channel" bigint PRIMARY KEY,
+                          "id_guild" bigint NOT NULL,
+                          "id_user" bigint NOT NULL,
+                          "id_message" bigint NOT NULL,
+                          "name" varchar(50) NOT NULL,
+                          "content" text NOT NULL,
+                          "archived" boolean NOT NULL default false,
+                          "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "WantedResponse" (
-    "id_channel" bigint NOT NULL,
-    "id_guild" bigint NOT NULL,
-    "id_user" bigint NOT NULL,
-    "id_message" bigint NOT NULL,
-    "content" text NOT NULL,
-    "date" timestamp default current_timestamp
+                                  "id_channel" bigint NOT NULL,
+                                  "id_guild" bigint NOT NULL,
+                                  "id_user" bigint NOT NULL,
+                                  "id_message" bigint NOT NULL,
+                                  "content" text NOT NULL,
+                                  "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Bird" (
-    "id_bird" serial PRIMARY KEY,
-    "id_channel" bigint NOT NULL,
-    "id_guild" bigint NOT NULL,
-    "id_user" bigint NOT NULL,
-    "name" varchar(50) NOT NULL,
-    "content" text NOT NULL,
-    "sea" int NOT NULL default 0,
-    "archived" boolean NOT NULL default false,
-    "date" timestamp default current_timestamp
+                        "id_bird" serial PRIMARY KEY,
+                        "id_channel" bigint NOT NULL,
+                        "id_guild" bigint NOT NULL,
+                        "id_user" bigint NOT NULL,
+                        "name" varchar(50) NOT NULL,
+                        "content" text NOT NULL,
+                        "sea" int NOT NULL default 0,
+                        "archived" boolean NOT NULL default false,
+                        "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "BirdReaction" (
-    "id_bird" int NOT NULL,
-    "id_user" bigint NOT NULL,
-    "id_emoji" varchar(10) NOT NULL,
-    "date" timestamp default current_timestamp
+                                "id_bird" int NOT NULL,
+                                "id_user" bigint NOT NULL,
+                                "id_emoji" varchar(10) NOT NULL,
+                                "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Sanctions" (
-  "id_user" bigint,
-  "id_mod" bigint,
-  "gravity" varchar(15),
-  "content" text,
-  "date" timestamp default current_timestamp
+                             "id_user" bigint,
+                             "id_mod" bigint,
+                             "gravity" varchar(15),
+                             "content" text,
+                             "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Ticket" (
-  "id_user" bigint PRIMARY KEY,
-  "id_channel" bigint,
-  "id_guild" bigint
+                          "id_user" bigint PRIMARY KEY,
+                          "id_channel" bigint,
+                          "id_guild" bigint
 );
 
 CREATE TABLE "Signalement" (
-    "id_message" bigint PRIMARY KEY,
-    "id_sender" bigint,
-    "id_receiver" bigint,
-    "content" text,
-    "type" varchar(255) NOT NULL
+                               "id_message" bigint PRIMARY KEY,
+                               "id_sender" bigint,
+                               "id_receiver" bigint,
+                               "content" text,
+                               "type" varchar(255) NOT NULL
 );
 CREATE TABLE "SignalementBottle" (
-    "id_message" bigint PRIMARY KEY,
-    "id_bottle" bigint
+                                     "id_message" bigint PRIMARY KEY,
+                                     "id_bottle" bigint
 );
 CREATE TABLE "SignalementWanted" (
-    "id_message" bigint PRIMARY KEY,
-    "id_message_wanted" bigint,
-    "id_channel" bigint
+                                     "id_message" bigint PRIMARY KEY,
+                                     "id_message_wanted" bigint,
+                                     "id_channel" bigint
 );
 CREATE TABLE "SignalementTicket" (
-    "id_message" bigint PRIMARY KEY,
-    "id_message_ticket" bigint,
-    "id_channel" bigint
+                                     "id_message" bigint PRIMARY KEY,
+                                     "id_message_ticket" bigint,
+                                     "id_channel" bigint
 );
 CREATE TABLE "SignalementSuggestion" (
-    "id_message" bigint PRIMARY KEY,
-    "id_message_suggestion" bigint,
-    "id_channel" bigint
+                                         "id_message" bigint PRIMARY KEY,
+                                         "id_message_suggestion" bigint,
+                                         "id_channel" bigint
 );
 CREATE TABLE "SignalementHelp" (
-    "id_message" bigint PRIMARY KEY,
-    "id_message_help" bigint,
-    "id_channel" bigint
+                                   "id_message" bigint PRIMARY KEY,
+                                   "id_message_help" bigint,
+                                   "id_channel" bigint
 );
 CREATE TABLE "SignalementBird" (
-    "id_message" bigint PRIMARY KEY,
-    "id_channel" bigint
+                                   "id_message" bigint PRIMARY KEY,
+                                   "id_channel" bigint
 );
 CREATE TABLE "SignalementIleMessage" (
-    "id_message" bigint PRIMARY KEY,
-    "id_message_ile" bigint,
-    "id_channel" bigint
+                                         "id_message" bigint PRIMARY KEY,
+                                         "id_message_ile" bigint,
+                                         "id_channel" bigint
 );
 
 CREATE TABLE "Opinion" (
-    "id_message" bigint PRIMARY KEY,
-    "id_user" bigint,
-    "content" text,
-    "date" timestamp default current_timestamp
+                           "id_message" bigint PRIMARY KEY,
+                           "id_user" bigint,
+                           "content" text,
+                           "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Suggestion" (
-    "id_message" bigint PRIMARY KEY,
-    "id_thread" bigint,
-    "id_user" bigint,
-    "content" text,
-    "isReply" boolean default false,
-    "date" timestamp default current_timestamp,
-    "id" serial
+                              "id_message" bigint PRIMARY KEY,
+                              "id_thread" bigint,
+                              "id_user" bigint,
+                              "content" text,
+                              "isReply" boolean default false,
+                              "date" timestamp default current_timestamp,
+                              "id" serial
 );
 
 CREATE TABLE "Vote" (
-    "id_message" bigint,
-    "id_user" bigint,
-    "vote" boolean
+                        "id_message" bigint,
+                        "id_user" bigint,
+                        "vote" boolean
 );
 
 CREATE TABLE "Help" (
-    "id_message" bigint,
-    "id_thread" bigint,
-    "id_user" bigint,
-    "content" text,
-    "isReply" boolean default false,
-    "date" timestamp default current_timestamp
+                        "id_message" bigint,
+                        "id_thread" bigint,
+                        "id_user" bigint,
+                        "content" text,
+                        "isReply" boolean default false,
+                        "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Hourly" (
-    "id_user" bigint PRIMARY KEY,
-    "lastHourly" timestamp default current_timestamp
+                          "id_user" bigint PRIMARY KEY,
+                          "lastHourly" timestamp default current_timestamp
 );
 
 CREATE TABLE "Message_ile" (
-    "id_message" bigint PRIMARY KEY,
-    "id_user" bigint,
-    "id_channel" bigint,
-    "id_guild" bigint,
-    "content" text,
-    "date" timestamp default current_timestamp
+                               "id_message" bigint PRIMARY KEY,
+                               "id_user" bigint,
+                               "id_channel" bigint,
+                               "id_guild" bigint,
+                               "content" text,
+                               "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "Profile_ile" (
-    "id_profile" serial PRIMARY KEY,
-    "signature" text NOT NULL default 'Un•e illustre inconnu•e',
-    "image_url" text NOT NULL
+                               "id_profile" serial PRIMARY KEY,
+                               "signature" text NOT NULL default 'Un•e illustre inconnu•e',
+                               "image_url" text NOT NULL
 );
 
 CREATE TABLE "User_ile" (
-    "id_user" bigint PRIMARY KEY,
-    "id_channel" bigint NOT NULL,
-    "id_profile" int NOT NULL,
-    "randNumber" int NOT NULL default trunc(random() * 8999 + 1000)
+                            "id_user" bigint PRIMARY KEY,
+                            "id_channel" bigint NOT NULL,
+                            "id_profile" int NOT NULL,
+                            "randNumber" int NOT NULL default trunc(random() * 8999 + 1000)
+);
+
+CREATE TABLE "User_ile_ticket" (
+                            "id_user" bigint NOT NULL,
+                            "date" timestamp NOT NULL default current_timestamp + interval '7 days'
 );
 
 ALTER TABLE "User_ile" ADD FOREIGN KEY ("id_profile") REFERENCES "Profile_ile" ("id_profile") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_ile_ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_bottle") REFERENCES "Bottle" ("id_bottle") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Message" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -354,19 +392,17 @@ ALTER TABLE "Help" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON 
 
 ALTER TABLE "Ticket" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "User" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE SET NULL ON UPDATE CASCADE;
-ALTER TABLE "User" ADD FOREIGN KEY ("id_footer") REFERENCES "Footer" ("id_footer") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "User_Letter" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Letter" ADD FOREIGN KEY ("id_letter") REFERENCES "Letter" ("id_letter") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "User_Sticker" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Background" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Background" ADD FOREIGN KEY ("id_background") REFERENCES "Background" ("id_background") ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE "User_Footer" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "User_Footer" ADD FOREIGN KEY ("id_footer") REFERENCES "Footer" ("id_footer") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Decoration" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "User_Decoration" ADD FOREIGN KEY ("id_decoration") REFERENCES "Decoration" ("id_decoration") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "User_Achievement" ADD FOREIGN KEY ("id_achievement") REFERENCES "Achievement" ("id_achievement") ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE "Achievement" ADD FOREIGN KEY ("id_sticker") REFERENCES "Sticker" ("id_sticker") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_inviter") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Invite" ADD FOREIGN KEY ("id_user_invited") REFERENCES "User" ("id_user") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -414,25 +450,25 @@ INSERT INTO "Couleur" VALUES ('rose'),
                              ('bleue');
 
 INSERT INTO "Etat" VALUES ('cassée'),
-                             ('naufragée'),
-                             ('mousseuse'),
-                             ('dorée'),
-                             ('sale'),
-                             ('étincelante'),
-                             ('polie'),
-                             ('perdue'),
-                             ('rayée'),
-                             ('coupante'),
-                             ('écaillée'),
-                             ('brûlante'),
-                             ('froide'),
-                             ('imaginaire'),
-                             ('douce'),
-                             ('abîmée'),
-                             ('plastique'),
-                             ('étoilée'),
-                             ('boueuse'),
-                             ('argentée');
+                          ('naufragée'),
+                          ('mousseuse'),
+                          ('dorée'),
+                          ('sale'),
+                          ('étincelante'),
+                          ('polie'),
+                          ('perdue'),
+                          ('rayée'),
+                          ('coupante'),
+                          ('écaillée'),
+                          ('brûlante'),
+                          ('froide'),
+                          ('imaginaire'),
+                          ('douce'),
+                          ('abîmée'),
+                          ('plastique'),
+                          ('étoilée'),
+                          ('boueuse'),
+                          ('argentée');
 
 -- Get all emoji from https://emojipedia.org/ who correpond to autumn season
 INSERT INTO "Emoji" VALUES ('🍂'),
@@ -453,62 +489,30 @@ INSERT INTO "Emoji" VALUES ('🍂'),
                            ('🎑'),
                            ('🌇');
 
--- Insert stickers for achievements
-INSERT INTO "Sticker" ("name", "url") VALUES ('Ma bouteille', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png'),
-                                                                                            ('Bouteille échouée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036280255666733087/bouteille_echouee.png'),
-                                                                                            ('Trésor vide', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507425742868/tresorvide.png'),
-                                                                                            ('Trésor remplis', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037428766785421432/tresor.png'),
-                                                                                            ('Trésor débordant', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037487507325063320/tresordebordant.png'),
-                                                                                            ('Coffre fermé', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037485184716652544/pirate.png'),
-                                                                                            ('Bretagne', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036973819283378257/bretagne.png'),
-                                                                                            ('Etoile montante', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036967149899624518/vip.png'),
-                                                                                            ('3 étoiles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037430577323835442/3etoiles.png'),
-                                                                                            ('Parchemin', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037695619571134475/parchemin.png'),
-                                                                                            ('Parchemin doré', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037695620279963668/parcheminor.png'),
-                                                                                            ('Coeur de crystal', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037477249076699137/avis.png'),
-                                                                                            ('Ampoule', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037471320021160057/suggestion.png'),
-                                                                                            ('Valise', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037766312526618715/valise.png'),
-                                                                                            ('Botte', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037770415197659267/botte.png'),
-                                                                                            ('Raz-de-marée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037772293675434004/mes_bouteilles.png'),
-                                                                                            ('Bouteilles échouées', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037774771854790748/mes_bouteille_echouees.png'),
-                                                                                            ('Couronne', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037809961020964884/Couronne.png'),
-                                                                                            ('Fauché•e', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037819169137250314/Pochevide.png'),
-                                                                                            ('Tirelire cassée', 'https://cdn.discordapp.com/attachments/1004073840093184000/1037824800149753957/cochonvide.png');
-
--- Insert stickers
-INSERT INTO "Sticker" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Plage', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162271353188434/plage.png', true, false, 0.01),
-                                             ('Biche', 'https://cdn.discordapp.com/attachments/1004073840093184000/1036971155011153980/biche.png', true, true, 0.2),
-                                             ('Panda', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653282252328961/panda.png', true, false, 0.1),
-                                             ('Ours', 'https://cdn.discordapp.com/attachments/1004073840093184000/1031653281539305542/ours.png', true, true, 0.1),
-                                             ('Bulles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162265934135346/bulle.png', true, true, 0.2),
-                                             ('Lanternes', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162007221075998/lanterne.png', true, true, 0.2),
-                                             ('Désert', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162005354614845/desert.png', true, true, 0.1),
-                                             ('Vague', 'https://cdn.discordapp.com/attachments/1004073840093184000/1030162005266538516/vague.png', true, true, 0.02);
-
 INSERT INTO "Achievement" ("name", "description", "rarity", "type", "value", "id_sticker") VALUES ('Océan messager', 'Vous avez envoyé votre première bouteille !', 'commun', 'bottleSend', 1, 1),
-                                                                                    ('Courrier marin', 'Vous avez reçu votre première bouteille !', 'commun', 'bottleReceive', 1, 2),
-                                                                                    ('Pirate sans carte', 'Vous avez trouvé et ouvert un trésor !', 'rare', 'userNbTreasures', 1, 15),
+                                                                                                  ('Courrier marin', 'Vous avez reçu votre première bouteille !', 'commun', 'bottleReceive', 1, 2),
+                                                                                                  ('Pirate sans carte', 'Vous avez trouvé et ouvert un trésor !', 'rare', 'userNbTreasures', 1, 15),
 
-                                                                                    ('Créateur de lien', 'Vous avez envoyé 100 bouteilles !', 'rare', 'bottleSend', 100, 16),
-                                                                                    ('Lecture abondante', 'Vous avez reçu 100 bouteilles !', 'rare', 'bottleReceive', 100, 17),
-                                                                                    ('Pile poil !', 'Vous avez envoyé une bouteille de 2000 caractères !', 'rare', 'messageLength', 2000, 11),
-                                                                                    ('Ecrivain accompli', 'Vous avez envoyé une bouteille de 1500 caractères !', 'rare', 'messageLength', 1500, 10),
-                                                                                    ('Une croix rouge', 'Vous avez trouvé et ouvert 100 trésors !', 'rare', 'userNbTreasures', 50, 14),
-                                                                                    ('Une suggestion suggestive', 'Vous avez envoyé une suggestion !', 'rare', 'suggestionSent', 1, 13),
-                                                                                    ('Un avis bien tranché', 'Vous avez envoyé un avis !', 'rare', 'opinionSent', 1, 12),
-                                                                                    ('Dépensier', 'Vous avez dépensé 10 000 pièces d''or !', 'rare', 'userMoneySpent', 10000, 19),
+                                                                                                  ('Créateur de lien', 'Vous avez envoyé 100 bouteilles !', 'rare', 'bottleSend', 100, 16),
+                                                                                                  ('Lecture abondante', 'Vous avez reçu 100 bouteilles !', 'rare', 'bottleReceive', 100, 17),
+                                                                                                  ('Pile poil !', 'Vous avez envoyé une bouteille de 2000 caractères !', 'rare', 'messageLength', 2000, 11),
+                                                                                                  ('Ecrivain accompli', 'Vous avez envoyé une bouteille de 1500 caractères !', 'rare', 'messageLength', 1500, 10),
+                                                                                                  ('Une croix rouge', 'Vous avez trouvé et ouvert 100 trésors !', 'rare', 'userNbTreasures', 50, 14),
+                                                                                                  ('Une suggestion suggestive', 'Vous avez envoyé une suggestion !', 'rare', 'suggestionSent', 1, 13),
+                                                                                                  ('Un avis bien tranché', 'Vous avez envoyé un avis !', 'rare', 'opinionSent', 1, 12),
+                                                                                                  ('Dépensier', 'Vous avez dépensé 10 000 pièces d''or !', 'rare', 'userMoneySpent', 10000, 19),
 
-                                                                                    ('Accro aux projecteurs', 'Vous êtes passé VIP !', 'epic', 'userInvited', 5, 8),
-                                                                                    ('Plus on est de fou...', 'Vous avez invité 10 personnes sur le serveur !', 'epic', 'userInvited', 10, 9),
-                                                                                    ('Plein aux as', 'Vous avez 10 000 pièces d''or sur votre compte !', 'epic', 'userMoneyEarned', 10000, 3),
+                                                                                                  ('Accro aux projecteurs', 'Vous êtes passé VIP !', 'epic', 'userInvited', 5, 8),
+                                                                                                  ('Plus on est de fou...', 'Vous avez invité 10 personnes sur le serveur !', 'epic', 'userInvited', 10, 9),
+                                                                                                  ('Plein aux as', 'Vous avez 10 000 pièces d''or sur votre compte !', 'epic', 'userMoneyEarned', 10000, 3),
 
-                                                                                    ('Panier percé', 'Vous avez dépensé 100 000 pièces d''or !', 'legendaire', 'userMoneySpent', 100000, 20),
-                                                                                    ('Richissime', 'Vous avez 100 000 pièces d''or sur votre compte !', 'legendaire', 'userMoneyEarned', 100000, 4),
-                                                                                    ('Trésor pirate', 'Vous avez trouvé et ouvert 500 trésors !', 'legendaire', 'userNbTreasures', 500, 6),
+                                                                                                  ('Panier percé', 'Vous avez dépensé 100 000 pièces d''or !', 'legendaire', 'userMoneySpent', 100000, 20),
+                                                                                                  ('Richissime', 'Vous avez 100 000 pièces d''or sur votre compte !', 'legendaire', 'userMoneyEarned', 100000, 4),
+                                                                                                  ('Trésor pirate', 'Vous avez trouvé et ouvert 500 trésors !', 'legendaire', 'userNbTreasures', 500, 6),
 
-                                                                                    ('E brezhoneg, mar plij', 'Vous avez écrit un mot en Breton !', 'mythique', 'messageContains', 'Breizh', 7),
-                                                                                    ('Créateur de stars', '5 membres que vous avez invités sont devenus VIP', 'mythique', 'vipUserInvited', 5, 18),
-                                                                                    ('Crésus', 'Vous avez 500 000 pièces d''or sur votre compte !', 'mythique', 'userMoneyEarned', 500000, 5);
+                                                                                                  ('E brezhoneg, mar plij', 'Vous avez écrit un mot en Breton !', 'mythique', 'messageContains', 'Breizh', 7),
+                                                                                                  ('Créateur de stars', '5 membres que vous avez invités sont devenus VIP', 'mythique', 'vipUserInvited', 5, 18),
+                                                                                                  ('Crésus', 'Vous avez 500 000 pièces d''or sur votre compte !', 'mythique', 'userMoneyEarned', 500000, 5);
 
 INSERT INTO "Profile_ile" ("image_url", "signature") VALUES ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612725594591272/america.png', 'Captain America'),
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038612725984673833/baleine.png', 'Baleine'),
@@ -552,11 +556,43 @@ INSERT INTO "Profile_ile" ("image_url", "signature") VALUES ('https://cdn.discor
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364612702249/Loup.png', 'Loup'),
                                                             ('https://cdn.discordapp.com/attachments/1038612651036639353/1038622364931457044/Plume.png', 'Plume');
 
+INSERT INTO "BottleStartExample" ("text") VALUES ('Raconte-moi deux anecdotes vraies et une anecdote fausse sur toi, à moi de deviner laquelle est la fausse.'),
+                                                 ('Décris-moi ta journée sans finir ta phrase, je vais essayer de trouver la suite.'),
+                                                 ('Si tu pouvais échanger ta vie avec quelqu''un pendant une semaine, qui choisirais-tu et pourquoi ?'),
+                                                 ('Si tu pouvais parler couramment une nouvelle langue instantanément, laquelle choisirais-tu et pourquoi ?'),
+                                                 ('Quelle est la chose la plus courageuse que tu aies jamais faite ?'),
+                                                 ('Quelle est la chose la plus étrange que tu aies mangée et comment était-ce ?'),
+                                                 ('Si tu pouvais avoir un dîner avec trois personnes, vivantes ou mortes, qui choisirais-tu et pourquoi ?'),
+                                                 ('Quel est le rêve le plus mémorable que tu aies jamais fait ?'),
+                                                 ('Quel est le livre ou le film qui a le plus changé ta vision du monde ?'),
+                                                 ('Si tu pouvais créer une nouvelle fête nationale, quelle serait-elle et comment la célébrerais-tu ?'),
+                                                 ('Imagine que tu peux voyager dans le temps, mais seulement pour une journée. Quelle époque choisirais-tu et pourquoi ?'),
+                                                 ('Quelle est la chose la plus inattendue que tu aies apprise récemment ?'),
+                                                 ('Quel est le meilleur cadeau que tu aies jamais reçu et pourquoi était-il si spécial ?'),
+                                                 ('Si tu pouvais changer une chose dans le monde, quelle serait-elle ?'),
+                                                 ('Quelle est la chanson qui te rappelle le plus de souvenirs et pourquoi ?'),
+                                                 ('Quel est le plus grand défi que tu aies relevé et comment l''as-tu surmonté ?'),
+                                                 ('Si tu pouvais créer une nouvelle planète, à quoi ressemblerait-elle et quelles seraient ses caractéristiques ?'),
+                                                 ('Quel est le plus grand mystère non résolu selon toi, et pourquoi t''intrigue-t-il ?'),
+                                                 ('Si tu pouvais parler à un animal, lequel choisirais-tu et quelle serait la première question que tu lui poserais ?'),
+                                                 ('Si tu pouvais assister à un événement historique, lequel choisirais-tu et pourquoi ?'),
+                                                 ('Quelle est la technologie du futur que tu es le plus impatient de voir se développer ?'),
+                                                 ('Quel est le projet le plus ambitieux que tu aimerais réaliser un jour ?'),
+                                                 ('Quel est le plus beau paysage que tu aies jamais vu, en vrai ou en photo ?'),
+                                                 ('Imagine que tu es dans un musée rempli d''objets de ton enfance. Quel objet choisirais-tu de revisiter et pourquoi ?'),
+                                                 ('Quel est le meilleur conseil que tu aies jamais reçu et comment l''as-tu appliqué dans ta vie ?'),
+                                                 ('Si tu devais écrire un livre sur ta vie, quel serait le titre et quel genre littéraire choisirais-tu ?'),
+                                                 ('Si tu pouvais poser une question à ton toi du futur, quelle serait-elle ?'),
+                                                 ('Si tu pouvais donner un titre à cette année de ta vie, quel serait-il ?'),
+                                                 ('Quelle est la chose la plus folle que tu aies faite pour surmonter une peur ?'),
+                                                 ('Si tu pouvais créer une nouvelle couleur, à quoi ressemblerait-elle et comment l''appellerais-tu ?'),
+                                                 ('Imagine que tu trouves une lampe magique avec un génie qui t''accorde trois souhaits. Quels seraient-ils ?'),
+                                                 ('Quelle est la tradition ou coutume la plus intéressante que tu connaisses ?'),
+                                                 ('Si tu pouvais créer un nouveau sport, à quoi ressemblerait-il et quelles en seraient les règles ?'),
+                                                 ('Supposons que tu découvres une île déserte où tu peux construire une nouvelle société à partir de zéro. Quelles seraient les trois premières règles ou principes que tu établirais pour garantir l''harmonie et le bonheur de ses habitants ?'),
+                                                 ('Si tu pouvais donner un conseil à ton toi de 10 ans, quel serait-il ?');
 
-INSERT INTO "Footer" ("name", "url") VALUES ('Fin', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844978667343966/Illustration_sans_titre_2.png'),
-                                            ('Partition', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979191631942/Partition.png'),
-                                            ('Poissons', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979573293106/Illustration_sans_titre_3.png'),
-                                            ('Élégant', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844979246157916/arabesque-par-defaut.png'),
-                                            ('Feuilles', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844980688977980/Illustration_sans_titre_1.png'),
-                                            ('Printemps', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844981825650698/bas-de-page.png'),
-                                            ('Aurore polaire', 'https://cdn.discordapp.com/attachments/1004073840093184000/1042844981695627384/Illustration_sans_titre.png');
+-- Insert stickers
+INSERT INTO "Background" ("name", "url", "sharable", "winnable", "sharable_percentage") VALUES ('Défaut', 'https://cdn.discordapp.com/attachments/1004073840093184000/1353092597949927564/UntitledArtwork2.png', true, false, 0.01);
+
+INSERT INTO "Letter" ("name", "url") VALUES ('Défaut', 'https://cdn.discordapp.com/attachments/1004073840093184000/1353093651818872852/UntitledArtwork1.png');

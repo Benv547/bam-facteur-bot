@@ -37,18 +37,6 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "color" = $1 WHERE "id_user" = $2', [color, id_user]);
     },
-    update_id_sticker: async function (id_user, id_sticker) {
-        const pool = db.getPool();
-        return await pool.query('UPDATE "User" SET "id_sticker" = $1 WHERE "id_user" = $2', [id_sticker, id_user]);
-    },
-    get_id_sticker: async function (id_user) {
-        const pool = db.getPool();
-        const results = await pool.query('SELECT "id_sticker" FROM "User" WHERE "id_user" = $1', [id_user]);
-        if (results.rows.length > 0) {
-            return results.rows[0]["id_sticker"];
-        }
-        return null;
-    },
     update_id_footer: async function (id_user, id_footer) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "id_footer" = $1 WHERE "id_user" = $2', [id_footer, id_user]);
@@ -73,6 +61,7 @@ module.exports = {
         }
         return null;
     },
+
     incr_money: async function (id_user, qte) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "money" = "money" + $1 WHERE "id_user" = $2', [qte, id_user]);
@@ -85,6 +74,20 @@ module.exports = {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "money" = "money" - $1 WHERE "id_user" = $2', [qte, id_user]);
     },
+
+    incr_corail: async function (id_user, qte) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "corail" = "corail" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    incr_corail_spent: async function (id_user, qte) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "corail_spent" = "corail_spent" + $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+    reduce_corail: async function (id_user, qte) {
+        const pool = db.getPool();
+        return await pool.query('UPDATE "User" SET "corail" = "corail" - $1 WHERE "id_user" = $2', [qte, id_user]);
+    },
+
     incr_xp: async function (id_user, qte) {
         const pool = db.getPool();
         return await pool.query('UPDATE "User" SET "xp" = "xp" + $1 WHERE "id_user" = $2', [qte, id_user]);

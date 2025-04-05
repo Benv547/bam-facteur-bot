@@ -12,7 +12,7 @@ module.exports = {
         .setDescription('Choisissez la couleur de vos messages dans vos bouteilles !')
         .addStringOption(option =>
             option.setName('hex')
-                .setDescription('La couleur de la bouteille')),
+                .setDescription('La couleur de l\'encre de la bouteille')),
     async execute(interaction) {
 
         let price = this.price;

@@ -1,32 +1,32 @@
 const { SlashCommandBuilder } = require('discord.js');
 const createEmbeds = require("../utils/createEmbeds");
-const stickerDB = require('../database/sticker');
+const backgroundDB = require('../database/background');
 const roles = require("../utils/roles");
 const userDB = require("../database/user");
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('givesticker')
-        .setDescription('Permet de donner un sticker.')
+        .setName('givebackground')
+        .setDescription('Permet de donner un fond.')
         .addStringOption(option =>
             option.setName('userid')
                 .setDescription('The user id')
                 .setRequired(true))
         .addStringOption(option =>
-            option.setName('stickername')
-                .setDescription('The sticker name to give')
+            option.setName('backgroundname')
+                .setDescription('The background name to give')
                 .setRequired(true)),
     async execute(interaction) {
         if (await roles.userIsAdmin(interaction.member)) {
             // Get the user
             const userId = interaction.options.getString('userid');
-            const stickername = interaction.options.getString('stickername');
+            const backgroundname = interaction.options.getString('backgroundname');
             // Set the user's currency
-            const sticker = await stickerDB.getStickerWithName(stickername);
-            if (sticker == null || sticker == undefined || sticker.length == 0) {
-                return interaction.reply({ content:'Ce sticker n\'existe pas.', ephemeral: true});
-            } else if (sticker.length > 1) {
-                return interaction.reply({ content:'Plusieurs stickers ont ce même nom, affinez votre recherche.', ephemeral: true});
+            const background = await backgroundDB.getBackgroundWithName(backgroundname);
+            if (background === null || background === undefined || background.length === 0) {
+                return interaction.reply({ content:'Ce fond n\'existe pas.', ephemeral: true});
+            } else if (background.length > 1) {
+                return interaction.reply({ content:'Plusieurs fonds ont ce même nom, affinez votre recherche.', ephemeral: true});
             }
 
             const checkUserID = await userDB.getUser(userId);
@@ -35,11 +35,11 @@ module.exports = {
                 await userDB.createUser(userId, 0, 0);
             }
 
-            await stickerDB.giveStickerToUser(userId, sticker[0].id_sticker, interaction.guild.id);
+            await backgroundDB.giveBackgroundToUser(userId, background[0].id_background, interaction.guild.id);
 
             // Fetch user
             const user = await interaction.guild.members.fetch(userId);
-            const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu le sticker **' + sticker[0].name + '** !', null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed('Quelle chance !', 'Vous avez reçu le fond **' + background[0].name + '** !', null, null, 0x2f3136, null);
 
             // Send direct message to user
             try {

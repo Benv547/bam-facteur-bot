@@ -1,7 +1,6 @@
 const {SlashCommandBuilder} = require("discord.js");
 
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+const backgroundDB = require("../database/background");
 const createEmbeds = require("../utils/createEmbeds");
 
 module.exports = {
@@ -14,8 +13,7 @@ module.exports = {
                 .setDescription('La catégorie de boutique')
                 .setRequired(true)
                 .setChoices(
-                    { name: 'Sticker', value: 'sticker' },
-                    { name: 'Arabesque', value: 'arabesque' },
+                    { name: 'Fond', value: 'background' },
                 ))
         .addStringOption(option =>
             option.setName('item')
@@ -25,29 +23,17 @@ module.exports = {
         const categorie = interaction.options.get('catégorie').value;
         const item = interaction.options.get('item').value;
 
-        if (categorie == 'sticker') {
-            const stickers = await stickerDB.getStickerWithName(item);
-            if (stickers === null || stickers.length == 0) {
-                return await interaction.reply({content: 'Aucun sticker ne correspond à ce nom.', ephemeral: true});
+        if (categorie == 'background') {
+            const backgrounds = await backgroundDB.getBackgroundWithName(item);
+            if (backgrounds === null || backgrounds.length == 0) {
+                return await interaction.reply({content: 'Aucun fond ne correspond à ce nom.', ephemeral: true});
             }
-            if (stickers.length === 1) {
-                const sticker = stickers[0];
-                const embed = createEmbeds.createFullEmbed('Sticker ' + sticker.name, null, null, sticker.url, 0x2f3136, null);
+            if (backgrounds.length === 1) {
+                const background = backgrounds[0];
+                const embed = createEmbeds.createFullEmbed('Fond ' + background.name, null, null, background.url, 0x2f3136, null);
                 return await interaction.reply({content: "", embeds: [embed], ephemeral: true});
             } else {
-                return await interaction.reply({ content: 'Plusieurs stickers correspondent à ce nom, veuillez préciser.', ephemeral: true });
-            }
-        } else if (categorie == 'arabesque') {
-            const footers = await footerDB.getFooterWithName(item);
-            if (footers === null || footers.length == 0) {
-                return await interaction.reply({content: 'Aucune arabesque ne correspond à ce nom.', ephemeral: true});
-            }
-            if (footers.length === 1) {
-                const footer = footers[0];
-                const embed = createEmbeds.createFullEmbed('Arabesque ' + footer.name, null, null, footer.url, 0x2f3136, null);
-                return await interaction.reply({content: "", embeds: [embed], ephemeral: true});
-            } else {
-                return await interaction.reply({content: 'Plusieurs arabesques correspondent à ce nom, veuillez préciser.', ephemeral: true});
+                return await interaction.reply({ content: 'Plusieurs fonds correspondent à ce nom, veuillez préciser.', ephemeral: true });
             }
         }
 

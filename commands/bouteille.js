@@ -29,7 +29,12 @@ module.exports = {
                 message += '\n\n'
 
                 bottles.forEach(bottle => {
-                    message += '• **' + bottle.name + '** [';
+                    if (!bottle.archived && !bottle.terminated) {
+                        message += '• <#' + bottle.id_channel + '> [';
+                    } else {
+                        message += '• **' + bottle.name + '** [';
+                    }
+
                     let status = '';
                     if (bottle.archived) {
                         status = '🗄';

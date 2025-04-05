@@ -5,8 +5,9 @@ const {ChannelType, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("dis
 const {newWantedCategory, wantedChannel} = require("../config.json");
 const wantedDB = require("../database/wanted");
 const createEmbeds = require("../utils/createEmbeds");
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+const backgroundDB = require("../database/background");
+const letterDB = require("../database/letter");
+const images = require("../utils/images");
 
 module.exports = {
     name: 'createWanted',
@@ -50,7 +51,7 @@ module.exports = {
 
             // TODO: move channel to "nouvelles bouteilles"
             const category = (await interaction.guild.channels.fetch()).find(c => c.id == newWantedCategory);
-
+            const guild = interaction.guild;
 
             // While number of channels in category is more than 45
             while (category.children.cache.size > 45) {
@@ -80,7 +81,16 @@ module.exports = {
 
             await channel.permissionOverwrites.create(interaction.member.id, {ViewChannel: true, SendMessages: false});
 
-            const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, "Un•e illustre inconnu•e", sender.color, sender.id_footer);
+            const user_background = await backgroundDB.getAppliedBackgroundFromUser(sender.id_user, guild.id);
+            const background = await backgroundDB.getBackground(user_background.id_background);
+
+            const user_letter = await letterDB.getAppliedLetterFromUser(sender.id_user, guild.id);
+            const letter = await letterDB.getLetter(user_letter.id_letter);
+
+            const img = await images.createMyCustomImage(content + '\n\n -Un•e illustre inconnu•e', sender.color, letter.url, background.url);
+            const img2 = {attachment: Buffer.from(img.attachment), name: img.name, contentType: img.contentType};
+
+            // const embed = await createEmbeds.createBottle(this.transformEmojiToDiscordEmoji(interaction.guild, content), sender.diceBearSeed, sender.id_sticker, "Un•e illustre inconnu•e", sender.color, sender.id_footer);
 
             // ... with actions (reply, signal, resend to ocean)
             const row = new ActionRowBuilder()
@@ -102,10 +112,10 @@ module.exports = {
 
 
             // Send to channel
-            const messageInitial = await channel.send({ content: '', embeds: [embed] });
+            const messageInitial = await channel.send({ content: '', files: [img2] });
 
             // Send message to channel of interaction
-            const message = await interaction.channel.send({ content: '', embeds: [embed], components: [row] });
+            const message = await interaction.channel.send({ content: '', files: [img], components: [row] });
 
             await wantedDB.insertWanted(channel.id, interaction.guildId, interaction.member.id, message.id, channel_name, content);
 

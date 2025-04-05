@@ -3,7 +3,7 @@ const bottleDB = require("../database/bottle");
 const messageDB = require("../database/message");
 const recordDB = require("../database/record");
 const achievementDB = require("../database/achievement");
-const stickerDB = require("../database/sticker");
+// const stickerDB = require("../database/sticker");
 const message_ileDB = require("../database/message_ile");
 const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
@@ -11,10 +11,11 @@ const birdDB = require("../database/bird");
 const wantedDB = require("../database/wanted");
 const boutiqueAction = require("../utils/boutiqueAction");
 const { Collection, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
-const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, treasureRole, newBirdChannel, boutique, conversations } = require("../config.json");
+const { guildId, anniversaireRole, treasure, adminRole, memberRole, vipRole, boostRole, wantedChannel, afkRole, ile, ileVoice, treasureRole, newBirdChannel, boutique, conversations, signalement } = require("../config.json");
 const createEmbeds = require("../utils/createEmbeds");
 const user_ileDB = require("../database/user_ile");
 const orAction = require("../utils/orAction");
+const embeds = require("../utils/createEmbeds");
 
 module.exports = {
     name: 'ready',
@@ -28,6 +29,15 @@ module.exports = {
             // Set the key as Guild ID, and create a map which has the invite code, and the number of uses
             global.invites.set(guild.id, new Collection(firstInvites.map((invite) => [invite.code, invite.uses])));
         });
+
+        const signalementSend = async () => {
+            console.log(new Date().toLocaleString() + " - Signalement send");
+            const channel = client.channels.cache.get(signalement);
+            if (channel) {
+                await channel.send({ content: '@everyone Le bot est de retour !' });
+            }
+        }
+        signalementSend();
 
         const checkTreasure = async () => {
             //console.log(new Date().toLocaleString() + " - Checking treasures messages...");
@@ -238,7 +248,7 @@ module.exports = {
                             } catch { }
                         }
                         await userDB.incr_afk_number(receiver_id);
-                        if (await userDB.get_afk_number(receiver_id) >= 5) {
+                        if (await userDB.get_afk_number(receiver_id) >= 20) {
                             const user = await guild.members.fetch(receiver_id);
                             await user.roles.add(afkRole);
                             // Create Embed AFK
@@ -445,23 +455,23 @@ module.exports = {
                                 id_users = await achievementDB.achievementXVIPUsersInvited(achievements[i].id_achievement, value);
                                 break;
                         }
-                        const sticker = await stickerDB.getSticker(achievements[i].id_sticker);
-                        if (id_users !== null) {
-                            for (let j = 0; j < id_users.length; j++) {
-                                const user = await client.users.fetch(id_users[j].id_user);
-                                let textSticker = '';
-                                if (sticker !== null) {
-                                    await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
-                                    textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
-                                }
-                                const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, sticker.id_sticker.url, null, null);
-                                try {
-                                    await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
-                                    await user.send({ content: '', embeds: [embed] });
-                                } catch {
-                                }
-                            }
-                        }
+                        // const sticker = await stickerDB.getSticker(achievements[i].id_sticker);
+                        // if (id_users !== null) {
+                        //     for (let j = 0; j < id_users.length; j++) {
+                        //         const user = await client.users.fetch(id_users[j].id_user);
+                        //         let textSticker = '';
+                        //         if (sticker !== null) {
+                        //             await stickerDB.giveStickerToUser(id_users[j].id_user, sticker.id_sticker, guildId);
+                        //             textSticker = 'En plus, vous avez reçu le sticker **' + sticker.name + '**.';
+                        //         }
+                        //         const embed = createEmbeds.createFullEmbed(`Vous avez reçu le trophée **${achievements[i].name}** !\n${textSticker}`, `${achievements[i].description}`, null, sticker.id_sticker.url, null, null);
+                        //         try {
+                        //             await achievementDB.giveAchievementToUser(id_users[j].id_user, achievements[i].id_achievement);
+                        //             await user.send({ content: '', embeds: [embed] });
+                        //         } catch {
+                        //         }
+                        //     }
+                        // }
                     }
                     catch (error) {
                         console.log(error);
@@ -471,6 +481,38 @@ module.exports = {
             setTimeout(checkAchievement, 1000 * 60 * 30);
         };
         checkAchievement();
+
+
+
+        checkIle = async () => {
+            // console.log(new Date().toLocaleString() + " - Checking ile...");
+
+            const usersToRemove = await user_ileDB.checkUserIleTicket();
+            if (usersToRemove !== null) {
+
+                const guild = await client.guilds.fetch(guildId);
+                const channel = await guild.channels.fetch(ile);
+                const channelVoice = await guild.channels.fetch(ileVoice);
+
+                for (let i = 0; i < usersToRemove.length; i++) {
+                    try {
+                        const memberId = usersToRemove[i].id_user;
+                        const member = await client.guilds.cache.first().members.fetch(memberId);
+                        if (member !== null) {
+                            await channel.permissionOverwrites.edit(member, {ViewChannel: false, SendMessages: false});
+                            await channelVoice.permissionOverwrites.edit(member, {ViewChannel: false, Connect: false});
+                            const embed = embeds.createFullEmbed('', '<@' + memberId + '> est parti de l\'île.', null, null, 0x2f3136, null);
+                            await channel.send({content: '', embeds: [embed]});
+                            await member.send({ content: 'Votre ticket de l\'île a expiré, vous n\'êtes plus sur l\'île.' });
+                        }
+                    } catch {
+                    }
+                }
+            }
+
+            setTimeout(checkIle, 1000 * 60 * 30);
+        };
+        checkIle();
 
 
 

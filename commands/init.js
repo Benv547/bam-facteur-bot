@@ -30,6 +30,12 @@ module.exports = {
                             .setCustomId('createBottle')
                             .setLabel('Créer une bouteille')
                             .setStyle(ButtonStyle.Primary),
+                    )
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId('inspirationBottle')
+                            .setLabel('Je n\'ai pas d\'inspiration, aidez-moi')
+                            .setStyle(ButtonStyle.Secondary),
                     );
                 await interaction.reply({ content:'C\'est fait.', ephemeral: true});
                 return interaction.channel.send({ content: '', components: [row] });

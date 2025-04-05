@@ -2,7 +2,7 @@ const bottle = require("../utils/bottleAction");
 const userDB = require("../database/user");
 
 module.exports = {
-    name: 'replyBottle',
+    name: 'replyDeleteBottle',
     async execute(interaction) {
 
         const content = interaction.fields.getTextInputValue('textBottle');
@@ -15,7 +15,7 @@ module.exports = {
 
         try {
             await userDB.reset_afk_number(interaction.member.id);
-            await bottle.reply(interaction.guild, sender.id, interaction.channel, content);
+            await bottle.replyDelete(interaction.guild, sender.id, interaction.channel, content);
         } catch (e) {
             console.log(e);
         }

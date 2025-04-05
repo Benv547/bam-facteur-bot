@@ -1,7 +1,6 @@
 const { SlashCommandBuilder} = require('discord.js');
 
-const stickerDB = require("../database/sticker");
-const footerDB = require("../database/footer");
+const backgroundDB = require("../database/background");
 const boutiqueDB = require("../database/boutique");
 const boutiqueAction = require("../utils/boutiqueAction");
 const createEmbeds = require("../utils/createEmbeds");
@@ -17,8 +16,7 @@ module.exports = {
                 .setDescription('La catégorie de boutique')
                 .setRequired(true)
                 .setChoices(
-                    { name: 'Sticker', value: 'sticker' },
-                    { name: 'Arabesque', value: 'arabesque' },
+                    { name: 'Fond', value: 'background' },
                 ))
         .addStringOption(option =>
             option.setName('item')
@@ -51,21 +49,13 @@ module.exports = {
 
         let message = '';
         for (const item of items) {
-            if (categorie === 'sticker') {
-                const sticker = await stickerDB.getSticker(item.id_item);
-                const stickers = await stickerDB.getStickerFromUserWithName(interaction.user.id, sticker.name);
-                if (stickers.length > 0) {
-                    message += '• **~~' + sticker.name + '~~** - possédé\n';
+            if (categorie === 'background') {
+                const background = await backgroundDB.getBackground(item.id_item);
+                const backgrounds = await backgroundDB.getBackgroundWithName(interaction.user.id, background.name);
+                if (backgrounds.length > 0) {
+                    message += '• **~~' + background.name + '~~** - possédé\n';
                 } else {
-                    message += '• **' + sticker.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
-                }
-            } else if (categorie === 'arabesque') {
-                const footer = await footerDB.getFooter(item.id_item);
-                const footers = await footerDB.getFooterFromUserWithName(interaction.user.id, footer.name);
-                if (footers.length > 0) {
-                    message += '• **~~' + footer.name + '~~** - possédé\n';
-                } else {
-                    message += '• **' + footer.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
+                    message += '• **' + background.name + '** : ' + item.price + ' <:piece:1045638309235404860>\n';
                 }
             }
         }
