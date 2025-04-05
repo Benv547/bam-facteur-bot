@@ -16,7 +16,7 @@ module.exports = {
 
         // If the user has more than 1000 or
         if (money < 50) {
-            const embed = createEmbeds.createFullEmbed("Pas assez d'or !", 'Vous devez avoir au moins **50 <:piece:1045638309235404860>** pour utiliser cette fonctionnalité !', null, null, 0x2f3136, null);
+            const embed = createEmbeds.createFullEmbed("Pas assez d'or !", 'Vous devez avoir au moins **50 <:piece:1045638309235404860>** pour utiliser cette fonctionnalité !', null, null, 0x2f3136, null, false);
             return interaction.reply({ content: "", embeds: [embed], ephemeral:true });
         }
 
@@ -27,7 +27,7 @@ module.exports = {
         const inspiration = await inspirationDB.getRandomInspiration();
 
         // Create the embed
-        const embed = createEmbeds.createFullEmbed("Besoin d'inspiration ?", 'Si vous avez besoin d\'inspiration, j\'ai ce qu\'il vous faut.. essayez ceci :\n\n**"' + inspiration + '"**', null, null, 0x2f3136, 'Si vous n\'êtes pas satisfait de cette inspiration, vous pouvez en demander une autre.');
+        const embed = createEmbeds.createFullEmbed("Besoin d'inspiration ?", 'Si vous avez besoin d\'inspiration, j\'ai ce qu\'il vous faut.. essayez ceci :\n\n**"' + inspiration + '"**', null, null, 0x2f3136, 'Si vous n\'êtes pas satisfait de cette inspiration, vous pouvez en demander une autre.', false);
         // Send the embed
         return await interaction.reply({ content: "", embeds: [embed], ephemeral:true });
     },
