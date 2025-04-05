@@ -126,10 +126,35 @@ module.exports = {
         }
         return null;
     },
+    getRankOrSpent: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('select "rank" from (select RANK() OVER(ORDER BY money_spent DESC), id_user from "User") AS derivedTable Where id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["rank"];
+        }
+        return null;
+    },
 
     getRankXp: async function (id_user) {
         const pool = db.getPool();
         const results = await pool.query('select "rank" from (select RANK() OVER(ORDER BY xp DESC), id_user from "User") AS derivedTable Where id_user = $1', [id_user] );
+        if (results.rows.length > 0) {
+            return results.rows[0]["rank"];
+        }
+        return null;
+    },
+
+    getRankCorail: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('select "rank" from (select RANK() OVER(ORDER BY corail DESC), id_user from "User") AS derivedTable Where id_user = $1', [id_user]);
+        if (results.rows.length > 0) {
+            return results.rows[0]["rank"];
+        }
+        return null;
+    },
+    getRankCorailSpent: async function (id_user) {
+        const pool = db.getPool();
+        const results = await pool.query('select "rank" from (select RANK() OVER(ORDER BY corail_spent DESC), id_user from "User") AS derivedTable Where id_user = $1', [id_user]);
         if (results.rows.length > 0) {
             return results.rows[0]["rank"];
         }
