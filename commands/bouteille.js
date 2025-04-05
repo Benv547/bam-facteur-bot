@@ -29,7 +29,7 @@ module.exports = {
                 message += '\n\n'
 
                 bottles.forEach(bottle => {
-                    if (!bottle.archived && !bottle.terminated) {
+                    if (!bottle.archived && !bottle.terminated && bottle.id_user_sender === interaction.user.id) {
                         message += '• <#' + bottle.id_channel + '> [';
                     } else {
                         message += '• **' + bottle.name + '** [';
