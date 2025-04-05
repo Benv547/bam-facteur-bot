@@ -44,7 +44,8 @@ module.exports = {
         const backgrounds = await backgroundDB.getAllBackgroundsFromUser(interaction.user.id, index * 25, 25);
 
         if (backgrounds.length === 0) {
-            return interaction.deferUpdate();
+            const embed = createEmbeds.createFullEmbed("Vos fonds", "Vous n'avez pas encore de fonds.", null, null, null, 'Faite /background <nom> pour changer de fond');
+            return await interaction.reply({content: '', embeds: [embed], ephemeral: true});
         }
 
         let content = '';
@@ -94,7 +95,7 @@ module.exports = {
         const rowS = new ActionRowBuilder()
             .addComponents(select);
 
-        const embed = createEmbeds.createFullEmbed("Vos fonds", content, null, current_background.url, null, 'Faite /background <nom> pour changer de background');
+        const embed = createEmbeds.createFullEmbed("Vos fonds", content, null, current_background.url, null, 'Faite /background <nom> pour changer de fond');
         let message;
         if (index === 0) {
             message = await interaction.reply({content: '', embeds: [embed], components: [rowS, rowB], ephemeral: true});
